@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f836e6ddf12a24db5922ec18ff9d2c, type: 3}
+  m_Name: SCAR
+  m_EditorClassIdentifier: 
+  weaponSlotType: 0
+  name: SCAR
+  description: 
+  weaponID: 0
+  weaponPrefab: {fileID: 1701325561305732, guid: 80514b72feef0e94fbab24a3b156d451, type: 3}
+  bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
+  muzzleEffect: {fileID: 0}
+  UISprite: {fileID: 0}
+  magSize: 30
+  maxReserveAmmo: 270
+  reloadSpeed: 2.8
+  projectileCount: 1
+  maxSpreadDeviationAngle: 0
+  damage: 20
+  perShotCooldown: 0.15
+  aimingFOV: 40
+  isAutomatic: 1
+  isProjectile: 0
+  projectile: {fileID: 0}
+  blastRadius: 0
+  projectileInitalVelocity: 0
+  projectileDestructionEffect: {fileID: 0}
+  fireSFX:
+  - {fileID: 8300000, guid: 8018acccaecddce498259f8e5a93b440, type: 3}
+  - {fileID: 8300000, guid: 9fac002407092764e8936cb3d0387616, type: 3}
+  - {fileID: 8300000, guid: 73e3ceb9aff1022448528283abfd07c3, type: 3}
+  reloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  unequipSFX: {fileID: 0}

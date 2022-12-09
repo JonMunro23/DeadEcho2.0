@@ -5,7 +5,10 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
     [Header("Movement")]
+    public float baseMoveSpeed;
     public float moveSpeed;
 
     public float groundDrag;
@@ -13,13 +16,14 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    bool readyToJump;
+    [SerializeField] bool readyToJump, hasJumped;
 
     [HideInInspector] public float walkSpeed;
     [HideInInspector] public float sprintSpeed;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode sprintKey = KeyCode.LeftShift;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -35,15 +39,32 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+    public Animator animator;
 
-        readyToJump = true;
+
+
+    [Header("MovementSFX")]
+    [SerializeField] float walkingSFXCooldown;
+    [SerializeField] AudioSource movementAudioSource, landingAudioSource;
+    [SerializeField] AudioClip[] walkingSFX, landingSFX;
+    bool canPlaySFX;
+
+    void Awake()
+    {
+        instance = this;
+        rb = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    void Start()
+    {
+        moveSpeed = baseMoveSpeed;
+        rb.freezeRotation = true;
+        readyToJump = true;
+
+        canPlaySFX = true;
+    }
+
+    void Update()
     {
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, whatIsGround);
@@ -58,16 +79,22 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = 0;
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         MovePlayer();
     }
 
-    private void MyInput()
+    void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        Debug.Log("meme");
+
+        //begin sprinting
+        if(Input.GetKey(sprintKey) && grounded)
+        {
+
+        }
+
         // when to jump
         if(Input.GetKey(jumpKey) && readyToJump && grounded)
         {
@@ -79,21 +106,53 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePlayer()
+    void MovePlayer()
     {
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // on ground
         if(grounded)
+        {
+            if(hasJumped)
+            {
+                hasJumped = false;
+                landingAudioSource.PlayOneShot(PickSFXClip(landingSFX));
+                Debug.Log("Played landing sfx");
+            }
+
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            if(horizontalInput != 0 || verticalInput != 0)
+            {
+                animator.SetFloat("speed", 0.5f, .2f, Time.deltaTime);
+                if(canPlaySFX)
+                {
+                    canPlaySFX = false;
+                    movementAudioSource.PlayOneShot(PickSFXClip(walkingSFX));
+                    StartCoroutine(WalkingSFXCooldown());
+                }
+            }
+            else
+            {
+                animator.SetFloat("speed", 0.0f);
+            }
+        }
 
         // in air
         else if(!grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
+        }
     }
 
-    private void SpeedControl()
+    AudioClip PickSFXClip(AudioClip[] arrayToPickFrom)
+    {
+        int rand = Random.Range(0, arrayToPickFrom.Length);
+        return walkingSFX[rand];
+    }
+
+    void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
@@ -105,15 +164,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    void Jump()
     {
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
-    private void ResetJump()
+    void ResetJump()
     {
         readyToJump = true;
+        hasJumped = true;
+    }
+
+    public void BeginAiming()
+    {
+        moveSpeed = baseMoveSpeed / 4;
+    }
+
+    public void StopAiming()
+    {
+        moveSpeed = baseMoveSpeed;
+    }
+
+
+    IEnumerator WalkingSFXCooldown()
+    {
+        yield return new WaitForSeconds(walkingSFXCooldown);
+        canPlaySFX = true;
     }
 }
