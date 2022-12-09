@@ -15,8 +15,9 @@ MonoBehaviour:
   weaponSlotType: 0
   name: Sniper
   description: 
-  weaponID: 0
-  weaponPrefab: {fileID: 1977984898015220, guid: 30e365fcd1d27fe4c94ab350c0484231, type: 3}
+  cost: 0
+  weaponObj: {fileID: 1977984898015220, guid: 30e365fcd1d27fe4c94ab350c0484231, type: 3}
+  weaponWallBuyObj: {fileID: 0}
   bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
   muzzleEffect: {fileID: 0}
   UISprite: {fileID: 0}

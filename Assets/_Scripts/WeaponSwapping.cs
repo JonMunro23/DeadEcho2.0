@@ -129,7 +129,7 @@ public class WeaponSwapping : MonoBehaviour
             currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
         }
         DeactivateWeapons();
-        GameObject clone = Instantiate(weaponToSpawn.weaponPrefab);
+        GameObject clone = Instantiate(weaponToSpawn.weaponObj);
         PlayerMovement.instance.animator = clone.GetComponent<Animator>();
         switch(weaponSlot)
         {

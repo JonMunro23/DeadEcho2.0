@@ -13,9 +13,10 @@ public class Weapon : ScriptableObject
     public new string name;
     [TextArea(3, 10)]
     public string description;
-    public int weaponID;
+    public int cost;
 
-    public GameObject weaponPrefab;
+    public GameObject weaponObj;
+    public GameObject weaponWallBuyObj;
     public GameObject bulletHole;
     public GameObject muzzleEffect;
 
@@ -35,7 +36,6 @@ public class Weapon : ScriptableObject
     public float blastRadius;
     public float projectileInitalVelocity;
     public GameObject projectileDestructionEffect;
-
 
     public AudioClip[] fireSFX;
     public AudioClip reloadSFX;

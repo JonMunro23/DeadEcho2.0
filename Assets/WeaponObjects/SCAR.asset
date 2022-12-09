@@ -15,8 +15,9 @@ MonoBehaviour:
   weaponSlotType: 0
   name: SCAR
   description: 
-  weaponID: 0
-  weaponPrefab: {fileID: 1701325561305732, guid: 80514b72feef0e94fbab24a3b156d451, type: 3}
+  cost: 0
+  weaponObj: {fileID: 1701325561305732, guid: 80514b72feef0e94fbab24a3b156d451, type: 3}
+  weaponWallBuyObj: {fileID: 1701325561305732, guid: 510ec589132763647861a79fcf0441fd, type: 3}
   bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
   muzzleEffect: {fileID: 0}
   UISprite: {fileID: 0}
