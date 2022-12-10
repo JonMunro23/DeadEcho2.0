@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4966321793772286}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4749899003524216}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Magazine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4363173720126268}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Grip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4055534935734462}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Cartridges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4301942285027924}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Base2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,7 +164,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4606117079323808}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hp_Scar_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4650037838242392}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Triger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4323240756143518}
   - component: {fileID: 137763254139898440}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Scar_Grip_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +318,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4405761295087912}
   - component: {fileID: 137754287778038348}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Scar_Triger_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4089396701741908}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hp_Scar_Magazine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4649837977730892}
   - component: {fileID: 137151540831282900}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Scar_Magazine_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +524,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4995261962816350}
   - component: {fileID: 137094354692010556}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Scar_Base_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,7 +611,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4644167320023726}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bn_Scar_Planck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -642,9 +642,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4085378547632038}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hands_Automatic_rifle WallBuy
-  m_TagString: Untagged
+  m_TagString: WallBuy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -657,7 +657,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1701325561305732}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.7, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -681,7 +681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4017202196884950}
   - component: {fileID: 137951748300369262}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Scar_Planck_mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
