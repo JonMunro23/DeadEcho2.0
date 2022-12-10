@@ -2543,7 +2543,7 @@ Animator:
   m_GameObject: {fileID: 1977984898015220}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6f0f8052e8240774480c907872112ac4, type: 3}
-  m_Controller: {fileID: 9100000, guid: 138d37c736b05da4b8e9db8bd007a284, type: 2}
+  m_Controller: {fileID: 9100000, guid: 021be7a6b4a1b294fbf4cb8849c04346, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2574,8 +2574,7 @@ MonoBehaviour:
   currentLoadedAmmo: 0
   isAiming: 0
   canADS: 0
-  firingSFXSource: {fileID: 0}
-  reloadSFXSource: {fileID: 0}
+  isReloading: 0
 --- !u!1 &1994926487890642
 GameObject:
   m_ObjectHideFlags: 0

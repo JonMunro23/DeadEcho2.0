@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WeaponSwapping : MonoBehaviour
 {
+    public static WeaponSwapping instance;
+
     [SerializeField] GameObject primaryWeapon1Holder, primaryWeapon2Holder, secondaryWeaponHolder;
 
     Weapon currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
@@ -19,6 +21,11 @@ public class WeaponSwapping : MonoBehaviour
     [SerializeField] Vector3 weaponSpawnDefaultPosition;
 
     public static bool canSwapWeapon;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -129,7 +136,7 @@ public class WeaponSwapping : MonoBehaviour
             currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
         }
         DeactivateWeapons();
-        GameObject clone = Instantiate(weaponToSpawn.weaponPrefab);
+        GameObject clone = Instantiate(weaponToSpawn.weaponObj);
         PlayerMovement.instance.animator = clone.GetComponent<Animator>();
         switch(weaponSlot)
         {

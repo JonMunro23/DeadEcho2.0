@@ -15,8 +15,9 @@ MonoBehaviour:
   weaponSlotType: 1
   name: SCAR
   description: 
-  weaponID: 0
-  weaponPrefab: {fileID: 1425756895877542, guid: 9820bbe58bb57204db392c631110251c, type: 3}
+  cost: 0
+  weaponObj: {fileID: 1170339376308916, guid: 87109e39fc1c2fe45955415c04b02e82, type: 3}
+  weaponWallBuyObj: {fileID: 0}
   bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
   muzzleEffect: {fileID: 0}
   UISprite: {fileID: 0}
@@ -26,7 +27,7 @@ MonoBehaviour:
   projectileCount: 1
   maxSpreadDeviationAngle: 0
   damage: 40
-  perShotCooldown: 0.2
+  perShotCooldown: 0.4
   aimingFOV: 50
   isAutomatic: 1
   isProjectile: 0
@@ -35,9 +36,9 @@ MonoBehaviour:
   projectileInitalVelocity: 0
   projectileDestructionEffect: {fileID: 0}
   fireSFX:
-  - {fileID: 8300000, guid: 8018acccaecddce498259f8e5a93b440, type: 3}
-  - {fileID: 8300000, guid: 9fac002407092764e8936cb3d0387616, type: 3}
-  - {fileID: 8300000, guid: 73e3ceb9aff1022448528283abfd07c3, type: 3}
-  reloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  - {fileID: 8300000, guid: 7736ebd0e468eb843a27e996b7c014a1, type: 3}
+  - {fileID: 8300000, guid: 00d6c854d736b274692325c410bbdcc7, type: 3}
+  - {fileID: 8300000, guid: 57be9f76b7fd1914fbb8a53e7ad41c53, type: 3}
+  reloadSFX: {fileID: 8300000, guid: 5352c7bdf44b11141ba87d35e6e5a45a, type: 3}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
   unequipSFX: {fileID: 0}
