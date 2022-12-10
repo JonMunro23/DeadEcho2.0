@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class WallBuy : MonoBehaviour
 {
-    [SerializeField] Weapon weaponToShow;
+    public Weapon weapon;
     Transform weaponObjSpawnHolder;
 
+    public string weaponName;
     public int weaponCost;
 
     private void Awake()
@@ -22,7 +23,8 @@ public class WallBuy : MonoBehaviour
 
     void InitialiseWallBuy()
     {
-        Instantiate(weaponToShow.weaponWallBuyObj, weaponObjSpawnHolder);
-        weaponCost = weaponToShow.cost;
+        Instantiate(weapon.weaponWallBuyObj, weaponObjSpawnHolder);
+        weaponCost = weapon.cost;
+        weaponName = weapon.name;
     }
 }
