@@ -27,8 +27,8 @@ MonoBehaviour:
   projectileCount: 1
   maxSpreadDeviationAngle: 0
   damage: 70
-  perShotCooldown: 4
-  aimingFOV: 20
+  perShotCooldown: 1.9
+  aimingFOV: 30
   isAutomatic: 1
   isProjectile: 0
   projectile: {fileID: 0}

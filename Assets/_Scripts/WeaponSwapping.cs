@@ -8,8 +8,8 @@ public class WeaponSwapping : MonoBehaviour
 
     [SerializeField] GameObject primaryWeapon1Holder, primaryWeapon2Holder, secondaryWeaponHolder;
 
-    Weapon currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
-    GameObject currentPrimary1WeaponObj, currentPrimary2WeaponObj, currentSecondaryWeaponObj;
+    public Weapon currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
+    public GameObject currentPrimary1WeaponObj, currentPrimary2WeaponObj, currentSecondaryWeaponObj;
 
     public Weapon startingPistol, tempPrimary1, tempPrimary2;
 

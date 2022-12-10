@@ -201,6 +201,11 @@ public class WeaponShooting : MonoBehaviour
         isReloading = false;
     }
 
+    public void RefillAmmo()
+    {
+        currentLoadedAmmo = maxMagSize;
+        currentReserveAmmo = maxReserveAmmo;
+    }
 
     AudioClip PickAudioClip()
     {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StartingPistol 2
   m_EditorClassIdentifier: 
   weaponSlotType: 1
-  name: SCAR
+  name: Makarov
   description: 
   cost: 0
   weaponObj: {fileID: 1170339376308916, guid: 87109e39fc1c2fe45955415c04b02e82, type: 3}

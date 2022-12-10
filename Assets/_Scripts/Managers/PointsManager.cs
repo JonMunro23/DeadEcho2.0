@@ -7,6 +7,9 @@ public class PointsManager : MonoBehaviour
 {
     public static PointsManager instance;
 
+    [Header("Keybinds")]
+    [SerializeField] KeyCode addMoreCash = KeyCode.Alpha3;
+
     [SerializeField] TMP_Text currentPointsText;
 
     public int currentPoints;
@@ -26,6 +29,17 @@ public class PointsManager : MonoBehaviour
         UpdatePointsText();
     }
 
+    private void Update()
+    {
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            if(Input.GetKeyDown(addMoreCash))
+            {
+                AddPoints(1000);
+            }
+        }
+    }
+
     public void AddPoints(int pointsToAdd)
     {
         currentPoints += pointsToAdd;
@@ -41,6 +55,6 @@ public class PointsManager : MonoBehaviour
 
     void UpdatePointsText()
     {
-        currentPointsText.text = currentPoints.ToString();
+        currentPointsText.text = "£" + currentPoints.ToString();
     }
 }
