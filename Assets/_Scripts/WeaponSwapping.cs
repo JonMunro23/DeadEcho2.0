@@ -19,6 +19,7 @@ public class WeaponSwapping : MonoBehaviour
     public GameObject currentlyEquippedWeaponObj;
 
     [SerializeField] Vector3 weaponSpawnDefaultPosition;
+    [SerializeField] float reactivateWeaponsTime;
 
     public static bool canSwapWeapon;
 
@@ -204,6 +205,8 @@ public class WeaponSwapping : MonoBehaviour
                 }
                 break;
         }
+        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().canShoot = true;
+        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().canADS = true;
     }
 
     void UpdateAmmo(GameObject weaponObj)
@@ -218,4 +221,29 @@ public class WeaponSwapping : MonoBehaviour
         primaryWeapon2Holder.SetActive(false);
         secondaryWeaponHolder.SetActive(false);
     }
+
+    public void DeactivateForThrowables(GameObject grenadeObjHolder)
+    {
+        DeactivateWeapons();
+        StartCoroutine(ReactivateWeapons(grenadeObjHolder));
+    }
+
+    IEnumerator ReactivateWeapons(GameObject grenadeObjHolder)
+    {
+        yield return new WaitForSeconds(reactivateWeaponsTime);
+        grenadeObjHolder.SetActive(false);
+        switch (currentlyEquippedWeaponSlot)
+        {
+            case 1:
+                primaryWeapon1Holder.SetActive(true);
+                break;
+            case 2:
+                primaryWeapon2Holder.SetActive(true);
+                break;
+            case 3:
+                secondaryWeaponHolder.SetActive(true);
+                break;
+        }
+    }
+
 }

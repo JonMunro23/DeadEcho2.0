@@ -731,7 +731,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Fire
+    m_ConditionEvent: AimingFire
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: isAiming

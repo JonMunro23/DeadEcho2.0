@@ -46,7 +46,7 @@ public class ZombieMovement : MonoBehaviour
             if (Vector3.Distance(transform.position, agent.destination) <= distanceToPerformMeleeAttack && canPerformMeleeAttack == true)
             {
                 //MeleeAttack();
-                Debug.Log("Performed Melee Attack");
+                //Debug.Log("Performed Melee Attack");
             }
         }
     }
