@@ -46,16 +46,7 @@ public class WeaponSwapping : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3) && currentlyEquippedWeaponSlot != 3 && currentSecondaryWeapon)
         {
             SwapToWeapon(3);
-        }
-
-        if(Input.GetKeyDown(KeyCode.F1))
-        {
-            PickUpWeapon(tempPrimary1);
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            PickUpWeapon(tempPrimary2);
-        }
+        } 
     }
 
     public void PickUpWeapon(Weapon weaponToPickup)

@@ -13,7 +13,7 @@ public class WeaponShooting : MonoBehaviour
     public bool canShoot;
     public Animator weaponAnimator;
 
-    Weapon equippedWeaponObj;
+    Weapon equippedWeapon;
     int maxMagSize, maxReserveAmmo, loadedAmmoBeforeReload, reserveAmmoBeforeReload, damage, projectileCount;
     public int currentReserveAmmo, currentLoadedAmmo;
     float maxSpreadDeviationAngle, perShotCooldown, reloadSpeed, aimingFOV;
@@ -47,7 +47,7 @@ public class WeaponShooting : MonoBehaviour
     {
         weaponAnimator = GetComponent<Animator>();
         PlayerMovement.instance.animator = weaponAnimator;
-        equippedWeaponObj = weaponToInitialise;
+        equippedWeapon = weaponToInitialise;
         maxMagSize = weaponToInitialise.magSize;
         maxReserveAmmo = weaponToInitialise.maxReserveAmmo;
         currentLoadedAmmo = maxMagSize;
@@ -104,7 +104,16 @@ public class WeaponShooting : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.7f, transform.position.z), transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
             {
-                Instantiate(bulletHole, hit.point, Quaternion.identity);
+                if(hit.transform.CompareTag("ZombieBody"))
+                {
+                    hit.transform.GetComponentInParent<ZombieHealth>().RemoveHealth(equippedWeapon.damage, false);
+                }
+                else if(hit.transform.CompareTag("ZombieHead"))
+                {
+                    hit.transform.GetComponentInParent<ZombieHealth>().RemoveHealth(Mathf.RoundToInt(equippedWeapon.damage * equippedWeapon.headshotMultiplier), true);
+                }
+                else
+                    Instantiate(bulletHole, hit.point, Quaternion.identity);
             }
 
             StartCoroutine(PerShotCooldown());
@@ -205,6 +214,18 @@ public class WeaponShooting : MonoBehaviour
     {
         currentLoadedAmmo = maxMagSize;
         currentReserveAmmo = maxReserveAmmo;
+        if(WeaponSwapping.instance.currentlyEquippedWeapon.name == equippedWeapon.name)
+            AmmoManager.instance.UpdateAmmoHUD(currentLoadedAmmo, currentReserveAmmo);
+    }
+
+    public bool IsAmmoFull()
+    {
+        if (currentLoadedAmmo == maxMagSize && currentReserveAmmo == maxReserveAmmo)
+        {
+            return true;
+        }
+        else
+            return false;
     }
 
     AudioClip PickAudioClip()

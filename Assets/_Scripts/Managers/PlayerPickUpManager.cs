@@ -41,8 +41,7 @@ public class PlayerPickUpManager : MonoBehaviour
                             WeaponSwapping.instance.PickUpWeapon(weaponToPurchase);
                         else
                             return;
-                        purchaseWeaponAudioSource.PlayOneShot(purchaseWeaponAudioSource.clip);
-                        PointsManager.instance.RemovePoints(weaponToPurchase.cost);
+                        Purchase(weaponToPurchase.cost);
                     }
                     isBuyingWeapon = false;
                 }
@@ -52,23 +51,45 @@ public class PlayerPickUpManager : MonoBehaviour
                     {
                         if(weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name)
                         {
-                            WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+                            if (!WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                            {
+                                WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+                                Purchase(costOfAmmo);
+                            }
+                            else
+                                return;
                         }
-                        else if (weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name)
+                        else if (weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name && !WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                         {
-                            WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+                            if (!WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                            {
+                                WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+                                Purchase(costOfAmmo);
+                            }
+                            else
+                                return;
                         }
-                        else if (weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name)
+                        else if (weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name && !WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                         {
-                            WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+                            if (!WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                            {
+                                WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+                                Purchase(costOfAmmo);
+                            }
+                            else
+                                return;
                         }
-                        purchaseWeaponAudioSource.PlayOneShot(purchaseWeaponAudioSource.clip);
-                        PointsManager.instance.RemovePoints(costOfAmmo);
                     }
                     isBuyingAmmo = false;
                 }
             }
         }
+    }
+
+    void Purchase(int cost)
+    {
+        purchaseWeaponAudioSource.PlayOneShot(purchaseWeaponAudioSource.clip);
+        PointsManager.instance.RemovePoints(cost);
     }
 
     private void OnTriggerEnter(Collider other)

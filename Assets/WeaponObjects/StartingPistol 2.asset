@@ -27,6 +27,7 @@ MonoBehaviour:
   projectileCount: 1
   maxSpreadDeviationAngle: 0
   damage: 40
+  headshotMultiplier: 2
   perShotCooldown: 0.4
   aimingFOV: 50
   isAutomatic: 1

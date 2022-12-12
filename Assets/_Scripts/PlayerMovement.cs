@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("MovementSFX")]
-    [SerializeField] float walkingSFXCooldown;
+    [SerializeField] float walkingSFXCooldown, aimingWalkingSFXCooldown;
     [SerializeField] AudioSource movementAudioSource, landingAudioSource;
     [SerializeField] AudioClip[] walkingSFX, landingSFX;
     bool canPlaySFX;
@@ -179,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void BeginAiming()
     {
-        moveSpeed = baseMoveSpeed / 4;
+        moveSpeed = baseMoveSpeed / 3;
     }
 
     public void StopAiming()
@@ -190,7 +190,10 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator WalkingSFXCooldown()
     {
-        yield return new WaitForSeconds(walkingSFXCooldown);
+        if (!WeaponSwapping.instance.currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isAiming)
+            yield return new WaitForSeconds(walkingSFXCooldown);
+        else
+            yield return new WaitForSeconds(aimingWalkingSFXCooldown);
         canPlaySFX = true;
     }
 }

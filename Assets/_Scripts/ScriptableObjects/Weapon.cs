@@ -28,6 +28,7 @@ public class Weapon : ScriptableObject
     public int projectileCount;
     public float maxSpreadDeviationAngle;
     public int damage;
+    public float headshotMultiplier;
     public float perShotCooldown;
     public float aimingFOV;
     public bool isAutomatic;
