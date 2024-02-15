@@ -13,23 +13,51 @@ MonoBehaviour:
   m_Name: Sniper
   m_EditorClassIdentifier: 
   weaponSlotType: 0
-  name: Sniper
+  name: Sniper1
   description: 
   cost: 1500
   weaponObj: {fileID: 1977984898015220, guid: 30e365fcd1d27fe4c94ab350c0484231, type: 3}
   weaponWallBuyObj: {fileID: 1977984898015220, guid: 70bcbb812db260649a46bdc691c09690, type: 3}
+  UIObj: {fileID: 0}
   bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
   muzzleEffect: {fileID: 0}
+  defaultYPos: -1.7
+  aimingYPos: 0
   UISprite: {fileID: 0}
   magSize: 5
   maxReserveAmmo: 45
   reloadSpeed: 2.8
   projectileCount: 1
-  maxSpreadDeviationAngle: 0
+  maxSpreadDeviationAngle: 10
   damage: 70
   headshotMultiplier: 2.5
   perShotCooldown: 1.9
+  timeToADS: 4
   aimingFOV: 30
+  ADSCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   isAutomatic: 1
   isProjectile: 0
   projectile: {fileID: 0}
@@ -42,4 +70,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f3a989eaf5b21a6428f44f9d476fd98b, type: 3}
   reloadSFX: {fileID: 8300000, guid: 49445863fb03df24e81d6b088856f783, type: 3}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
-  unequipSFX: {fileID: 0}
+  canUseSightAttachment: 1
+  canUseMagAttachment: 1
+  canUseMuzzleAttachment: 1
+  canUseStockAttachment: 1

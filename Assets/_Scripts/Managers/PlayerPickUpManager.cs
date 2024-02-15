@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using HighlightPlus;
+using TMPro.EditorUtilities;
 
 public class PlayerPickUpManager : MonoBehaviour
 {
-    [SerializeField] TMP_Text purchasePickupText;
+    TMP_Text purchasePickupText;
 
     [Header("Keybinds")]
     [SerializeField] KeyCode purchaseWeaponKey = KeyCode.E;
@@ -15,15 +17,12 @@ public class PlayerPickUpManager : MonoBehaviour
     Weapon weaponToPurchase;
     bool canBuy, isBuyingWeapon, isBuyingAmmo;
 
+    HighlightEffect wallBuyHighlightEffect;
+    Color originalHighlightEffectColor;
+
     private void Awake()
     {
-        
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        purchasePickupText = GameObject.FindGameObjectWithTag("InteractText").GetComponent<TMP_Text>();
     }
 
     // Update is called once per frame
@@ -49,7 +48,7 @@ public class PlayerPickUpManager : MonoBehaviour
                 {
                     if (PointsManager.instance.currentPoints >= costOfAmmo)
                     {
-                        if(weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name)
+                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name)
                         {
                             if (!WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
@@ -92,16 +91,52 @@ public class PlayerPickUpManager : MonoBehaviour
         PointsManager.instance.RemovePoints(cost);
     }
 
-    private void OnTriggerEnter(Collider other)
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("WallBuy"))
+    //    {
+    //        canBuy = true;
+    //        WallBuy wallBuy = other.GetComponent<WallBuy>();
+    //        weaponToPurchase = wallBuy.weapon;
+    //        if (WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name || WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name || WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name)
+    //        {
+    //            purchasePickupText.text = "Press " + purchaseWeaponKey.ToString() + " to purchase ammo for £" + costOfAmmo;
+    //            isBuyingWeapon = false;
+    //            isBuyingAmmo = true;
+    //        }
+    //        else
+    //        {
+    //            purchasePickupText.text = "Press " + purchaseWeaponKey.ToString() + " to purchase the " + wallBuy.weaponName + " for £" + wallBuy.weaponCost;
+    //            isBuyingAmmo = false;
+    //            isBuyingWeapon = true;
+    //        }
+    //    }
+    //}
+
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("WallBuy"))
         {
+            wallBuyHighlightEffect = other.GetComponentInChildren<HighlightEffect>();
+            originalHighlightEffectColor = wallBuyHighlightEffect.outlineColor;
             canBuy = true;
             WallBuy wallBuy = other.GetComponent<WallBuy>();
             weaponToPurchase = wallBuy.weapon;
+
+            //change highlight outline color
+            if (PointsManager.instance.currentPoints >= weaponToPurchase.cost && PointsManager.instance.currentPoints >= costOfAmmo)
+            {
+                wallBuyHighlightEffect.outlineColor = Color.green;
+            }
+            else if (PointsManager.instance.currentPoints < weaponToPurchase.cost && PointsManager.instance.currentPoints < costOfAmmo)
+            {
+                wallBuyHighlightEffect.outlineColor = Color.red;
+            }                
+
             if (WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name || WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name || WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name)
             {
                 purchasePickupText.text = "Press " + purchaseWeaponKey.ToString() + " to purchase ammo for £" + costOfAmmo;
+                
                 isBuyingWeapon = false;
                 isBuyingAmmo = true;
             }
@@ -114,17 +149,14 @@ public class PlayerPickUpManager : MonoBehaviour
         }
     }
 
-    //private void OnTriggerStay(Collider other)
-    //{
-
-    //}
-
     private void OnTriggerExit(Collider other)
     {
         canBuy = false;
         isBuyingAmmo = false;
         isBuyingWeapon = false;
         purchasePickupText.text = "";
+        if(wallBuyHighlightEffect)
+            wallBuyHighlightEffect.outlineColor = originalHighlightEffectColor;
     }
 
 

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f836e6ddf12a24db5922ec18ff9d2c, type: 3}
+  m_Name: Python
+  m_EditorClassIdentifier: 
+  weaponSlotType: 1
+  name: Python
+  description: 
+  cost: 1000
+  weaponObj: {fileID: 1731598803622250, guid: 3dae5c5f864e5ad4998dbcbf8aa60fc3, type: 3}
+  weaponWallBuyObj: {fileID: 1731598803622250, guid: c253b90d90f51fb4d9d43be78b67c403, type: 3}
+  UIObj: {fileID: 0}
+  bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
+  muzzleEffect: {fileID: 0}
+  defaultYPos: -1.6
+  aimingYPos: -1.545
+  UISprite: {fileID: 0}
+  magSize: 6
+  maxReserveAmmo: 54
+  reloadSpeed: 3
+  projectileCount: 1
+  maxSpreadDeviationAngle: 0
+  damage: 150
+  headshotMultiplier: 3
+  perShotCooldown: 0.8
+  timeToADS: 1
+  aimingFOV: 50
+  ADSCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isAutomatic: 1
+  isProjectile: 0
+  projectile: {fileID: 0}
+  blastRadius: 0
+  projectileInitalVelocity: 0
+  projectileDestructionEffect: {fileID: 0}
+  fireSFX:
+  - {fileID: 8300000, guid: 7736ebd0e468eb843a27e996b7c014a1, type: 3}
+  - {fileID: 8300000, guid: 00d6c854d736b274692325c410bbdcc7, type: 3}
+  - {fileID: 8300000, guid: 57be9f76b7fd1914fbb8a53e7ad41c53, type: 3}
+  reloadSFX: {fileID: 8300000, guid: 5352c7bdf44b11141ba87d35e6e5a45a, type: 3}
+  equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  canUseSightAttachment: 1
+  canUseMagAttachment: 1
+  canUseMuzzleAttachment: 1
+  canUseStockAttachment: 1

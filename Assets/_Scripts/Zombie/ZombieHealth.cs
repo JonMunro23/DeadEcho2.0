@@ -1,26 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using System;
 
-public class ZombieHealth : MonoBehaviour
+public class ZombieHealth : MonoBehaviour, IDamageable
 {
-    ZombieMovement zombieMovement;
-    [SerializeField] int startingHealth;
-    public int currentHealth;
-
-    [SerializeField] int hitPoints, baseKillPoints, extraHeadshotPoints;
-
-    [SerializeField] SkinnedMeshRenderer zombieHead;
-
+    ZombieAI zombieAI;
     Animator animator;
 
+    [SerializeField] int hitPoints, baseKillPoints, extraHeadshotPoints, startingHealth;
+    [SerializeField] SkinnedMeshRenderer zombieHead;
+
+    [SerializeField] GameObject zombieRagdoll;
+
+    public int currentHealth;
     public bool isDead;
+
+    public static Action onDeath;
+    public static Action onHit;
+    public static Action<Vector3> dropPowerUp;
+
+    //int = damageTaken
+    public static Action<int> onPointsGiven;
+    [SerializeField] int powerUpDropChance;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        zombieMovement = GetComponent<ZombieMovement>();
+        zombieAI = GetComponent<ZombieAI>();
     }
 
     // Start is called before the first frame update
@@ -29,31 +34,25 @@ public class ZombieHealth : MonoBehaviour
         currentHealth = startingHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void RemoveHealth(int healthToRemove, bool hitHead)
+    public void TakeDamage(int healthToRemove, bool hitHead = false)
     {
         if(!isDead)
         {
-            PointsManager.instance.AddPoints(hitPoints);
             currentHealth -= healthToRemove;
-            if(currentHealth <= 0)
+            if (currentHealth <= 0)
             {
-                if (hitHead)
-                    ExplodeHead();
-                else
-                    Die();
+                Die();
+                return;
             }
+
+            onPointsGiven?.Invoke(hitPoints);
+            onHit?.Invoke();
         }
-        else if(isDead)
-        {
-            if (hitHead && zombieHead.enabled)
-                ExplodeHead();
-        }
+        //else if(isDead)
+        //{
+        //    if (hitHead && zombieHead.enabled)
+        //        ExplodeHead();
+        //}
     }
 
     public void ExplodeHead()
@@ -61,7 +60,7 @@ public class ZombieHealth : MonoBehaviour
         zombieHead.enabled = false;
         if (!isDead)
         {
-            PointsManager.instance.AddPoints(extraHeadshotPoints);
+            onPointsGiven?.Invoke(extraHeadshotPoints);
             Die();
         }
         //play head explosing particle effect
@@ -70,15 +69,46 @@ public class ZombieHealth : MonoBehaviour
 
     public void Die()
     {
-        PointsManager.instance.AddPoints(baseKillPoints);
+        if(DoesSpawnPowerUp())
+            dropPowerUp?.Invoke(transform.position);
+
         isDead = true;
-        zombieMovement.isMoving = false;
-        zombieMovement.agent.velocity = Vector3.zero;
-        zombieMovement.agent.isStopped = true;
+        onDeath?.Invoke();
+        onPointsGiven?.Invoke(baseKillPoints);
+        zombieAI.isMoving = false;
+        zombieAI.agent.velocity = Vector3.zero;
+        zombieAI.agent.isStopped = true;
         animator.SetTrigger("Die");
         animator.SetBool("IsMoving", false);
-        //Destroy(zombieMovement.agent);
-        Destroy(gameObject, 60);
+        transform.SetParent(null);
+        Destroy(zombieAI.agent);
+        var ragdollClone = Instantiate(zombieRagdoll, transform.position, transform.rotation);
+        //ragdollClone.GetComponent<Rigidbody>().AddForce(Vector3.back * 20 ,ForceMode.Impulse);
+        Destroy(ragdollClone, 12);
+        Destroy(gameObject);
         //add chance to gib depending on weapon?
+    }
+
+    bool DoesSpawnPowerUp()
+    {
+        int randInt = UnityEngine.Random.Range(0, 100);
+        if (randInt <= powerUpDropChance)
+            return true;
+        else
+            return false;
+
+    }
+
+    public void OnDamaged(int damageTaken, string hitBodyPart)
+    {
+        if (hitBodyPart == "ZombieHead")
+            TakeDamage(damageTaken, true);
+        else
+            TakeDamage(damageTaken, false);
+    }
+
+    public void Kill()
+    {
+        Die();
     }
 }

@@ -1,4 +1,6 @@
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "WeaponObject", menuName = "New Weapon")]
 public class Weapon : ScriptableObject
@@ -17,8 +19,12 @@ public class Weapon : ScriptableObject
 
     public GameObject weaponObj;
     public GameObject weaponWallBuyObj;
+    public GameObject UIObj;
     public GameObject bulletHole;
     public GameObject muzzleEffect;
+
+    public float defaultYPos;
+    public float aimingYPos;
 
     public Sprite UISprite;
 
@@ -30,7 +36,9 @@ public class Weapon : ScriptableObject
     public int damage;
     public float headshotMultiplier;
     public float perShotCooldown;
+    public float timeToADS;
     public float aimingFOV;
+    public AnimationCurve ADSCurve;
     public bool isAutomatic;
     public bool isProjectile;
     public GameObject projectile;
@@ -39,6 +47,11 @@ public class Weapon : ScriptableObject
     public GameObject projectileDestructionEffect;
 
     public AudioClip[] fireSFX;
-    public AudioClip reloadSFX;
-    public AudioClip equipSFX, unequipSFX;
+    public AudioClip reloadSFX, equipSFX;
+
+    [Header("Attachments")]
+    public bool canUseSightAttachment;
+    public bool canUseMagAttachment;
+    public bool canUseMuzzleAttachment;
+    public bool canUseStockAttachment;
 }

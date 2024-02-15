@@ -8,6 +8,23 @@ TagManager:
   - WeaponCamera
   - WeaponSFX
   - WallBuy
+  - ZombieSpawnPoint
+  - ZombieBody
+  - ZombieHead
+  - HitMarker
+  - HealthBarImage
+  - ExplodingBarrel
+  - Door
+  - InteractText
+  - PurchaseSFXSource
+  - WeaponWorkbench
+  - LoadedAmmoText
+  - ReserveAmmoText
+  - EquipmentOwnedText
+  - CurrentPointsText
+  - CurrentRoundText
+  - PlayerCameraPos
+  - PlayerOrientation
   layers:
   - Default
   - TransparentFX
@@ -15,10 +32,10 @@ TagManager:
   - 
   - Water
   - UI
-  - WhatIsGround
+  - IsGround
   - Weapon
   - WallBuyWeapon
-  - 
+  - UIWeapon
   - 
   - 
   - 
