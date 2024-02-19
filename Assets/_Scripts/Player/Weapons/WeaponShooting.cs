@@ -13,6 +13,9 @@ public class WeaponShooting : MonoBehaviour
     KeyCode ADSKey = KeyCode.Mouse1;
     public KeyCode reloadKey = KeyCode.R;
 
+    [Header("Data")]
+    [SerializeField] HitEffectData hitEffectData;
+
     public bool canShoot;
     public Animator weaponAnimator;
 
@@ -23,7 +26,10 @@ public class WeaponShooting : MonoBehaviour
     bool isAutomatic;
     public bool isAiming, canADS, isReloading;
     public GameObject zombieHitEffect;
-    GameObject bulletHole, muzzleEffect;
+    [SerializeField]
+    GameObject bulletHole;
+    [SerializeField]
+    ParticleSystem muzzleEffect;
     Image crosshair;
     AudioSource SFXSource;
     AudioClip[] firingSFX;
@@ -79,13 +85,11 @@ public class WeaponShooting : MonoBehaviour
         perShotCooldown = weaponToInitialise.perShotCooldown;
         maxSpreadDeviationAngle = weaponToInitialise.maxSpreadDeviationAngle;
         isAutomatic = weaponToInitialise.isAutomatic;
-        bulletHole = weaponToInitialise.bulletHole;
-        muzzleEffect = weaponToInitialise.muzzleEffect;
+        hitEffectData = weaponToInitialise.hitEffectData;
         firingSFX = weaponToInitialise.fireSFX;
         reloadSFX = weaponToInitialise.reloadSFX;
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-
         CheckInstantKillStatus();
     }
     public void CheckInstantKillStatus()
@@ -121,6 +125,8 @@ public class WeaponShooting : MonoBehaviour
         if (canShoot && currentLoadedAmmo != 0 && !isReloading && !PlayerMovement.instance.isSprinting)
         {
             canShoot = false;
+            StartCoroutine(PerShotCooldown());
+            PlayMuzzleFlash();
 
             Vector3 forwardVector = Vector3.forward;
             if (PlayerMovement.instance.isCrouching)
@@ -171,11 +177,25 @@ public class WeaponShooting : MonoBehaviour
                         else
                             damageable.OnDamaged(damage, hit.transform.tag);
                     }
-
                 }
+                
+                if (hit.transform.TryGetComponent<SurfaceIdentifier>(out SurfaceIdentifier _surface))
+                {
+                    Vector3 spawnLocation = hit.point + (hit.normal * .01f);
+                    Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+
+                    if(_surface.surfaceType != SurfaceTypes.flesh)
+                    {
+                        GameObject clone = Instantiate(bulletHole, spawnLocation, spawnRotation);
+                        clone.transform.SetParent(hit.transform);
+                        clone.GetComponent<BulletHole>().SetMaterialType(_surface.surfaceType);
+                    }
+
+                    spawnRotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
+                    hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
+                }               
             }
 
-            StartCoroutine(PerShotCooldown());
         }
         else if (canShoot && currentLoadedAmmo == 0 && currentReserveAmmo > 0)
         {
@@ -183,6 +203,10 @@ public class WeaponShooting : MonoBehaviour
         }
     }
 
+    void PlayMuzzleFlash()
+    {
+        muzzleEffect.Play();
+    }
 
     void ToggleWeaponAiming()
     {

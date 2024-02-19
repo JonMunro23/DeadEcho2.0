@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33000011335424762}
   - component: {fileID: 23000013339697274}
   - component: {fileID: 64000010475210148}
+  - component: {fileID: 1807780871592631143}
   m_Layer: 6
   m_Name: Road_set_v1_road_up_1m_LD
   m_TagString: Untagged
@@ -106,6 +107,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300086, guid: c7f7a9ec09a97d144963b6dd16448dc3, type: 3}
+--- !u!114 &1807780871592631143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010335641028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 1
 --- !u!1 &1000012196295660
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +151,7 @@ Transform:
   - {fileID: 4000012521990018}
   - {fileID: 4000012944939678}
   m_Father: {fileID: 0}
-  m_RootOrder: 38
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1000013514771496
 GameObject:
@@ -151,6 +165,7 @@ GameObject:
   - component: {fileID: 33000012380772074}
   - component: {fileID: 23000011101830828}
   - component: {fileID: 64000010291788812}
+  - component: {fileID: 1655679532207910213}
   m_Layer: 6
   m_Name: Road_set_v1_road_up_1m_LD_f
   m_TagString: Untagged
@@ -245,3 +260,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300094, guid: c7f7a9ec09a97d144963b6dd16448dc3, type: 3}
+--- !u!114 &1655679532207910213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013514771496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 1

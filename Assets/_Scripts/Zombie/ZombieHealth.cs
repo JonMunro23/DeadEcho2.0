@@ -14,6 +14,10 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     public int currentHealth;
     public bool isDead;
 
+    [Header("Sound")]
+    public AudioClip[] hitSFx;
+    AudioSource gettngHitAudioSource;
+
     public static Action onDeath;
     public static Action onHit;
     public static Action<Vector3> dropPowerUp;
@@ -26,6 +30,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     {
         animator = GetComponent<Animator>();
         zombieAI = GetComponent<ZombieAI>();
+        gettngHitAudioSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update

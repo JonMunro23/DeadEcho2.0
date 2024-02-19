@@ -265,9 +265,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea7e82ed58ceeb741bb6c10e648a9249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireKey: 323
-  ADSKey: 324
   reloadKey: 114
+  hitEffectData: {fileID: 0}
   canShoot: 0
   weaponAnimator: {fileID: 0}
   equippedWeapon: {fileID: 0}
@@ -277,6 +276,8 @@ MonoBehaviour:
   canADS: 0
   isReloading: 0
   zombieHitEffect: {fileID: 0}
+  bulletHole: {fileID: 1952876972476476232, guid: dc8a9061ec4dcd8408b9f74eec030c6f, type: 3}
+  muzzleEffect: {fileID: 0}
 --- !u!1 &1080846572375672
 GameObject:
   m_ObjectHideFlags: 0

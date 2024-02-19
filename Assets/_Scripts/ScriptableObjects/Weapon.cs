@@ -20,8 +20,7 @@ public class Weapon : ScriptableObject
     public GameObject weaponObj;
     public GameObject weaponWallBuyObj;
     public GameObject UIObj;
-    public GameObject bulletHole;
-    public GameObject muzzleEffect;
+    public HitEffectData hitEffectData;
 
     public float defaultYPos;
     public float aimingYPos;

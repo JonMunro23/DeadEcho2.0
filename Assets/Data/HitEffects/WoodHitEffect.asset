@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1316ecdf46ea2488246179db567f71, type: 3}
+  m_Name: WoodHitEffect
+  m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 2987751777254422691, guid: b3730ed3fa1fed44db81cced178c24b4, type: 3}
+  hitEffectSfx:
+  - {fileID: 8300000, guid: 80ab204d7ae61474e9c1a4e9556b651d, type: 3}
+  - {fileID: 8300000, guid: 36239731b8b91604d9114c6c52280550, type: 3}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1316ecdf46ea2488246179db567f71, type: 3}
+  m_Name: MetalHitEffect
+  m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 3187277780378210930, guid: dc6df57fa091b6d4e9394d8749dc6a91, type: 3}
+  hitEffectSfx:
+  - {fileID: 8300000, guid: fdcea4a2d9d36c64a9ae3b53b2d30228, type: 3}
+  - {fileID: 8300000, guid: 0581fdb0fa3dbd9459fe5e252d2211f0, type: 3}
+  - {fileID: 8300000, guid: 49dd5e0426c15d44abe18016170e220b, type: 3}

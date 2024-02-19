@@ -32,15 +32,13 @@ public class ZombieSpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(canSpawnZombies)
-        {
-            amountToSpawn = startingAmountToSpawn;
-            canSpawnZombie = true;
-            spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("ZombieSpawnPoint"));
-            currentRound = 1;
-            UpdateCurrentWaveText();
-            PlayWaveTextIntroAnimation();
-        }
+
+        amountToSpawn = startingAmountToSpawn;
+        canSpawnZombie = true;
+        spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("ZombieSpawnPoint"));
+        currentRound = 1;
+        UpdateCurrentWaveText();
+        PlayWaveTextIntroAnimation();
     }
 
     private void OnDisable()
@@ -50,34 +48,37 @@ public class ZombieSpawnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(spawnPoints.Count > 0)
+        if(canSpawnZombies)
         {
-            while (amountToSpawn > 0 && canSpawnZombie && aliveZombies < maxNumberOfAliveZombies)
+            if(spawnPoints.Count > 0)
             {
-                canSpawnZombie = false;
-                amountToSpawn--;
-                aliveZombies++;
-                int rand = Random.Range(0, spawnPoints.Count);
+                while (amountToSpawn > 0 && canSpawnZombie && aliveZombies < maxNumberOfAliveZombies)
+                {
+                    canSpawnZombie = false;
+                    amountToSpawn--;
+                    aliveZombies++;
+                    int rand = Random.Range(0, spawnPoints.Count);
 
-                if(zombieParent)
-                    Instantiate(zombieObj, spawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
-                else
-                    Instantiate(zombieObj, spawnPoints[rand].transform.position, Quaternion.identity);
+                    if(zombieParent)
+                        Instantiate(zombieObj, spawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
+                    else
+                        Instantiate(zombieObj, spawnPoints[rand].transform.position, Quaternion.identity);
 
-                StartCoroutine(SpawnCooldown());
+                    StartCoroutine(SpawnCooldown());
+                }
             }
-        }
 
-        if (amountToSpawn == 0 && aliveZombies == 0 && canStartNextWave)
-        {
-            NextRound();
-        }
-
-        if(Input.GetKey(KeyCode.LeftShift))
-        {
-            if(Input.GetKeyDown(KeyCode.L))
+            if (amountToSpawn == 0 && aliveZombies == 0 && canStartNextWave)
             {
                 NextRound();
+            }
+
+            if(Input.GetKey(KeyCode.LeftShift))
+            {
+                if(Input.GetKeyDown(KeyCode.L))
+                {
+                    NextRound();
+                }
             }
         }
     }
@@ -127,7 +128,8 @@ public class ZombieSpawnManager : MonoBehaviour
 
             currentWaveText.GetComponent<RectTransform>().DOLocalMove(new Vector3(50, -50, 0), 1).SetDelay(.35f).SetEase(Ease.OutCirc).OnComplete(() =>
             {
-                canStartNextWave = true;
+                if(canSpawnZombies)
+                    canStartNextWave = true;
             });
         });
         

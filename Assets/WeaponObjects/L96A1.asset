@@ -19,8 +19,8 @@ MonoBehaviour:
   weaponObj: {fileID: 1577853085290668, guid: 928b688ca93e2b74bb1b03b789da8d94, type: 3}
   weaponWallBuyObj: {fileID: 1577853085290668, guid: eaa9f1c6b7975694d85cc4446130b26d, type: 3}
   UIObj: {fileID: 0}
-  bulletHole: {fileID: 4625233241759954807, guid: e1d96a56c65afcf4893cdd06a15b68d5, type: 3}
   muzzleEffect: {fileID: 0}
+  hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   defaultYPos: -1.7
   aimingYPos: 0
   UISprite: {fileID: 0}

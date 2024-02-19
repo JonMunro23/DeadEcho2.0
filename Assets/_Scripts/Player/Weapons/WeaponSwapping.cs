@@ -1,7 +1,10 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class WeaponSwapping : MonoBehaviour
 {
@@ -12,12 +15,18 @@ public class WeaponSwapping : MonoBehaviour
     public Weapon currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
     public GameObject currentPrimary1WeaponObj, currentPrimary2WeaponObj, currentSecondaryWeaponObj;
 
-    public Weapon startingWeapon;
+    public Weapon startingSecondaryWeapon;
 
     //1 == primary1, 2 == primary2, 3 == secondary
     public int currentlyEquippedWeaponSlot;
     public Weapon currentlyEquippedWeapon;
     public GameObject currentlyEquippedWeaponObj;
+
+    [Header("Weapon Inventory")]
+    public GameObject weaponInventoryDisplayUI;
+    [SerializeField] float displayLength;
+    Coroutine displayCounter;
+    bool isWeaponInventoryDisplayOpen = false;
 
     [SerializeField] Vector3 weaponSpawnDefaultPosition;
 
@@ -42,29 +51,38 @@ public class WeaponSwapping : MonoBehaviour
 
     private void Start()
     {
+        weaponInventoryDisplayUI.SetActive(false);
+
         canSwapWeapon = true;
-        PickUpWeapon(startingWeapon);
+        SpawnNewWeapon(startingSecondaryWeapon, 3);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && currentlyEquippedWeaponSlot != 1 && currentPrimary1Weapon)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SwapToWeapon(1);
+            ShowWeaponInventory();
+            if (currentlyEquippedWeaponSlot != 1 && currentPrimary1Weapon)
+                SwapToWeapon(1);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && currentlyEquippedWeaponSlot != 2 && currentPrimary2Weapon)
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SwapToWeapon(2);
+            ShowWeaponInventory();
+            if (currentlyEquippedWeaponSlot != 2 && currentPrimary2Weapon)
+                SwapToWeapon(2);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && currentlyEquippedWeaponSlot != 3 && currentSecondaryWeapon)
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SwapToWeapon(3);
-        } 
+            ShowWeaponInventory();
+            if (currentlyEquippedWeaponSlot != 3 && currentSecondaryWeapon)
+                SwapToWeapon(3);
+        }
     }
 
     public void PickUpWeapon(Weapon weaponToPickup)
     {
-        if(weaponToPickup.weaponSlotType == Weapon.WeaponSlotType.primary)
+
+        if (weaponToPickup.weaponSlotType == Weapon.WeaponSlotType.primary)
         {
             if (!currentPrimary1Weapon)
             {
@@ -79,18 +97,20 @@ public class WeaponSwapping : MonoBehaviour
                 ExchangePrimaryWeapon(weaponToPickup);
             }
         }
-        else if(weaponToPickup.weaponSlotType == Weapon.WeaponSlotType.secondary)
+        else if (weaponToPickup.weaponSlotType == Weapon.WeaponSlotType.secondary)
         {
 
             if (!currentSecondaryWeapon)
             {
                 SpawnNewWeapon(weaponToPickup, 3);
             }
-            else if(currentSecondaryWeapon)
+            else if (currentSecondaryWeapon)
             {
                 ExchangeSecondaryWeapon(weaponToPickup);
             }
         }
+
+        ShowWeaponInventory();
     }
 
 
@@ -145,7 +165,7 @@ public class WeaponSwapping : MonoBehaviour
         DeactivateWeapons();
         GameObject clone = Instantiate(weaponToSpawn.weaponObj);
         //PlayerMovement.instance.animator = clone.GetComponent<Animator>();
-        switch(weaponSlot)
+        switch (weaponSlot)
         {
             case 1:
                 primaryWeapon1Holder.SetActive(true);
@@ -167,7 +187,7 @@ public class WeaponSwapping : MonoBehaviour
                 break;
         }
 
-        if(weaponToSpawn.name == "Python")
+        if (weaponToSpawn.name == "Python")
             clone.transform.localPosition = new Vector3(0, -1.6f, 0);
         else
             clone.transform.localPosition = weaponSpawnDefaultPosition;
@@ -181,7 +201,7 @@ public class WeaponSwapping : MonoBehaviour
 
     void SwapToWeapon(int weaponSlotToSwapTo)
     {
-        if(currentlyEquippedWeaponObj && currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isReloading)
+        if (currentlyEquippedWeaponObj && currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isReloading)
         {
             currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
         }
@@ -219,6 +239,7 @@ public class WeaponSwapping : MonoBehaviour
                 }
                 break;
         }
+        weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
         onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
     }
@@ -256,14 +277,50 @@ public class WeaponSwapping : MonoBehaviour
 
     public void RefillWeaponAmmunition()
     {
-        if(currentPrimary1WeaponObj != null)
+        if (currentPrimary1WeaponObj != null)
             currentPrimary1WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
 
-        if(currentPrimary2WeaponObj != null)
+        if (currentPrimary2WeaponObj != null)
             currentPrimary2WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
 
-        if(currentSecondaryWeaponObj != null)
+        if (currentSecondaryWeaponObj != null)
             currentSecondaryWeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+    }
+
+    void ShowWeaponInventory()
+    {
+        weaponInventoryDisplayUI.SetActive(true);
+        isWeaponInventoryDisplayOpen = true;
+        weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().Init(currentlyEquippedWeaponSlot, currentSecondaryWeapon, currentPrimary1Weapon != null ? currentPrimary1Weapon : null, currentPrimary2Weapon != null ? currentPrimary2Weapon : null);
+        weaponInventoryDisplayUI.transform.DOScaleY(1, .2f).OnComplete(() =>
+        {
+            if(displayCounter != null)
+            {
+                StopCoroutine(displayCounter);
+            }
+            displayCounter = StartCoroutine(StartDisplayCountdown());
+        });
+
+    }
+
+    void HideWeaponInventory()
+    {
+        isWeaponInventoryDisplayOpen = false;
+        weaponInventoryDisplayUI.transform.DOScaleY(0, .2f).OnComplete(() =>
+        {
+            if(isWeaponInventoryDisplayOpen == false)
+            {
+                weaponInventoryDisplayUI.SetActive(false);
+            }
+        });
+    }
+
+
+    IEnumerator StartDisplayCountdown()
+    {
+        yield return new WaitForSeconds(displayLength);
+        HideWeaponInventory();
+
     }
 
 }

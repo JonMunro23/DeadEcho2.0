@@ -46,7 +46,7 @@ public class HitMarkerManager : MonoBehaviour
         hitMarker.transform.GetChild(0).gameObject.SetActive(true);
         SetHitMarkerArmColour(hitmarkerColour);
         if(hitmarkerSFXSource.isPlaying) hitmarkerSFXSource.Stop();
-        hitmarkerSFXSource.PlayOneShot(hitMarkerSfx);
+        //hitmarkerSFXSource.PlayOneShot(hitMarkerSfx);
         if (deactivateHitMarker != null)
             StopCoroutine(deactivateHitMarker);
 

@@ -2537,7 +2537,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &95614729095742034
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2554,7 +2554,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!82 &7381764330250384188
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2663,16 +2664,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea7e82ed58ceeb741bb6c10e648a9249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireKey: 323
-  ADSKey: 324
   reloadKey: 114
+  hitEffectData: {fileID: 0}
   canShoot: 0
   weaponAnimator: {fileID: 0}
+  equippedWeapon: {fileID: 0}
   currentReserveAmmo: 0
   currentLoadedAmmo: 0
   isAiming: 0
   canADS: 0
   isReloading: 0
+  zombieHitEffect: {fileID: 0}
+  bulletHole: {fileID: 1952876972476476232, guid: dc8a9061ec4dcd8408b9f74eec030c6f, type: 3}
+  muzzleEffect: {fileID: 0}
 --- !u!1 &1994926487890642
 GameObject:
   m_ObjectHideFlags: 0
@@ -2709,7 +2713,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4666379958049642}
     m_Modifications:
     - target: {fileID: 1499573690772834, guid: 06dbf2b82ae111844805bcb6e1aa1228, type: 3}
@@ -2773,7 +2777,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06dbf2b82ae111844805bcb6e1aa1228, type: 3}
 --- !u!4 &4208698526512215128 stripped
 Transform:

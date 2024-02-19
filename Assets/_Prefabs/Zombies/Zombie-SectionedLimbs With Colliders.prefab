@@ -158,7 +158,7 @@ Transform:
   - {fileID: 4341162323912872992}
   - {fileID: 7874759558624874013}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &6535327460619246836
 NavMeshAgent:
@@ -223,7 +223,12 @@ MonoBehaviour:
   zombieRagdoll: {fileID: 4585039117666586349, guid: ce8f848145cea054c986deb7472aa19e, type: 3}
   currentHealth: 0
   isDead: 0
-  powerUpDropChance: 100
+  hitSFx:
+  - {fileID: 8300000, guid: 716320be700fdbc468e93389cb0604d2, type: 3}
+  - {fileID: 8300000, guid: 7cb927ed1b24cfd4ba783d39b4317691, type: 3}
+  - {fileID: 8300000, guid: 366d98a0c6040c547a9a3285fa4fb71e, type: 3}
+  gettngHitAudioSource: {fileID: 0}
+  powerUpDropChance: 5
 --- !u!114 &6535327460619246827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,6 +728,7 @@ GameObject:
   - component: {fileID: 2554468513642167181}
   - component: {fileID: 281902428251444228}
   - component: {fileID: 7819687807113688528}
+  - component: {fileID: 5782744330501433593}
   m_Layer: 0
   m_Name: Base HumanRArmForearm
   m_TagString: ZombieBody
@@ -808,7 +814,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.26574108, y: -0.00000026449567, z: -0.00000007823107}
+  m_ConnectedAnchor: {x: -0.26574123, y: -0.00000023841864, z: 0.00000007450578}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -842,6 +848,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &5782744330501433593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346160242285652918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &1431167776492057765
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,6 +968,7 @@ GameObject:
   - component: {fileID: 8326684478662701071}
   - component: {fileID: 1533538882943590319}
   - component: {fileID: 3036159353234686372}
+  - component: {fileID: 7172241530473174875}
   m_Layer: 0
   m_Name: Base HumanRArmUpperarm
   m_TagString: ZombieBody
@@ -1034,7 +1054,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: -0.3038768, y: -0.036873814, z: -0.17756362}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -1068,6 +1088,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &7172241530473174875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691702601943030110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &1770773265375698927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,6 +1362,7 @@ GameObject:
   - component: {fileID: 1642252695315581224}
   - component: {fileID: 3354312116043709663}
   - component: {fileID: 5259429643603553540}
+  - component: {fileID: 7790570214630740030}
   m_Layer: 0
   m_Name: Base HumanPelvis
   m_TagString: ZombieBody
@@ -1402,6 +1436,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7790570214630740030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2684726258384542957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &2716868101997143791
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,6 +1461,7 @@ GameObject:
   - component: {fileID: 2364368814931339924}
   - component: {fileID: 299308183552738391}
   - component: {fileID: 6655438472232485229}
+  - component: {fileID: 7466682305025382318}
   m_Layer: 0
   m_Name: Base HumanHead
   m_TagString: ZombieHead
@@ -1535,6 +1583,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &7466682305025382318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2716868101997143791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &2782900514094193673
 GameObject:
   m_ObjectHideFlags: 0
@@ -1757,6 +1818,7 @@ GameObject:
   - component: {fileID: 6381851372909264620}
   - component: {fileID: 6646486774371452334}
   - component: {fileID: 7925703614888073600}
+  - component: {fileID: 1049487526787737942}
   m_Layer: 0
   m_Name: Base HumanLArmForearm
   m_TagString: ZombieBody
@@ -1842,7 +1904,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.2657414, y: 0.00000016018747, z: -0.0000000055879372}
+  m_ConnectedAnchor: {x: -0.2657414, y: -0.0000002980232, z: -0.000000037252917}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -1876,6 +1938,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &1049487526787737942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935949312647811759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &2972951978584782503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1888,6 +1963,7 @@ GameObject:
   - component: {fileID: 7871372059391173058}
   - component: {fileID: 8073214102796199801}
   - component: {fileID: 7248203243792723884}
+  - component: {fileID: 8133965196094951559}
   m_Layer: 0
   m_Name: Base HumanRThigh
   m_TagString: ZombieBody
@@ -2007,6 +2083,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &8133965196094951559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2972951978584782503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &3149420686621779758
 GameObject:
   m_ObjectHideFlags: 0
@@ -2019,6 +2108,7 @@ GameObject:
   - component: {fileID: 7027677331254561560}
   - component: {fileID: 5257320589244432272}
   - component: {fileID: 8045769908924290499}
+  - component: {fileID: 6916248542040984593}
   m_Layer: 0
   m_Name: Base HumanLLegThigh
   m_TagString: ZombieBody
@@ -2138,6 +2228,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &6916248542040984593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3149420686621779758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &3398292646666186059
 GameObject:
   m_ObjectHideFlags: 0
@@ -2277,6 +2380,7 @@ GameObject:
   - component: {fileID: 8630001593325864721}
   - component: {fileID: 2062480198973642674}
   - component: {fileID: 3205379660709786431}
+  - component: {fileID: 7055038932154562457}
   m_Layer: 0
   m_Name: Base HumanLLegCalf
   m_TagString: ZombieBody
@@ -2396,6 +2500,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &7055038932154562457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875265987119902215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &3970278326992262840
 GameObject:
   m_ObjectHideFlags: 0
@@ -3432,6 +3549,7 @@ GameObject:
   - component: {fileID: 5784758047716349582}
   - component: {fileID: 8225969644456054572}
   - component: {fileID: 1640076668699458181}
+  - component: {fileID: 7891767452491622807}
   m_Layer: 0
   m_Name: Base HumanLArmUpperarm
   m_TagString: ZombieBody
@@ -3517,7 +3635,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: -0.30387637, y: -0.03687386, z: 0.17756347}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -3551,6 +3669,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &7891767452491622807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6105164320332901898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &6170611712054815806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3595,6 +3726,7 @@ GameObject:
   - component: {fileID: 8851975390565948275}
   - component: {fileID: 5853237043046682268}
   - component: {fileID: 791424038648377384}
+  - component: {fileID: 804630786927182397}
   m_Layer: 0
   m_Name: Base HumanSpine2
   m_TagString: ZombieBody
@@ -3678,7 +3810,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: -0.27080226, y: 0.04972437, z: -0.000000014901161}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -3712,6 +3844,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &804630786927182397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6627488215354940269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &6990259042814786761
 GameObject:
   m_ObjectHideFlags: 0
@@ -3976,6 +4121,7 @@ GameObject:
   - component: {fileID: 3209132118002242128}
   - component: {fileID: 5505941777413316174}
   - component: {fileID: 1545151309699604030}
+  - component: {fileID: 4805531151455319531}
   m_Layer: 0
   m_Name: Base HumanRCalf
   m_TagString: ZombieBody
@@ -4095,6 +4241,19 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4805531151455319531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8130568860830157863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 3
 --- !u!1 &8134716910228403488
 GameObject:
   m_ObjectHideFlags: 0
