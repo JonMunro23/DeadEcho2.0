@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1316ecdf46ea2488246179db567f71, type: 3}
+  m_Name: FleshHitEffect
+  m_EditorClassIdentifier: 
+  hitEffectPrefab: {fileID: 4284461365719833726, guid: 708b93be0a558ab439788c690db99dfc, type: 3}
+  hitEffectSfx:
+  - {fileID: 8300000, guid: 716320be700fdbc468e93389cb0604d2, type: 3}
+  - {fileID: 8300000, guid: 7cb927ed1b24cfd4ba783d39b4317691, type: 3}
+  - {fileID: 8300000, guid: 366d98a0c6040c547a9a3285fa4fb71e, type: 3}
