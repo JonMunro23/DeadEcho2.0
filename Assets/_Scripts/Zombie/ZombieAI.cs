@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 using static UnityEngine.GraphicsBuffer;
 
 public class ZombieAI : MonoBehaviour
@@ -14,7 +15,17 @@ public class ZombieAI : MonoBehaviour
     public float speed, meleeCooldown, meleePerformTime;
     public float distanceToPerformMeleeAttack;
     public int damage;
-    public bool isDead, isMoving, isAttacking, canPerformMeleeAttack = true;
+    public bool isDead, isMoving, isAttacking, canPerformMeleeAttack = true, seekPlayer = true;
+
+    private void OnEnable()
+    {
+        PlayerHealth.onDeath += SetIdle;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.onDeath -= SetIdle;
+    }
 
     private void Awake()
     {
@@ -36,7 +47,7 @@ public class ZombieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!zombieHealth.isDead)
+        if (!zombieHealth.isDead && seekPlayer)
         {
             SetTarget();    
 
@@ -113,5 +124,11 @@ public class ZombieAI : MonoBehaviour
     {
         Vector3 dir = targetPos - transform.position;
         transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.LookRotation(dir), agent.angularSpeed * Time.deltaTime);
+    }
+
+    void SetIdle()
+    {
+        seekPlayer = false;
+        HaltMovement();
     }
 }

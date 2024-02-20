@@ -1,5 +1,5 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +15,8 @@ public class PlayerHealth : MonoBehaviour
     Coroutine healthRegenCoRoutine;
     [SerializeField] AudioSource gettingHitSource, lowHealthSource;
     [SerializeField] AudioClip[] gettingHitSFX;
+
+    public static Action onDeath;
 
     private void Awake()
     {
@@ -33,29 +35,47 @@ public class PlayerHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                TakeDamage(maxHealth / 4);
+            }
+        }
     }
 
     public void TakeDamage(float damage)
     {
-        if (canTakeDamage == true)
+        if (canTakeDamage == true && currentHealth > 0)
         {
             canTakeDamage = false;
             currentHealth -= damage;
             healthbarImage.fillAmount = currentHealth / 100;
             gettingHitSource.PlayOneShot(GetRandomAudioClip());
 
-            //Display hit ui
+            if (currentHealth <= 30)
+            {
+                if (!isPlayingLowHealthSFX)
+                {
+                    isPlayingLowHealthSFX = true;
+                    lowHealthSource.Play();
+                }
+                lowHealthOverlay.SetActive(true);
+            }
 
             if (currentHealth <= 0)
             {
-                //Time.timeScale = 0;
-                //PauseMenu.isPaused = true;
-                //Cursor.lockState = CursorLockMode.None;
-                //_gameOverOverlay.SetActive(true);
-                //_gameOverOverlay.transform.parent.GetChild(1).GetChild(0).transform.gameObject.SetActive(true);
-                //scoreBoard.SetActive(true);
-                Debug.Log("Player is Dead");
+                onDeath?.Invoke();
+
+                if(healthRegenCoRoutine != null)
+                    StopCoroutine(healthRegenCoRoutine);
+
+                if(isPlayingLowHealthSFX)
+                {
+                    isPlayingLowHealthSFX = false;
+                    lowHealthSource.Stop();
+                }
+                return;
             }
 
             StartCoroutine(Invincibility());
@@ -64,22 +84,14 @@ public class PlayerHealth : MonoBehaviour
                 StopCoroutine(healthRegenCoRoutine);
 
             healthRegenCoRoutine = StartCoroutine(HealthRegen());
+
         }
 
-        if (currentHealth <= 30)
-        {
-            if (!isPlayingLowHealthSFX)
-            {
-                isPlayingLowHealthSFX = true;
-                lowHealthSource.Play();
-            }
-            lowHealthOverlay.SetActive(true);
-        }
     }
 
     AudioClip GetRandomAudioClip()
     {
-        int rand = Random.Range(0, gettingHitSFX.Length);
+        int rand = UnityEngine.Random.Range(0, gettingHitSFX.Length);
         return gettingHitSFX[rand];
     }
 
@@ -88,6 +100,9 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(invincibilityLength);
         canTakeDamage = true;
     }
+
+
+
     IEnumerator HealthRegen()
     {
         yield return new WaitForSeconds(5);
