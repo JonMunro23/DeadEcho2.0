@@ -3,11 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using TMPro;
 
 public class GameOverManager : MonoBehaviour
 {
     [SerializeField]
     GameObject gameOverScreen, scoreBoard, hud, player, gameOverCamera;
+    [SerializeField]
+    TMP_Text roundsSurvivedText;
     [SerializeField]
     Image fadeOverlay;
 
@@ -27,6 +30,9 @@ public class GameOverManager : MonoBehaviour
     void EndGame()
     {
         gameOverScreen.SetActive(true);
+
+        roundsSurvivedText.text = "You survived " + (ZombieSpawnManager.currentRound - 1) + " Waves!";
+
         FadeToGameOverCamera();
 
     }
