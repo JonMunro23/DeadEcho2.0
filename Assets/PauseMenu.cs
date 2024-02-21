@@ -51,11 +51,11 @@ public class PauseMenu : MonoBehaviour
 
     public void RestartLevel()
     {
-        Scene currentLevel = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentLevel.name);
         isPaused = false;
         Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
+        Scene currentLevel = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentLevel.name);
     }
 
     public void Options()
@@ -63,8 +63,11 @@ public class PauseMenu : MonoBehaviour
         //open option menu
     }
 
-    public void Quit()
+    public void Quit(string levelName)
     {
-        //return to main menu
+        isPaused = false;
+        Time.timeScale = 1.0f;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene(levelName);
     }
 }
