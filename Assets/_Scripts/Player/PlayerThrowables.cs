@@ -38,17 +38,20 @@ public class PlayerThrowables : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canThrowGrenade && currentGrenadeCount > 0)
+        if(!PauseMenu.isPaused) 
         {
-            if(Input.GetKeyDown(throwEquipmentKey))
+            if(canThrowGrenade && currentGrenadeCount > 0)
             {
-                canThrowGrenade = false;
-                onEquipmentUsed?.Invoke();
-                currentGrenadeCount--;
-                currentGrenadeCountText.text = currentGrenadeCount.ToString();
-                grenadeArmsHolder.SetActive(true);
-                WeaponSwapping.instance.TemporarilyDeactivateWeapons(grenadeArmsHolder, grenadeReactivationTime);
-                StartCoroutine(ThrowGrenadeCooldown());
+                if(Input.GetKeyDown(throwEquipmentKey))
+                {
+                    canThrowGrenade = false;
+                    onEquipmentUsed?.Invoke();
+                    currentGrenadeCount--;
+                    currentGrenadeCountText.text = currentGrenadeCount.ToString();
+                    grenadeArmsHolder.SetActive(true);
+                    WeaponSwapping.instance.TemporarilyDeactivateWeapons(grenadeArmsHolder, grenadeReactivationTime);
+                    StartCoroutine(ThrowGrenadeCooldown());
+                }
             }
         }
     }

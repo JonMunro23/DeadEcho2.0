@@ -103,20 +103,22 @@ public class WeaponShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if(Input.GetKey(fireKey) && isAutomatic)
+        if(!PauseMenu.isPaused)
         {
-            FireWeapon();
-        }
+            if(Input.GetKey(fireKey) && isAutomatic)
+            {
+                FireWeapon();
+            }
 
-        if(Input.GetKeyDown(reloadKey) && currentLoadedAmmo != maxMagSize && currentReserveAmmo > 0 && !isReloading)
-        {
-            ReloadWeapon();
-        }
+            if(Input.GetKeyDown(reloadKey) && currentLoadedAmmo != maxMagSize && currentReserveAmmo > 0 && !isReloading)
+            {
+                ReloadWeapon();
+            }
 
-        if (Input.GetKeyDown(ADSKey) && canADS)
-        {
-            ToggleWeaponAiming();
+            if (Input.GetKeyDown(ADSKey) && canADS)
+            {
+                ToggleWeaponAiming();
+            }
         }
     }
 
@@ -137,7 +139,7 @@ public class WeaponShooting : MonoBehaviour
             {
                 weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
             }
-            float angle = Random.Range(-360, 360f);
+            float angle = Random.Range(-360f, 360f);
             forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, Vector3.up) * forwardVector;
             forwardVector = Quaternion.AngleAxis(angle, Vector3.forward) * forwardVector;
 
@@ -324,13 +326,11 @@ public class WeaponShooting : MonoBehaviour
     void EnableInstantKills()
     {
         isInstantKillActive = true;
-        Debug.Log("instant kill active");
     }
 
     void DisableInstantKills()
     {
         isInstantKillActive = false;
-        Debug.Log("instant kill disabled");
     }
 
     IEnumerator PerShotCooldown()

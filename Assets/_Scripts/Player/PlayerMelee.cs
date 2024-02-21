@@ -30,7 +30,8 @@ public class PlayerMelee : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckInputs();
+        if (!PauseMenu.isPaused)
+            CheckInputs();
     }
 
     void CheckInputs()
