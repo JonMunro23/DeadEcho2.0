@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public static PlayerMovement instance;
 
     [Header("Movement")]
+    public bool canMove;
     public float baseMoveSpeed;
     public float moveSpeed;
     public float groundDrag;
@@ -73,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
         WeaponSwapping.onWeaponSwapped += SwapToNewWeaponAnimator;
+        PlayerHealth.onDeath += StopMovement;
     }
 
     void Start()
@@ -91,13 +93,14 @@ public class PlayerMovement : MonoBehaviour
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
         WeaponSwapping.onWeaponSwapped -= SwapToNewWeaponAnimator;
-
-
+        PlayerHealth.onDeath -= StopMovement;
     }
+
     void Update()
     {
+        if(canMove)
+            PlayerInput();
 
-        PlayerInput();
         SpeedControl();
         HandleCrouching();
         //HandleSliding();
@@ -113,7 +116,8 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        MovePlayer();
+        if(canMove)
+            MovePlayer();
     }
 
     void PlayerInput()
@@ -431,5 +435,13 @@ public class PlayerMovement : MonoBehaviour
     void SwapToNewWeaponAnimator(GameObject newWeaponObj)
     {
         animator = newWeaponObj.GetComponent<Animator>();
+    }
+
+    void StopMovement()
+    {
+        canMove = false;
+        animator.SetFloat("speed", 0);
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity =  Vector3.zero;
     }
 }

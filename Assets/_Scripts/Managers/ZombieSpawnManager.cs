@@ -16,7 +16,7 @@ public class ZombieSpawnManager : MonoBehaviour
     [SerializeField] float zombieSpawnCooldown, gracePeriodLength;
     TMP_Text currentWaveText, waveText;
 
-    public int currentRound;
+    public static int currentRound;
 
     public bool canSpawnZombies = true;
 

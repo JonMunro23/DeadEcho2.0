@@ -265,12 +265,15 @@ public class WeaponSwapping : MonoBehaviour
         {
             case 1:
                 primaryWeapon1Holder.SetActive(true);
+                currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
                 break;
             case 2:
                 primaryWeapon2Holder.SetActive(true);
+                currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
                 break;
             case 3:
                 secondaryWeaponHolder.SetActive(true);
+                currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
                 break;
         }
     }

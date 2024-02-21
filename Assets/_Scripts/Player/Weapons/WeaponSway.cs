@@ -7,6 +7,7 @@ public class WeaponSway : MonoBehaviour
     public PlayerMovement playerMovement;
 
     [Header("Settings")]
+    public bool canSway = true;
     public bool sway = true;
     public bool swayRotation = true;
     public bool bobOffset = true;
@@ -42,11 +43,13 @@ public class WeaponSway : MonoBehaviour
     private void OnEnable()
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
+        PlayerHealth.onDeath += StopSway;
     }
 
     private void OnDisable()
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
+        PlayerHealth.onDeath -= StopSway;
     }
     // Start is called before the first frame update
     void Start()
@@ -57,7 +60,8 @@ public class WeaponSway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetInput();
+        if(canSway)
+            GetInput();
 
         Sway();
         SwayRotation();
@@ -147,5 +151,10 @@ public class WeaponSway : MonoBehaviour
     public void RestoreBob()
     {
         bobLimit = Vector3.one * 0.01f; travelLimit = Vector3.one * 0.025f;
+    }
+
+    void StopSway()
+    {
+        canSway = false;
     }
 }

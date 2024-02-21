@@ -227,7 +227,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 716320be700fdbc468e93389cb0604d2, type: 3}
   - {fileID: 8300000, guid: 7cb927ed1b24cfd4ba783d39b4317691, type: 3}
   - {fileID: 8300000, guid: 366d98a0c6040c547a9a3285fa4fb71e, type: 3}
-  gettngHitAudioSource: {fileID: 0}
   powerUpDropChance: 5
 --- !u!114 &6535327460619246827
 MonoBehaviour:
@@ -253,6 +252,7 @@ MonoBehaviour:
   isMoving: 0
   isAttacking: 0
   canPerformMeleeAttack: 1
+  seekPlayer: 1
 --- !u!82 &5304284615476171007
 AudioSource:
   m_ObjectHideFlags: 0

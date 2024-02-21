@@ -237,7 +237,7 @@ Transform:
   - {fileID: 7113644969650488164}
   - {fileID: 6459542631952352944}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &8791606583880009310
 Rigidbody:
@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd862ffe0f367045a822587e0be804f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   baseMoveSpeed: 7
   moveSpeed: 7
   groundDrag: 5
@@ -509,7 +510,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3681153510122642189}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 22dcabb96d7771d439f65919c823e4bb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
