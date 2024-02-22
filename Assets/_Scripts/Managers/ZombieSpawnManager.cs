@@ -105,7 +105,7 @@ public class ZombieSpawnManager : MonoBehaviour
         canSpawnZombie = true;
     }
 
-    void KillZombie()
+    void KillZombie(int playerIndex, bool wasHeadshot)
     {
         aliveZombies--;
     }

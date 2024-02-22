@@ -18,8 +18,10 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     public AudioClip[] hitSFx;
     AudioSource gettngHitAudioSource;
 
-    public static Action onDeath;
+    //int = index of player that killed, bool = wasHeadshot
+    public static Action<int, bool> onDeath;
     public static Action onHit;
+    //vector3 = drop location
     public static Action<Vector3> dropPowerUp;
 
     //int = damageTaken
@@ -39,25 +41,26 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         currentHealth = startingHealth;
     }
 
-    public void TakeDamage(int healthToRemove, bool hitHead = false)
+    public void TakeDamage(int healthToRemove, bool hitHead)
     {
         if(!isDead)
         {
             currentHealth -= healthToRemove;
             if (currentHealth <= 0)
             {
-                Die();
+                if(hitHead)
+                {
+                    ExplodeHead();
+                    return;
+                }
+
+                Die(hitHead);
                 return;
             }
 
             onPointsGiven?.Invoke(hitPoints);
             onHit?.Invoke();
         }
-        //else if(isDead)
-        //{
-        //    if (hitHead && zombieHead.enabled)
-        //        ExplodeHead();
-        //}
     }
 
     public void ExplodeHead()
@@ -66,19 +69,19 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         if (!isDead)
         {
             onPointsGiven?.Invoke(extraHeadshotPoints);
-            Die();
+            Die(true);
         }
         //play head explosing particle effect
         //play head explosing sfx
     }
 
-    public void Die()
+    public void Die(bool wasHeadshot)
     {
         if(DoesSpawnPowerUp())
             dropPowerUp?.Invoke(transform.position);
 
         isDead = true;
-        onDeath?.Invoke();
+        onDeath?.Invoke(0, wasHeadshot);
         onPointsGiven?.Invoke(baseKillPoints);
         zombieAI.isMoving = false;
         zombieAI.agent.velocity = Vector3.zero;
@@ -86,11 +89,16 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         animator.SetTrigger("Die");
         animator.SetBool("IsMoving", false);
         transform.SetParent(null);
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
+        }    
+
         Destroy(zombieAI.agent);
-        var ragdollClone = Instantiate(zombieRagdoll, transform.position, transform.rotation);
-        //ragdollClone.GetComponent<Rigidbody>().AddForce(Vector3.back * 20 ,ForceMode.Impulse);
-        Destroy(ragdollClone, 12);
-        Destroy(gameObject);
+        //var ragdollClone = Instantiate(zombieRagdoll, transform.position, transform.rotation);
+        //Destroy(ragdollClone, 12);
+        Destroy(gameObject, 12);
         //add chance to gib depending on weapon?
     }
 
@@ -104,16 +112,13 @@ public class ZombieHealth : MonoBehaviour, IDamageable
 
     }
 
-    public void OnDamaged(int damageTaken, string hitBodyPart)
+    public void OnDamaged(int damageTaken, bool wasHeadshot)
     {
-        if (hitBodyPart == "ZombieHead")
-            TakeDamage(damageTaken, true);
-        else
-            TakeDamage(damageTaken, false);
+        TakeDamage(damageTaken, wasHeadshot);
     }
 
-    public void Kill()
+    public void InstantlyKill()
     {
-        Die();
+        Die(false);
     }
 }

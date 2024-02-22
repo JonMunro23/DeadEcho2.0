@@ -168,16 +168,19 @@ public class WeaponShooting : MonoBehaviour
                 {
                     if(isInstantKillActive)
                     {
-                        damageable.Kill();
+                        damageable.InstantlyKill();
                     }
                     else
                     {
                         if(hit.transform.CompareTag("ZombieHead"))
                         {
-                            damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), hit.transform.tag);
+                            damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), true);
                         }
                         else
-                            damageable.OnDamaged(damage, hit.transform.tag);
+                        {
+                            damageable.OnDamaged(damage, false);
+                        }
+
                     }
                 }
                 
