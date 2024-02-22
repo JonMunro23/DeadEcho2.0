@@ -12,7 +12,7 @@ public class ZombieAI : MonoBehaviour
     Animator animator;
     [SerializeField]
     Transform meleePos, playerPosition;
-    public float speed, meleeCooldown, meleePerformTime;
+    public float speed, meleeCooldown, meleePerformTime, meleeRange;
     public float distanceToPerformMeleeAttack;
     public int damage;
     public bool isDead, isMoving, isAttacking, canPerformMeleeAttack = true, seekPlayer = true;
@@ -94,9 +94,14 @@ public class ZombieAI : MonoBehaviour
     void MeleeAttack()
     {
         canPerformMeleeAttack = false;
-        Collider[] colliders;
         animator.SetTrigger("MeleeAttack");
-        colliders = Physics.OverlapSphere(meleePos.position, 3);
+        StartCoroutine(MeleeAttackCooldown());
+    }
+
+    void CheckForHit()
+    {
+        Collider[] colliders;
+        colliders = Physics.OverlapSphere(meleePos.position, meleeRange);
         foreach (Collider collider in colliders)
         {
             if (collider.CompareTag("Player"))
@@ -105,15 +110,14 @@ public class ZombieAI : MonoBehaviour
                 Debug.Log("Hit Player");
             }
         }
-        StartCoroutine(MeleeAttackCooldown());
     }
 
-    //void OnDrawGizmosSelected()
-    //{
+    void OnDrawGizmosSelected()
+    {
 
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawSphere(meleePos.position, 3);
-    //}
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(meleePos.position, meleeRange);
+    }
 
     IEnumerator MeleeAttackCooldown()
     {
