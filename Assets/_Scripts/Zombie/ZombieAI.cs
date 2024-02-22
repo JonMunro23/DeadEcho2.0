@@ -75,7 +75,8 @@ public class ZombieAI : MonoBehaviour
     {
         isMoving = false;
         animator.SetBool("IsMoving", isMoving);
-        agent.isStopped = true;
+        if(agent)
+            agent.isStopped = true;
     }
 
     void MoveTowardsTarget()

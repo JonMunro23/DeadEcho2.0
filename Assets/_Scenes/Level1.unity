@@ -9260,7 +9260,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &306836623
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16271,7 +16271,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -152}
+  m_AnchoredPosition: {x: 0, y: -158}
   m_SizeDelta: {x: 1920, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &572858866
@@ -32533,7 +32533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 349}
+  m_AnchoredPosition: {x: 0, y: 232}
   m_SizeDelta: {x: 1000, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1001 &1191781410
@@ -56243,7 +56243,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 244}
+  m_AnchoredPosition: {x: 0, y: 238}
   m_SizeDelta: {x: 0, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2119353503
@@ -57280,7 +57280,7 @@ PrefabInstance:
     - target: {fileID: 4384731648686122597, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: scoreBoard
       value: 
-      objectReference: {fileID: 821119268}
+      objectReference: {fileID: 1191048282}
     - target: {fileID: 4384731648686122597, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: fadeOverlay
       value: 
@@ -57301,6 +57301,10 @@ PrefabInstance:
       propertyPath: restartLevelDelay
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4384731648686122597, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
+      propertyPath: roundsSurvivedText
+      value: 
+      objectReference: {fileID: 2119353503}
     - target: {fileID: 4384731648686122597, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: fadeToRestartLevelDelay
       value: 15
