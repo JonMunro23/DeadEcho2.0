@@ -10,7 +10,45 @@ public class Scoreboard : MonoBehaviour
     [Space]
     [SerializeField]
     GameObject scoreBoard;
+    [SerializeField]
+    PlayerScoreboardRow playerScoreboardRow;
+
+    List<PlayerScoreboardRow> scoreboardRows = new List<PlayerScoreboardRow>();
+
+    [SerializeField]
+    Transform scoreboardPlayerRowParent;
+
     public static bool isScoreboardOpen;
+
+    public int numberOfPlayers = 1;
+
+    private void OnEnable()
+    {
+        ZombieHealth.onDeath += UpdateKills;
+        PointsManager.pointsUpdated += UpdateScore;
+    }
+
+    private void OnDisable()
+    {
+        ZombieHealth.onDeath -= UpdateKills;
+        PointsManager.pointsUpdated -= UpdateScore;
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < numberOfPlayers; i++)
+        {
+            SpawnPlayerRow(i);
+        }
+    }
+
+    void SpawnPlayerRow(int playerIndex)
+    {
+        PlayerScoreboardRow clone = Instantiate(playerScoreboardRow, scoreboardPlayerRowParent);
+        scoreboardRows.Add(clone);
+        clone.SetName("Player " + playerIndex);
+        clone.AddScore(PointsManager.instance.currentPoints);
+    }
 
     private void Update()
     {
@@ -43,20 +81,21 @@ public class Scoreboard : MonoBehaviour
         isScoreboardOpen = false;
         scoreBoard.SetActive(false);
     }
-    public void AddNewPlayer()
+    public void UpdateScore(int playerIndex, int scoreToAdd)
     {
-
+        scoreboardRows[playerIndex].AddScore(scoreToAdd);
     }
-    public void UpdateScore()
+    public void UpdateKills(int playerIndex, bool wasHeadshot)
     {
-
+        scoreboardRows[playerIndex].AddKill();
+        if(wasHeadshot)
+        {
+            UpdateHeadshots(playerIndex);
+        }
     }
-    public void UpdateKills()
-    {
 
-    }
-    public void UpdateHeadshots()
+    public void UpdateHeadshots(int playerIndex)
     {
-
+        scoreboardRows[playerIndex].AddHeadshot();
     }
 }

@@ -31,7 +31,7 @@ public class HitMarkerManager : MonoBehaviour
         ZombieHealth.onHit -= ShowNormalHitmarker;
     }
 
-    void ShowKillHitmarker()
+    void ShowKillHitmarker(int playerIndex, bool wasHeadshot)
     {
         ActivateHitMarker(Color.red);
     }

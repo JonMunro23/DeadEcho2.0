@@ -614,7 +614,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151090154559136764}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2879,7 +2879,7 @@ GameObject:
   - component: {fileID: 7101706347728212401}
   m_Layer: 0
   m_Name: Base HumanLEye
-  m_TagString: Untagged
+  m_TagString: ZombieHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3868,7 +3868,7 @@ GameObject:
   - component: {fileID: 5048599485759467220}
   m_Layer: 0
   m_Name: Base HumanNeck
-  m_TagString: Untagged
+  m_TagString: ZombieHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4053,7 +4053,7 @@ GameObject:
   - component: {fileID: 8202745998191750732}
   m_Layer: 0
   m_Name: Base HumanHeadLEyelid
-  m_TagString: Untagged
+  m_TagString: ZombieHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4297,7 +4297,7 @@ GameObject:
   - component: {fileID: 6270938521569040795}
   m_Layer: 0
   m_Name: Base HumanHeadJaw
-  m_TagString: Untagged
+  m_TagString: ZombieHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4328,7 +4328,7 @@ GameObject:
   - component: {fileID: 7393516608452905052}
   m_Layer: 0
   m_Name: Base HumanHeadREye
-  m_TagString: Untagged
+  m_TagString: ZombieHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4480,7 +4480,7 @@ GameObject:
   - component: {fileID: 721476826401190313}
   m_Layer: 0
   m_Name: Base HumanHeadREyelid
-  m_TagString: Untagged
+  m_TagString: ZombieHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
