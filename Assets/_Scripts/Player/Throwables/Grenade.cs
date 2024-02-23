@@ -1,12 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class Grenade : MonoBehaviour
 {
     [SerializeField] float grenadeFuseTime, blastRadius;
     [SerializeField] int damage;
+
+    [SerializeField] bool explodesOnContact, hasTimer;
 
     [SerializeField] GameObject explosionEffect;
 
@@ -21,7 +21,8 @@ public class Grenade : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(GrenadeFuseTimer());
+        if(hasTimer)
+            StartCoroutine(GrenadeFuseTimer());
     }
 
     IEnumerator GrenadeFuseTimer()
@@ -63,6 +64,11 @@ public class Grenade : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(!other.CompareTag("Player"))
-            audioSource.PlayOneShot(audioSource.clip);
+        {
+            if (explodesOnContact)
+                Explode();
+            else
+                audioSource.PlayOneShot(audioSource.clip);
+        }
     }
 }

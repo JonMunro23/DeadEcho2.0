@@ -23,7 +23,7 @@ MonoBehaviour:
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   defaultYPos: -1.7
   aimingYPos: -1.68
-  UISprite: {fileID: 0}
+  UISprite: {fileID: 21300000, guid: 1e521cefafd36614ebeb1607ef395659, type: 3}
   magSize: 6
   maxReserveAmmo: 48
   reloadSpeed: 2
@@ -59,6 +59,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   isAutomatic: 0
+  isScoped: 0
+  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
   blastRadius: 0

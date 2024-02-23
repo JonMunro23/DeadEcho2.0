@@ -50,9 +50,7 @@ public class Weapon : ScriptableObject
     public Sprite scopeOverlay;
     public bool isProjectile;
     public GameObject projectile;
-    public float blastRadius;
     public float projectileInitalVelocity;
-    public GameObject projectileDestructionEffect;
 
     public AudioClip[] fireSFX;
     public AudioClip fullReloadSFX, reloadStartSFX, insertShellSFX, reloadEndSFX, equipSFX;
