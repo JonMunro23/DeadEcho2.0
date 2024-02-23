@@ -186,65 +186,73 @@ public class WeaponShooting : MonoBehaviour
             }
             currentLoadedAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+
             for (int i = 0; i < projectileCount; i++)
             {
-                Vector3 forwardVector = Vector3.forward;
-                if (PlayerMovement.instance.isCrouching)
+                if (equippedWeapon.isProjectile)
                 {
-                    weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
+                    //fire projectile
+                    GameObject clone = Instantiate(equippedWeapon.projectile, muzzleEffect.transform.position, transform.rotation);
+                    clone.GetComponent<Rigidbody>().AddForce(transform.forward * equippedWeapon.projectileInitalVelocity, ForceMode.Impulse);
                 }
-                else
+                else //fire hitscan
                 {
-                    weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
-                }
-                float angle = Random.Range(-360f, 360f);
-                forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, Vector3.up) * forwardVector;
-                forwardVector = Quaternion.AngleAxis(angle, Vector3.forward) * forwardVector;
-
-                forwardVector = weaponCamera.transform.rotation * forwardVector;
-                RaycastHit hit;
-                if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.7f, transform.position.z), isAiming == false ? forwardVector : transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
-                {
-                    IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
-                    if(damageable != null)
+                    Vector3 forwardVector = Vector3.forward;
+                    if (PlayerMovement.instance.isCrouching)
                     {
-                        if(isInstantKillActive)
+                        weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
+                    }
+                    else
+                    {
+                        weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
+                    }
+                    float angle = Random.Range(-360f, 360f);
+                    forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, Vector3.up) * forwardVector;
+                    forwardVector = Quaternion.AngleAxis(angle, Vector3.forward) * forwardVector;
+
+                    forwardVector = weaponCamera.transform.rotation * forwardVector;
+                    RaycastHit hit;
+                    if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.7f, transform.position.z), isAiming == false ? forwardVector : transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                    {
+                        IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
+                        if (damageable != null)
                         {
-                            damageable.InstantlyKill();
-                        }
-                        else
-                        {
-                            if(hit.transform.CompareTag("ZombieHead"))
+                            if (isInstantKillActive)
                             {
-                                damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), true);
+                                damageable.InstantlyKill();
                             }
                             else
                             {
-                                damageable.OnDamaged(damage, false);
+                                if (hit.transform.CompareTag("ZombieHead"))
+                                {
+                                    damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), true);
+                                }
+                                else
+                                {
+                                    damageable.OnDamaged(damage, false);
+                                }
+
+                            }
+                        }
+
+                        if (hit.transform.TryGetComponent<SurfaceIdentifier>(out SurfaceIdentifier _surface))
+                        {
+                            Vector3 spawnLocation = hit.point + (hit.normal * .01f);
+                            Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+
+                            if (_surface.surfaceType != SurfaceTypes.flesh)
+                            {
+                                GameObject clone = Instantiate(bulletHole, spawnLocation, spawnRotation);
+                                clone.transform.SetParent(hit.transform);
+                                clone.GetComponent<BulletHole>().SetMaterialType(_surface.surfaceType);
                             }
 
+                            spawnRotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
+                            hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
                         }
                     }
-                
-                    if (hit.transform.TryGetComponent<SurfaceIdentifier>(out SurfaceIdentifier _surface))
-                    {
-                        Vector3 spawnLocation = hit.point + (hit.normal * .01f);
-                        Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-
-                        if(_surface.surfaceType != SurfaceTypes.flesh)
-                        {
-                            GameObject clone = Instantiate(bulletHole, spawnLocation, spawnRotation);
-                            clone.transform.SetParent(hit.transform);
-                            clone.GetComponent<BulletHole>().SetMaterialType(_surface.surfaceType);
-                        }
-
-                        spawnRotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
-                        hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
-                    }               
                 }
-
             }
-
         }
         else if (canShoot && currentLoadedAmmo == 0 && currentReserveAmmo > 0)
         {
@@ -418,7 +426,9 @@ public class WeaponShooting : MonoBehaviour
 
     public void CancelReload()
     {
-        StopCoroutine(reloadCooldownCoRoutine);
+        if(reloadCooldownCoRoutine != null)
+            StopCoroutine(reloadCooldownCoRoutine);
+
         currentLoadedAmmo = loadedAmmoBeforeReload;
         currentReserveAmmo = reserveAmmoBeforeReload;
         canShoot = true;
@@ -434,6 +444,8 @@ public class WeaponShooting : MonoBehaviour
     {
         currentLoadedAmmo = maxMagSize;
         currentReserveAmmo = maxReserveAmmo;
+        loadedAmmoBeforeReload = currentLoadedAmmo;
+        reserveAmmoBeforeReload = currentReserveAmmo;
 
         if(WeaponSwapping.instance.currentlyEquippedWeaponObj == gameObject)
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);

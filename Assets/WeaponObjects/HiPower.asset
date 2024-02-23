@@ -28,7 +28,7 @@ MonoBehaviour:
   maxReserveAmmo: 63
   reloadSpeed: 1.4
   projectileCount: 1
-  maxSpreadDeviationAngle: 0
+  maxSpreadDeviationAngle: 1
   damage: 20
   headshotMultiplier: 2
   perShotCooldown: 0.12
@@ -59,6 +59,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   isAutomatic: 0
+  isScoped: 0
+  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
   blastRadius: 0
