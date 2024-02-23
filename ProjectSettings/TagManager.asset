@@ -25,6 +25,7 @@ TagManager:
   - CurrentRoundText
   - PlayerCameraPos
   - PlayerOrientation
+  - ScopeOverlay
   layers:
   - Default
   - TransparentFX

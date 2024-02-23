@@ -46,6 +46,8 @@ public class Weapon : ScriptableObject
     public float aimingFOV;
     public AnimationCurve ADSCurve;
     public bool isAutomatic;
+    public bool isScoped;
+    public Sprite scopeOverlay;
     public bool isProjectile;
     public GameObject projectile;
     public float blastRadius;
