@@ -33,7 +33,7 @@ public class WeaponShooting : MonoBehaviour
     Image crosshair;
     AudioSource SFXSource;
     AudioClip[] firingSFX;
-    AudioClip reloadSFX, reloadStartSFX, reloadEndSFX; 
+    AudioClip fullReloadSFX, insertShellSFX, reloadStartSFX, reloadEndSFX; 
     Coroutine reloadCooldownCoRoutine;
     Camera weaponCamera;
     float weaponSpreadDeviation;
@@ -88,12 +88,16 @@ public class WeaponShooting : MonoBehaviour
         isAutomatic = weaponToInitialise.isAutomatic;
         hitEffectData = weaponToInitialise.hitEffectData;
         firingSFX = weaponToInitialise.fireSFX;
-        reloadSFX = weaponToInitialise.reloadSFX;
+
         if(weaponToInitialise.reloadType == Weapon.ReloadType.shellByShell)
         {
             reloadStartSFX = weaponToInitialise.reloadStartSFX;
+            insertShellSFX = weaponToInitialise.insertShellSFX;
             reloadEndSFX = weaponToInitialise.reloadEndSFX;
         }
+        else
+        fullReloadSFX = weaponToInitialise.fullReloadSFX;
+
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         CheckInstantKillStatus();
@@ -111,15 +115,31 @@ public class WeaponShooting : MonoBehaviour
     {
         if(!PauseMenu.isPaused)
         {
-            if(Input.GetKey(fireKey) && isAutomatic)
+            if(isAutomatic)
             {
-                if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                if(Input.GetKey(fireKey))
                 {
-                    CancelShellByShellReload();
-                    return;
-                }
+                    if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                    {
+                        CancelShellByShellReload();
+                        return;
+                    }
 
-                FireWeapon();
+                    FireWeapon();
+                }
+            }
+            else if (!isAutomatic)
+            {
+                if(Input.GetKeyDown(fireKey))
+                {
+                    if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                    {
+                        CancelShellByShellReload();
+                        return;
+                    }
+
+                    FireWeapon();
+                }
             }
 
             
@@ -269,7 +289,7 @@ public class WeaponShooting : MonoBehaviour
         isReloading = true;
         if(equippedWeapon.reloadType == Weapon.ReloadType.magazine)
         {
-            SFXSource.PlayOneShot(reloadSFX);
+            SFXSource.PlayOneShot(fullReloadSFX);
             weaponAnimator.Play("Reload");
             
             loadedAmmoBeforeReload = currentLoadedAmmo;
@@ -313,12 +333,13 @@ public class WeaponShooting : MonoBehaviour
     IEnumerator ShellByShellReload()
     {
         weaponAnimator.Play("StartReload");
-        SFXSource.PlayOneShot(reloadStartSFX);
+        //SFXSource.PlayOneShot(reloadStartSFX);
         yield return new WaitForSeconds(.6f);
+
+        //maxmagsize - 1 due to EndReload anim slotting a round
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
-            weaponAnimator.Play("Reload");
-            SFXSource.PlayOneShot(reloadSFX);
+            weaponAnimator.Play("InsertShell");
             yield return new WaitForSeconds(1.4f);
             currentLoadedAmmo++;
             currentReserveAmmo--;
@@ -329,7 +350,6 @@ public class WeaponShooting : MonoBehaviour
             stopShellByShellReload = false;
 
         weaponAnimator.Play("EndReload");
-        SFXSource.PlayOneShot(reloadEndSFX);
         yield return new WaitForSeconds(2.4f);
         currentLoadedAmmo++;
         currentReserveAmmo--;
@@ -339,9 +359,20 @@ public class WeaponShooting : MonoBehaviour
         canADS = true;
     }
 
+    //used for animation events on shotgun
+    void PlayEndReloadSFX()
+    {
+        SFXSource.PlayOneShot(reloadEndSFX);
+    }
+
+    //used for animation events on shotgun
+    void PlayShellInsertionSFX()
+    {
+        SFXSource.PlayOneShot(insertShellSFX);
+    }
+
     public void CancelShellByShellReload()
     {
-        Debug.Log("Cancelling shell by shell");
         stopShellByShellReload = true;
     }
 

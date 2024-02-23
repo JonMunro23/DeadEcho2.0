@@ -53,7 +53,7 @@ public class Weapon : ScriptableObject
     public GameObject projectileDestructionEffect;
 
     public AudioClip[] fireSFX;
-    public AudioClip reloadSFX, reloadStartSFX, reloadEndSFX, equipSFX;
+    public AudioClip fullReloadSFX, reloadStartSFX, insertShellSFX, reloadEndSFX, equipSFX;
 
     [Header("Attachments")]
     public bool canUseSightAttachment;

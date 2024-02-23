@@ -17,7 +17,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   effectNameFilter: 
-  combineMeshes: 1
+  combineMeshes: 0
   alphaCutOff: 0
   cullBackFaces: 1
   depthClip: 1

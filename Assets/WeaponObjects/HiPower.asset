@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HiPower
   m_EditorClassIdentifier: 
   weaponSlotType: 1
+  reloadType: 0
   name: HiPower
   description: 
   cost: 500
@@ -23,14 +24,14 @@ MonoBehaviour:
   defaultYPos: -1.7
   aimingYPos: -1.678
   UISprite: {fileID: 21300000, guid: 86e14b86b0d58674e8c4cf27dbd0dd27, type: 3}
-  magSize: 7
+  magSize: 10
   maxReserveAmmo: 63
   reloadSpeed: 1.4
   projectileCount: 1
   maxSpreadDeviationAngle: 0
   damage: 20
   headshotMultiplier: 2
-  perShotCooldown: 0.25
+  perShotCooldown: 0.12
   timeToADS: 1
   aimingFOV: 50
   ADSCurve:
@@ -57,15 +58,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  isAutomatic: 1
+  isAutomatic: 0
   isProjectile: 0
   projectile: {fileID: 0}
   blastRadius: 0
   projectileInitalVelocity: 0
   projectileDestructionEffect: {fileID: 0}
   fireSFX:
-  - {fileID: 8300000, guid: ada807241eefef54681c5e9f2e838300, type: 3}
-  reloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  - {fileID: 8300000, guid: 7736ebd0e468eb843a27e996b7c014a1, type: 3}
+  - {fileID: 8300000, guid: 00d6c854d736b274692325c410bbdcc7, type: 3}
+  fullReloadSFX: {fileID: 8300000, guid: 5352c7bdf44b11141ba87d35e6e5a45a, type: 3}
+  reloadStartSFX: {fileID: 0}
+  insertShellSFX: {fileID: 0}
+  reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
   canUseSightAttachment: 1
   canUseMagAttachment: 1

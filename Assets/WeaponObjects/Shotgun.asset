@@ -24,8 +24,8 @@ MonoBehaviour:
   defaultYPos: -1.7
   aimingYPos: -1.68
   UISprite: {fileID: 0}
-  magSize: 8
-  maxReserveAmmo: 64
+  magSize: 6
+  maxReserveAmmo: 48
   reloadSpeed: 2
   projectileCount: 8
   maxSpreadDeviationAngle: 5
@@ -58,7 +58,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  isAutomatic: 1
+  isAutomatic: 0
   isProjectile: 0
   projectile: {fileID: 0}
   blastRadius: 0
@@ -66,8 +66,9 @@ MonoBehaviour:
   projectileDestructionEffect: {fileID: 0}
   fireSFX:
   - {fileID: 8300000, guid: a2236a73bcfdb5244a8f38748b045f50, type: 3}
-  reloadSFX: {fileID: 8300000, guid: ccd89f9433f4489478c3b6421fd95e9f, type: 3}
-  reloadStartSFX: {fileID: 8300000, guid: 876e49cd4a9864f44b4ca4e0d110c281, type: 3}
+  fullReloadSFX: {fileID: 0}
+  reloadStartSFX: {fileID: 0}
+  insertShellSFX: {fileID: 8300000, guid: ccd89f9433f4489478c3b6421fd95e9f, type: 3}
   reloadEndSFX: {fileID: 8300000, guid: 876e49cd4a9864f44b4ca4e0d110c281, type: 3}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
   canUseSightAttachment: 0

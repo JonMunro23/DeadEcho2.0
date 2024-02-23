@@ -229,7 +229,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isCrouching = true;
             moveSpeed = crouchingMovementSpeed;
-            animator.SetBool("isCrouching", isCrouching);
+            //animator.SetBool("isCrouching", isCrouching);
             movementAudioSource.volume = .5f;
         }
     }
@@ -239,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
         if(isCrouching)
         {
             isCrouching = false;
-            animator.SetBool("isCrouching", isCrouching);
+            //animator.SetBool("isCrouching", isCrouching);
             if (GetCurrentWeaponShootingScript().isAiming)
             {
                 moveSpeed = aimingMovementSpeed;
