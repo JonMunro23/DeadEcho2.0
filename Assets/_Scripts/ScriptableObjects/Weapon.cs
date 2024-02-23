@@ -12,6 +12,13 @@ public class Weapon : ScriptableObject
     };
     public WeaponSlotType weaponSlotType;
 
+    public enum ReloadType
+    {
+        magazine,
+        shellByShell
+    };
+    public ReloadType reloadType;  
+
     public new string name;
     [TextArea(3, 10)]
     public string description;
@@ -46,7 +53,7 @@ public class Weapon : ScriptableObject
     public GameObject projectileDestructionEffect;
 
     public AudioClip[] fireSFX;
-    public AudioClip reloadSFX, equipSFX;
+    public AudioClip fullReloadSFX, reloadStartSFX, insertShellSFX, reloadEndSFX, equipSFX;
 
     [Header("Attachments")]
     public bool canUseSightAttachment;

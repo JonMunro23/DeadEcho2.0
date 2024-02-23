@@ -33,7 +33,7 @@ public class WeaponShooting : MonoBehaviour
     Image crosshair;
     AudioSource SFXSource;
     AudioClip[] firingSFX;
-    AudioClip reloadSFX; 
+    AudioClip fullReloadSFX, insertShellSFX, reloadStartSFX, reloadEndSFX; 
     Coroutine reloadCooldownCoRoutine;
     Camera weaponCamera;
     float weaponSpreadDeviation;
@@ -42,6 +42,7 @@ public class WeaponShooting : MonoBehaviour
     public static event Action<int, int> onAmmoUpdated;
 
     bool isInstantKillActive = false;
+    bool stopShellByShellReload = false;
 
     private void Awake()
     {
@@ -87,7 +88,16 @@ public class WeaponShooting : MonoBehaviour
         isAutomatic = weaponToInitialise.isAutomatic;
         hitEffectData = weaponToInitialise.hitEffectData;
         firingSFX = weaponToInitialise.fireSFX;
-        reloadSFX = weaponToInitialise.reloadSFX;
+
+        if(weaponToInitialise.reloadType == Weapon.ReloadType.shellByShell)
+        {
+            reloadStartSFX = weaponToInitialise.reloadStartSFX;
+            insertShellSFX = weaponToInitialise.insertShellSFX;
+            reloadEndSFX = weaponToInitialise.reloadEndSFX;
+        }
+        else
+        fullReloadSFX = weaponToInitialise.fullReloadSFX;
+
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         CheckInstantKillStatus();
@@ -105,12 +115,36 @@ public class WeaponShooting : MonoBehaviour
     {
         if(!PauseMenu.isPaused)
         {
-            if(Input.GetKey(fireKey) && isAutomatic)
+            if(isAutomatic)
             {
-                FireWeapon();
+                if(Input.GetKey(fireKey))
+                {
+                    if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                    {
+                        CancelShellByShellReload();
+                        return;
+                    }
+
+                    FireWeapon();
+                }
+            }
+            else if (!isAutomatic)
+            {
+                if(Input.GetKeyDown(fireKey))
+                {
+                    if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                    {
+                        CancelShellByShellReload();
+                        return;
+                    }
+
+                    FireWeapon();
+                }
             }
 
-            if(Input.GetKeyDown(reloadKey) && currentLoadedAmmo != maxMagSize && currentReserveAmmo > 0 && !isReloading)
+            
+
+            if(Input.GetKeyDown(reloadKey) && currentLoadedAmmo < maxMagSize && currentReserveAmmo > 0 && !isReloading)
             {
                 ReloadWeapon();
             }
@@ -129,76 +163,77 @@ public class WeaponShooting : MonoBehaviour
             canShoot = false;
             StartCoroutine(PerShotCooldown());
             PlayMuzzleFlash();
-
-            Vector3 forwardVector = Vector3.forward;
-            if (PlayerMovement.instance.isCrouching)
-            {
-                weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
-            }
-            else
-            {
-                weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
-            }
-            float angle = Random.Range(-360f, 360f);
-            forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, Vector3.up) * forwardVector;
-            forwardVector = Quaternion.AngleAxis(angle, Vector3.forward) * forwardVector;
-
-            forwardVector = weaponCamera.transform.rotation * forwardVector;
-
-
             SFXSource.PlayOneShot(PickAudioClip());
             if(isAiming)
             {
-                weaponAnimator.SetTrigger("AimingFire");
+                weaponAnimator.Play("AimingFire");
             }
             else if (!isAiming)
             {
-                weaponAnimator.SetTrigger("Fire");
+                weaponAnimator.Play("Fire");
 
                 //Simulate recoil
 
             }
             currentLoadedAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-            RaycastHit hit;
-            if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.7f, transform.position.z), isAiming == false ? forwardVector : transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+            for (int i = 0; i < projectileCount; i++)
             {
-                IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
-                if(damageable != null)
+                Vector3 forwardVector = Vector3.forward;
+                if (PlayerMovement.instance.isCrouching)
                 {
-                    if(isInstantKillActive)
+                    weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
+                }
+                else
+                {
+                    weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
+                }
+                float angle = Random.Range(-360f, 360f);
+                forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, Vector3.up) * forwardVector;
+                forwardVector = Quaternion.AngleAxis(angle, Vector3.forward) * forwardVector;
+
+                forwardVector = weaponCamera.transform.rotation * forwardVector;
+                RaycastHit hit;
+                if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.7f, transform.position.z), isAiming == false ? forwardVector : transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                {
+                    IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
+                    if(damageable != null)
                     {
-                        damageable.InstantlyKill();
-                    }
-                    else
-                    {
-                        if(hit.transform.CompareTag("ZombieHead"))
+                        if(isInstantKillActive)
                         {
-                            damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), true);
+                            damageable.InstantlyKill();
                         }
                         else
                         {
-                            damageable.OnDamaged(damage, false);
+                            if(hit.transform.CompareTag("ZombieHead"))
+                            {
+                                damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), true);
+                            }
+                            else
+                            {
+                                damageable.OnDamaged(damage, false);
+                            }
+
+                        }
+                    }
+                
+                    if (hit.transform.TryGetComponent<SurfaceIdentifier>(out SurfaceIdentifier _surface))
+                    {
+                        Vector3 spawnLocation = hit.point + (hit.normal * .01f);
+                        Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+
+                        if(_surface.surfaceType != SurfaceTypes.flesh)
+                        {
+                            GameObject clone = Instantiate(bulletHole, spawnLocation, spawnRotation);
+                            clone.transform.SetParent(hit.transform);
+                            clone.GetComponent<BulletHole>().SetMaterialType(_surface.surfaceType);
                         }
 
-                    }
+                        spawnRotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
+                        hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
+                    }               
                 }
-                
-                if (hit.transform.TryGetComponent<SurfaceIdentifier>(out SurfaceIdentifier _surface))
-                {
-                    Vector3 spawnLocation = hit.point + (hit.normal * .01f);
-                    Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 
-                    if(_surface.surfaceType != SurfaceTypes.flesh)
-                    {
-                        GameObject clone = Instantiate(bulletHole, spawnLocation, spawnRotation);
-                        clone.transform.SetParent(hit.transform);
-                        clone.GetComponent<BulletHole>().SetMaterialType(_surface.surfaceType);
-                    }
-
-                    spawnRotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
-                    hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
-                }               
             }
 
         }
@@ -252,39 +287,93 @@ public class WeaponShooting : MonoBehaviour
         canADS = false;
         canShoot = false;
         isReloading = true;
-        SFXSource.PlayOneShot(reloadSFX);
-        weaponAnimator.SetTrigger("Reload");
-        loadedAmmoBeforeReload = currentLoadedAmmo;
-        reserveAmmoBeforeReload = currentReserveAmmo;
-        reloadCooldownCoRoutine = StartCoroutine(ReloadCooldown());
-        if (currentLoadedAmmo != 0)
+        if(equippedWeapon.reloadType == Weapon.ReloadType.magazine)
         {
-            int ammoToLoad = maxMagSize - currentLoadedAmmo;
-            if (currentReserveAmmo >= ammoToLoad)
+            SFXSource.PlayOneShot(fullReloadSFX);
+            weaponAnimator.Play("Reload");
+            
+            loadedAmmoBeforeReload = currentLoadedAmmo;
+            reserveAmmoBeforeReload = currentReserveAmmo;
+            reloadCooldownCoRoutine = StartCoroutine(ReloadCooldown());
+            if (currentLoadedAmmo != 0)
             {
-                currentLoadedAmmo += ammoToLoad;
-                currentReserveAmmo -= ammoToLoad;
+                int ammoToLoad = maxMagSize - currentLoadedAmmo;
+                if (currentReserveAmmo >= ammoToLoad)
+                {
+                    currentLoadedAmmo += ammoToLoad;
+                    currentReserveAmmo -= ammoToLoad;
 
+                }
+                else
+                {
+                    currentLoadedAmmo += currentReserveAmmo;
+                    currentReserveAmmo = 0;
+                }
             }
             else
             {
-                currentLoadedAmmo += currentReserveAmmo;
-                currentReserveAmmo = 0;
+                if (currentReserveAmmo >= maxMagSize)
+                {
+                    currentLoadedAmmo = maxMagSize;
+                    currentReserveAmmo -= maxMagSize;
+                }
+                else
+                {
+                    currentLoadedAmmo += currentReserveAmmo;
+                    currentReserveAmmo = 0;
+                }
             }
         }
-        else
+        else if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
         {
-            if (currentReserveAmmo >= maxMagSize)
-            {
-                currentLoadedAmmo = maxMagSize;
-                currentReserveAmmo -= maxMagSize;
-            }
-            else
-            {
-                currentLoadedAmmo += currentReserveAmmo;
-                currentReserveAmmo = 0;
-            }
+            StartCoroutine(ShellByShellReload());
         }
+    }
+
+    IEnumerator ShellByShellReload()
+    {
+        weaponAnimator.Play("StartReload");
+        //SFXSource.PlayOneShot(reloadStartSFX);
+        yield return new WaitForSeconds(.6f);
+
+        //maxmagsize - 1 due to EndReload anim slotting a round
+        while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
+        {
+            weaponAnimator.Play("InsertShell");
+            yield return new WaitForSeconds(1.4f);
+            currentLoadedAmmo++;
+            currentReserveAmmo--;
+            onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+
+        }
+        if (stopShellByShellReload)
+            stopShellByShellReload = false;
+
+        weaponAnimator.Play("EndReload");
+        yield return new WaitForSeconds(2.4f);
+        currentLoadedAmmo++;
+        currentReserveAmmo--;
+        onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+        isReloading = false;
+        canShoot = true;
+        canADS = true;
+    }
+
+    //used for animation events on shotgun
+    void PlayEndReloadSFX()
+    {
+        SFXSource.PlayOneShot(reloadEndSFX);
+    }
+
+    //used for animation events on shotgun
+    void PlayShellInsertionSFX()
+    {
+        SFXSource.PlayOneShot(insertShellSFX);
+    }
+
+    public void CancelShellByShellReload()
+    {
+        stopShellByShellReload = true;
     }
 
     public void CancelReload()
