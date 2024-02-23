@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using System.Runtime.CompilerServices;
+using DG.Tweening;
 
 public class WeaponShooting : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class WeaponShooting : MonoBehaviour
     public GameObject zombieHitEffect;
     [SerializeField]
     GameObject bulletHole;
+    Image scopeOverlay, scopeOverlayFade;
     [SerializeField]
     ParticleSystem muzzleEffect;
     Image crosshair;
@@ -37,6 +39,8 @@ public class WeaponShooting : MonoBehaviour
     Coroutine reloadCooldownCoRoutine;
     Camera weaponCamera;
     float weaponSpreadDeviation;
+    SkinnedMeshRenderer[] weaponSkinnedMeshRenderers;
+
 
     public static event Action<bool, WeaponShooting> onAimDownSights;
     public static event Action<int, int> onAmmoUpdated;
@@ -49,6 +53,8 @@ public class WeaponShooting : MonoBehaviour
         weaponCamera = GameObject.FindGameObjectWithTag("WeaponCamera").GetComponent<Camera>();
         SFXSource = GameObject.FindGameObjectWithTag("WeaponSFX").GetComponent<AudioSource>();
         crosshair = GameObject.FindGameObjectWithTag("HitMarker").GetComponentInParent<Image>();
+        scopeOverlay = GameObject.FindGameObjectWithTag("ScopeOverlay").GetComponent<Image>();
+        weaponSkinnedMeshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     private void OnEnable()
@@ -97,6 +103,9 @@ public class WeaponShooting : MonoBehaviour
         }
         else
         fullReloadSFX = weaponToInitialise.fullReloadSFX;
+
+        if (weaponToInitialise.isScoped == true)
+            scopeOverlayFade = scopeOverlay.transform.GetChild(0).GetComponent<Image>();
 
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -264,18 +273,49 @@ public class WeaponShooting : MonoBehaviour
     {
         onAimDownSights?.Invoke(isAiming, this);
         isAiming = true;
-
         weaponAnimator.SetBool("isAiming", isAiming);
-        crosshair.enabled = false;
+        if(equippedWeapon.isScoped)
+        {
+            scopeOverlayFade.DOColor(Color.black, .4f).SetDelay(.2f).OnComplete(() =>
+            {
+                scopeOverlay.enabled = true;
+                scopeOverlay.sprite = equippedWeapon.scopeOverlay;
+                HideWeaponModel();
+                scopeOverlayFade.DOColor(Color.clear, .2f);
+            });
+        }
+        else
+            crosshair.enabled = false;
+
     }
 
     public void StopADS()
     {
         onAimDownSights?.Invoke(isAiming, this);
         isAiming = false;
-
         weaponAnimator.SetBool("isAiming", isAiming);
-        crosshair.enabled = true;
+        if (equippedWeapon.isScoped)
+        {
+            scopeOverlayFade.DOColor(Color.black, .2f).OnComplete(() =>
+            {
+                scopeOverlay.enabled = false;
+                scopeOverlay.sprite = null;
+                ShowWeaponModel();
+                scopeOverlayFade.DOColor(Color.clear, .1f);
+            });
+        }
+        else
+            crosshair.enabled = true;
+    }
+
+    void ShowWeaponModel()
+    {
+        foreach (SkinnedMeshRenderer meshRenderer in weaponSkinnedMeshRenderers) { meshRenderer.enabled = true; }
+    }
+
+    void HideWeaponModel()
+    {
+        foreach (SkinnedMeshRenderer meshRenderer in weaponSkinnedMeshRenderers) { meshRenderer.enabled = false; }
     }
 
     void ReloadWeapon()
