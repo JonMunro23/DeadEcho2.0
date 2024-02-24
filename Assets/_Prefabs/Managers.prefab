@@ -78,8 +78,9 @@ Transform:
   - {fileID: 3036489827490675746}
   - {fileID: 2697177398231785806}
   - {fileID: 7931606767979113064}
+  - {fileID: 4675041389286521268}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6565530754065279952
 GameObject:
@@ -133,8 +134,51 @@ MonoBehaviour:
   startingAmountToSpawn: 8
   zombieSpawnCooldown: 2
   gracePeriodLength: 8
-  currentRound: 0
-  canSpawnZombies: 0
+  canSpawnZombies: 1
+--- !u!1 &6934477777443712108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4675041389286521268}
+  - component: {fileID: 5161193325225837935}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4675041389286521268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934477777443712108}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3928184490971590666}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5161193325225837935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934477777443712108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95177d8b67f1db747b10c95947bd5d73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7616032671261032112
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,8 +419,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverScreen: {fileID: 0}
   scoreBoard: {fileID: 0}
+  hud: {fileID: 0}
+  player: {fileID: 0}
+  gameOverCamera: {fileID: 0}
+  roundsSurvivedText: {fileID: 0}
   fadeOverlay: {fileID: 0}
-  fadeToBlackDelay: 0
+  fadeToGameOverCameraDelay: 3
+  fadeToRestartLevelDelay: 15
+  restartLevelDelay: 3
 --- !u!1 &9108757627434226829
 GameObject:
   m_ObjectHideFlags: 0

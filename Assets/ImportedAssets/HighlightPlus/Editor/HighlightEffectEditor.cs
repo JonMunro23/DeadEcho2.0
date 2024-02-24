@@ -574,7 +574,7 @@ namespace HighlightPlus {
 
         void CheckVRSupport(int qualityLevel) {
             if (qualityLevel == (int)QualityLevel.Highest && VRCheck.IsActive()) {
-                if (PlayerSettings.stereoRenderingPath != StereoRenderingPath.MultiPass) {
+                if (UnityEditor.PlayerSettings.stereoRenderingPath != StereoRenderingPath.MultiPass) {
                     EditorGUILayout.HelpBox("Highest Quality only supports VR Multi-Pass as CommandBuffers do not support this VR mode yet. Either switch to 'High Quality' or change VR Stereo mode to Multi-Pass.", MessageType.Error);
                 }
             }
