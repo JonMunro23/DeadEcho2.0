@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
+    public float sensitivity;
 
     [HideInInspector] public Transform orientation;
 
@@ -35,6 +34,8 @@ public class PlayerCam : MonoBehaviour
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
         PlayerHealth.onDeath += DisableCameraLook;
+        OptionsMenu.updateSettings += UpdateCameraFOV;
+        OptionsMenu.updateSettings += UpdateMouseSensitivity;
     }
 
     // Start is called before the first frame update
@@ -49,6 +50,8 @@ public class PlayerCam : MonoBehaviour
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
         PlayerHealth.onDeath -= DisableCameraLook;
+        OptionsMenu.updateSettings -= UpdateCameraFOV;
+        OptionsMenu.updateSettings -= UpdateMouseSensitivity;
     }
 
     // Update is called once per frame
@@ -56,8 +59,8 @@ public class PlayerCam : MonoBehaviour
     {
         if(canLook)
         {
-            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-            float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * (sensitivity * 10);
+            float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * (sensitivity * 10);
 
             yRotation += mouseX;
             xRotation -= mouseY;
@@ -110,6 +113,17 @@ public class PlayerCam : MonoBehaviour
     void DisableCameraLook()
     {
         canLook = false;
+    }
+
+    void UpdateCameraFOV(PlayerSettings playerSettings)
+    {
+        weaponCamera.fieldOfView = playerSettings.playerFov.currentValue;
+        defaultFOV = playerSettings.playerFov.currentValue;
+    }
+
+    void UpdateMouseSensitivity(PlayerSettings playerSettings)
+    {
+        sensitivity = playerSettings.mouseSensitivity.currentValue;
     }
 
     IEnumerator LerpWeaponLocalPosition(WeaponShooting weaponToLerp, Vector3 startingPosition, Vector3 finalPosition, float duration)

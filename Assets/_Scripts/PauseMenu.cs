@@ -9,14 +9,21 @@ public class PauseMenu : MonoBehaviour
     [Space]
     [SerializeField]
     GameObject pauseMenu;
+    [SerializeField]
+    OptionsMenu optionsMenu;
     public static bool isPaused = false;
 
+    private void Awake()
+    {
+        Unpause();
+    }
 
     private void Update()
     {
         if(Input.GetKeyDown(pauseKey))
         {
-            TogglePauseState();
+            if (!optionsMenu.isMenuOpen)
+                TogglePauseState();
         }
     }
 
@@ -30,6 +37,7 @@ public class PauseMenu : MonoBehaviour
 
     void Unpause()
     {
+
         isPaused = false;
         pauseMenu.SetActive(false);
         Time.timeScale = 1.0f;
@@ -58,9 +66,9 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(currentLevel.name);
     }
 
-    public void Options()
+    public void OpenOptionsMenu()
     {
-        //open option menu
+        optionsMenu.OpenMenu();
     }
 
     public void Quit(string levelName)

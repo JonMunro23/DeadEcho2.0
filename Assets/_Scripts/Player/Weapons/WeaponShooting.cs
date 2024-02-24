@@ -36,7 +36,7 @@ public class WeaponShooting : MonoBehaviour
     AudioSource SFXSource;
     AudioClip[] firingSFX;
     AudioClip fullReloadSFX, insertShellSFX, reloadStartSFX, reloadEndSFX; 
-    Coroutine reloadCooldownCoRoutine;
+    Coroutine reloadCooldownCoroutine, shellByShellReloadCoroutine;
     Camera weaponCamera;
     float weaponSpreadDeviation;
     SkinnedMeshRenderer[] weaponSkinnedMeshRenderers;
@@ -130,7 +130,7 @@ public class WeaponShooting : MonoBehaviour
                 {
                     if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
                     {
-                        CancelShellByShellReload();
+                        InterruptShellByShellReload();
                         return;
                     }
 
@@ -143,7 +143,7 @@ public class WeaponShooting : MonoBehaviour
                 {
                     if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
                     {
-                        CancelShellByShellReload();
+                        InterruptShellByShellReload();
                         return;
                     }
 
@@ -342,7 +342,7 @@ public class WeaponShooting : MonoBehaviour
             
             loadedAmmoBeforeReload = currentLoadedAmmo;
             reserveAmmoBeforeReload = currentReserveAmmo;
-            reloadCooldownCoRoutine = StartCoroutine(ReloadCooldown());
+            reloadCooldownCoroutine = StartCoroutine(ReloadCooldown());
             if (currentLoadedAmmo != 0)
             {
                 int ammoToLoad = maxMagSize - currentLoadedAmmo;
@@ -374,13 +374,15 @@ public class WeaponShooting : MonoBehaviour
         }
         else if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
         {
-            StartCoroutine(ShellByShellReload());
+            shellByShellReloadCoroutine = StartCoroutine(ShellByShellReload());
         }
     }
 
     IEnumerator ShellByShellReload()
     {
         weaponAnimator.Play("StartReload");
+        loadedAmmoBeforeReload = currentLoadedAmmo;
+        reserveAmmoBeforeReload = currentReserveAmmo;
         //SFXSource.PlayOneShot(reloadStartSFX);
         yield return new WaitForSeconds(.6f);
 
@@ -388,6 +390,8 @@ public class WeaponShooting : MonoBehaviour
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
             weaponAnimator.Play("InsertShell");
+            loadedAmmoBeforeReload = currentLoadedAmmo;
+            reserveAmmoBeforeReload = currentReserveAmmo;
             yield return new WaitForSeconds(1.4f);
             currentLoadedAmmo++;
             currentReserveAmmo--;
@@ -398,6 +402,8 @@ public class WeaponShooting : MonoBehaviour
             stopShellByShellReload = false;
 
         weaponAnimator.Play("EndReload");
+        loadedAmmoBeforeReload = currentLoadedAmmo;
+        reserveAmmoBeforeReload = currentReserveAmmo;
         yield return new WaitForSeconds(2.4f);
         currentLoadedAmmo++;
         currentReserveAmmo--;
@@ -419,15 +425,30 @@ public class WeaponShooting : MonoBehaviour
         SFXSource.PlayOneShot(insertShellSFX);
     }
 
-    public void CancelShellByShellReload()
+    public void InterruptShellByShellReload()
     {
         stopShellByShellReload = true;
     }
 
     public void CancelReload()
     {
-        if(reloadCooldownCoRoutine != null)
-            StopCoroutine(reloadCooldownCoRoutine);
+        //stop weapons remaining in weird positions after cancelling reload
+        weaponAnimator.Rebind();
+        weaponAnimator.Update(0f);
+
+        SFXSource.Stop();
+
+        if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
+        {
+            if (shellByShellReloadCoroutine != null)
+                StopCoroutine(shellByShellReloadCoroutine);
+        }
+        else
+        {
+            if(reloadCooldownCoroutine != null)
+                StopCoroutine(reloadCooldownCoroutine);
+        }
+
 
         currentLoadedAmmo = loadedAmmoBeforeReload;
         currentReserveAmmo = reserveAmmoBeforeReload;
