@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput;
     Vector3 moveDirection;
     Rigidbody rb;
+    public Vector3 currentVelocity;
     [SerializeField] Vector3 originalCamPos;
 
     [Header("Keybinds")]
@@ -209,6 +210,9 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        //CrosshairManager.instance.UpdateCrosshairSize(flatVel.magnitude);
+        currentVelocity = flatVel;
+
         // limit velocity if needed
         if(flatVel.magnitude > moveSpeed && !isSprinting)
         {
@@ -368,7 +372,7 @@ public class PlayerMovement : MonoBehaviour
     #region Aiming
     
 
-    public void ToggleAiming(bool _isAiming, WeaponShooting weaponToToggle)
+    public void ToggleAiming(bool _isAiming, WeaponShooting weaponAiming)
     {
         if (_isAiming)
         {

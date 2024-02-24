@@ -32,7 +32,7 @@ public class WeaponShooting : MonoBehaviour
     Image scopeOverlay, scopeOverlayFade;
     [SerializeField]
     ParticleSystem muzzleEffect;
-    Image crosshair;
+    //Image crosshair;
     AudioSource SFXSource;
     AudioClip[] firingSFX;
     AudioClip fullReloadSFX, insertShellSFX, reloadStartSFX, reloadEndSFX; 
@@ -44,6 +44,7 @@ public class WeaponShooting : MonoBehaviour
 
     public static event Action<bool, WeaponShooting> onAimDownSights;
     public static event Action<int, int> onAmmoUpdated;
+    public static event Action<bool> onWeaponFired;
 
     bool isInstantKillActive = false;
     bool stopShellByShellReload = false;
@@ -52,7 +53,6 @@ public class WeaponShooting : MonoBehaviour
     {
         weaponCamera = GameObject.FindGameObjectWithTag("WeaponCamera").GetComponent<Camera>();
         SFXSource = GameObject.FindGameObjectWithTag("WeaponSFX").GetComponent<AudioSource>();
-        crosshair = GameObject.FindGameObjectWithTag("HitMarker").GetComponentInParent<Image>();
         scopeOverlay = GameObject.FindGameObjectWithTag("ScopeOverlay").GetComponent<Image>();
         weaponSkinnedMeshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
@@ -185,6 +185,7 @@ public class WeaponShooting : MonoBehaviour
 
             }
             currentLoadedAmmo--;
+            onWeaponFired?.Invoke(isAiming);
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
 
             for (int i = 0; i < projectileCount; i++)
@@ -202,7 +203,11 @@ public class WeaponShooting : MonoBehaviour
                     {
                         weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
                     }
-                    else
+                    else if(PlayerMovement.instance.currentVelocity.magnitude > 0 && !PlayerMovement.instance.isCrouching)
+                    {
+                        weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) * 2);
+                    }
+                    else 
                     {
                         weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
                     }
@@ -292,9 +297,6 @@ public class WeaponShooting : MonoBehaviour
                 scopeOverlayFade.DOColor(Color.clear, .2f);
             });
         }
-        else
-            crosshair.enabled = false;
-
     }
 
     public void StopADS()
@@ -312,8 +314,6 @@ public class WeaponShooting : MonoBehaviour
                 scopeOverlayFade.DOColor(Color.clear, .1f);
             });
         }
-        else
-            crosshair.enabled = true;
     }
 
     void ShowWeaponModel()
