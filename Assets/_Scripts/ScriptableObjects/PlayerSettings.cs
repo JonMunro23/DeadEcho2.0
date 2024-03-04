@@ -11,4 +11,6 @@ public class PlayerSettings : ScriptableObject
 
     [Header("Audio")]
     public PlayerSettingFloat masterVolume;
+    public PlayerSettingFloat musicVolume;
+    public PlayerSettingFloat sfxVolume;
 }

@@ -16,13 +16,13 @@ public class PlayerCam : MonoBehaviour
 
     public bool canLook = true;
 
-
     Camera weaponCamera;
     [SerializeField]
     AnimationCurve ADSCurve;
 
-    Coroutine cameraFOVLerp;
-    Coroutine weaponLocalPositionLerp;
+    Coroutine cameraFOVLerpCoroutine;
+    Coroutine weaponLocalPositionLerpCoroutine;
+
 
     private void Awake()
     {
@@ -33,6 +33,7 @@ public class PlayerCam : MonoBehaviour
     private void OnEnable()
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
+        WeaponShooting.onWeaponFired += ApplyRecoil;
         PlayerHealth.onDeath += DisableCameraLook;
         OptionsMenu.updateSettings += UpdateCameraFOV;
         OptionsMenu.updateSettings += UpdateMouseSensitivity;
@@ -49,6 +50,7 @@ public class PlayerCam : MonoBehaviour
     private void OnDisable()
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
+        WeaponShooting.onWeaponFired -= ApplyRecoil;
         PlayerHealth.onDeath -= DisableCameraLook;
         OptionsMenu.updateSettings -= UpdateCameraFOV;
         OptionsMenu.updateSettings -= UpdateMouseSensitivity;
@@ -57,7 +59,8 @@ public class PlayerCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canLook)
+
+        if (canLook)
         {
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * (sensitivity * 10);
             float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * (sensitivity * 10);
@@ -67,11 +70,20 @@ public class PlayerCam : MonoBehaviour
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
     }
 
+    void ApplyRecoil(bool isAiming)
+    {
+        if (!isAiming)
+        {
+
+        }
+    }
+
+    
     public void ToggleAiming(bool _isAiming, WeaponShooting weaponToToggle)
     {
         if (_isAiming)
@@ -86,28 +98,28 @@ public class PlayerCam : MonoBehaviour
 
     void MoveCameraToAimingPosition(WeaponShooting weaponToToggle)
     {
-        if (cameraFOVLerp != null)
-            StopCoroutine(cameraFOVLerp);
+        if (cameraFOVLerpCoroutine != null)
+            StopCoroutine(cameraFOVLerpCoroutine);
 
-        cameraFOVLerp = StartCoroutine(LerpCameraFOV(weaponToToggle.equippedWeapon.aimingFOV, weaponToToggle.equippedWeapon.timeToADS));
+        cameraFOVLerpCoroutine = StartCoroutine(LerpCameraFOV(weaponToToggle.equippedWeapon.aimingFOV, weaponToToggle.equippedWeapon.timeToADS));
 
-        if (weaponLocalPositionLerp != null)
-            StopCoroutine(weaponLocalPositionLerp);
+        if (weaponLocalPositionLerpCoroutine != null)
+            StopCoroutine(weaponLocalPositionLerpCoroutine);
 
-        weaponLocalPositionLerp = StartCoroutine(LerpWeaponLocalPosition(weaponToToggle, weaponToToggle.gameObject.transform.localPosition, new Vector3(0, weaponToToggle.equippedWeapon.aimingYPos, 0), .25f));
+        weaponLocalPositionLerpCoroutine = StartCoroutine(LerpWeaponLocalPosition(weaponToToggle, weaponToToggle.gameObject.transform.localPosition, new Vector3(0, weaponToToggle.equippedWeapon.aimingYPos, 0), .25f));
     }
 
     void MoveCameraToDefaultPosition(WeaponShooting weaponToToggle)
     {
-        if (cameraFOVLerp != null)
-            StopCoroutine(cameraFOVLerp);
+        if (cameraFOVLerpCoroutine != null)
+            StopCoroutine(cameraFOVLerpCoroutine);
 
-        cameraFOVLerp = StartCoroutine(LerpCameraFOV(defaultFOV, timeToLeaveADS));
+        cameraFOVLerpCoroutine = StartCoroutine(LerpCameraFOV(defaultFOV, timeToLeaveADS));
 
-        if (weaponLocalPositionLerp != null)
-            StopCoroutine(weaponLocalPositionLerp);
+        if (weaponLocalPositionLerpCoroutine != null)
+            StopCoroutine(weaponLocalPositionLerpCoroutine);
  
-        weaponLocalPositionLerp = StartCoroutine(LerpWeaponLocalPosition(weaponToToggle, weaponToToggle.gameObject.transform.localPosition, new Vector3(0, weaponToToggle.equippedWeapon.defaultYPos, 0), .2f));
+        weaponLocalPositionLerpCoroutine = StartCoroutine(LerpWeaponLocalPosition(weaponToToggle, weaponToToggle.gameObject.transform.localPosition, new Vector3(0, weaponToToggle.equippedWeapon.defaultYPos, 0), .2f));
     }
 
     void DisableCameraLook()

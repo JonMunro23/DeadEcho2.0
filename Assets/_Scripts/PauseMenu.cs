@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     OptionsMenu optionsMenu;
     public static bool isPaused = false;
+
+    public static Action<bool> onPaused;
 
     private void Awake()
     {
@@ -39,6 +42,7 @@ public class PauseMenu : MonoBehaviour
     {
 
         isPaused = false;
+        onPaused?.Invoke(isPaused);
         pauseMenu.SetActive(false);
         Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
@@ -47,6 +51,7 @@ public class PauseMenu : MonoBehaviour
     void Pause()
     {
         isPaused = true;
+        onPaused?.Invoke(isPaused);
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.Confined;
@@ -60,6 +65,7 @@ public class PauseMenu : MonoBehaviour
     public void RestartLevel()
     {
         isPaused = false;
+        //onPaused?.Invoke(isPaused);
         Time.timeScale = 1.0f;
         Cursor.lockState = CursorLockMode.Locked;
         Scene currentLevel = SceneManager.GetActiveScene();

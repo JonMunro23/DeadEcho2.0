@@ -41,6 +41,7 @@ public class OptionsSlider : MonoBehaviour
         slider.maxValue = settingValue.valueMax;
         UpdateSliderValue(settingValue.currentValue);
         currentValue = settingValue.currentValue;
+        updatedValue = currentValue;
         previousValue = settingValue.currentValue;
     }
 
@@ -85,6 +86,7 @@ public class OptionsSlider : MonoBehaviour
     {
         if (updatedValue != currentValue)
         {
+            Debug.Log(settingValue.name + ": " +  updatedValue + " is not equal to current value: " + currentValue);
             return true;
         }
         else
