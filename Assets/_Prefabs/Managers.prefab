@@ -145,6 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4675041389286521268}
   - component: {fileID: 5161193325225837935}
+  - component: {fileID: 2709969764800093814}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -179,6 +180,103 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95177d8b67f1db747b10c95947bd5d73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicTracks: []
+--- !u!82 &2709969764800093814
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934477777443712108}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7616032671261032112
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +289,7 @@ GameObject:
   - component: {fileID: 9045246786933683437}
   - component: {fileID: 277128260634032211}
   m_Layer: 0
-  m_Name: HitmarkerManager
+  m_Name: CrosshairManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,8 +322,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 692fb814d453c4d41bd6a578446fcba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitmarkerSFXSource: {fileID: 277128260634032211}
-  hitMarkerSfx: {fileID: 8300000, guid: 503d82ee616ecbd4b827f8be2f97d87b, type: 3}
+  crosshairLeftArm: {fileID: 0}
+  crosshairRightArm: {fileID: 0}
+  crosshairTopArm: {fileID: 0}
+  crosshairBottomArm: {fileID: 0}
+  crosshair: {fileID: 0}
+  hitMarker: {fileID: 0}
+  minCrosshairSize: 125
+  maxCrosshairSize: 225
+  accuracyRecoveryRate: 80
+  currentCrosshairSize: 0
+  baseCrosshairSize: 125
 --- !u!82 &277128260634032211
 AudioSource:
   m_ObjectHideFlags: 0

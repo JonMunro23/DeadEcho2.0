@@ -15,3 +15,5 @@ MonoBehaviour:
   playerFov: {fileID: 11400000, guid: b60859b788cdafc4a91f393f5c0b7a6e, type: 2}
   mouseSensitivity: {fileID: 11400000, guid: 2334e02a7a998eb41ad89c88e24b799a, type: 2}
   masterVolume: {fileID: 11400000, guid: f6196ce38eb6be940b8b5ec21eab4d4d, type: 2}
+  musicVolume: {fileID: 11400000, guid: 1340e50791cf3004da9965ea5e529bfb, type: 2}
+  sfxVolume: {fileID: 11400000, guid: 05e7c8bb0165db54583670d3680f5d3a, type: 2}

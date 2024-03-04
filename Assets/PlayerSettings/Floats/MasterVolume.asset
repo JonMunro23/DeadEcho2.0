@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MasterVolume
   m_EditorClassIdentifier: 
   name: Master Volume
-  defaultValue: 80
-  currentValue: 80
-  valueMin: 0
-  valueMax: 100
+  defaultValue: 1
+  currentValue: 1
+  valueMin: 0.0001
+  valueMax: 1
