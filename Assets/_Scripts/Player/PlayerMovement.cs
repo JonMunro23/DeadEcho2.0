@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Sprinting")]
     public bool isSprinting;
+    public float sprintSpeedMultiplier;
     [HideInInspector] public float sprintingMovementSpeed;
     Coroutine sprintingBreathingSFXCoroutine;
 
@@ -85,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
         readyToJump = true;
         aimingMovementSpeed = baseMoveSpeed / 2;
-        sprintingMovementSpeed = baseMoveSpeed * 1.66f;
+        sprintingMovementSpeed = baseMoveSpeed * sprintSpeedMultiplier;
         crouchingMovementSpeed = baseMoveSpeed / 3;
         canPlayMovementSFX = true;
     }
