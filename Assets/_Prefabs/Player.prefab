@@ -206,9 +206,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5882179577331821263}
   - component: {fileID: 8791606583880009310}
-  - component: {fileID: 4846398802170070688}
+  - component: {fileID: 2716378426189189292}
   - component: {fileID: 2888709841626420681}
-  - component: {fileID: 6239305949222761624}
   - component: {fileID: 4208324484240436933}
   - component: {fileID: 7967683415825617344}
   - component: {fileID: 5087128479350157466}
@@ -236,8 +235,9 @@ Transform:
   - {fileID: 7370035124297081520}
   - {fileID: 7113644969650488164}
   - {fileID: 6459542631952352944}
+  - {fileID: 7396360172992673638}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &8791606583880009310
 Rigidbody:
@@ -266,8 +266,8 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!136 &4846398802170070688
-CapsuleCollider:
+--- !u!135 &2716378426189189292
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -281,13 +281,11 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.74
-  m_Height: 1
-  m_Direction: 1
+  serializedVersion: 3
+  m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2888709841626420681
 MonoBehaviour:
@@ -312,6 +310,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   cameraPos: {fileID: 7370035124297081520}
   walkingMovementSpeed: 0
+  currentVelocity: {x: 0, y: 0, z: 0}
   originalCamPos: {x: 0, y: 0.5, z: 0}
   jumpKey: 32
   sprintKey: 304
@@ -351,21 +350,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c5401dac992b0d341bafe66bc1a29518, type: 3}
   - {fileID: 8300000, guid: 2bc46186ae493404f8a857a5a6fe945a, type: 3}
   jumpingGruntingSFX: {fileID: 8300000, guid: a684ae4f7af324043bf36d8aa5be0ee1, type: 3}
---- !u!114 &6239305949222761624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3069719484839355263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7270194552016489ce6d6dee6dfcec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  purchaseWeaponKey: 101
-  purchaseWeaponAudioSource: {fileID: 2970991988062394810}
-  costOfAmmo: 500
 --- !u!114 &4208324484240436933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1100,6 +1084,75 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &8763151489092182334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7396360172992673638}
+  - component: {fileID: 2694735581346594505}
+  - component: {fileID: 6197907703445710885}
+  m_Layer: 2
+  m_Name: PlayerPickupRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7396360172992673638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8763151489092182334}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5882179577331821263}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2694735581346594505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8763151489092182334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7270194552016489ce6d6dee6dfcec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purchaseWeaponKey: 101
+  purchaseWeaponAudioSource: {fileID: 2970991988062394810}
+  costOfAmmo: 500
+--- !u!135 &6197907703445710885
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8763151489092182334}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9162962487612121002
 GameObject:
   m_ObjectHideFlags: 0

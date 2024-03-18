@@ -16,22 +16,30 @@ public class GameOverManager : MonoBehaviour
 
     [SerializeField]
     float fadeToGameOverCameraDelay, fadeToRestartLevelDelay, restartLevelDelay;
+    int currentRound;
 
     private void OnEnable()
     {
         PlayerHealth.onDeath += EndGame;
+        RoundManager.onNewRoundStarted += GetCurrentRound;
     }
 
     private void OnDisable()
     {
         PlayerHealth.onDeath -= EndGame;
+        RoundManager.onNewRoundStarted -= GetCurrentRound;
+    }
+
+    void GetCurrentRound(int _currentRound)
+    {
+        currentRound = _currentRound;
     }
 
     void EndGame()
     {
         gameOverScreen.SetActive(true);
 
-        roundsSurvivedText.text = "You survived " + (ZombieSpawnManager.currentRound - 1) + " Waves!";
+        roundsSurvivedText.text = "You survived " + (currentRound - 1) + " Waves!";
 
         FadeToGameOverCamera();
 

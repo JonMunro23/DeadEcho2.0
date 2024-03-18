@@ -3,101 +3,113 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Rendering;
+using System;
 
 public class ZombieSpawnManager : MonoBehaviour
 {
-    int amountToSpawn, aliveZombies;
-    bool canSpawnZombie, canStartNextWave;
+    [SerializeField]
+    int remaningAmountToSpawn, totalAmountToSpawn, aliveZombies, zombiesKilledThisRound;
+    bool canSpawnZombie, canSpawn;
 
-    [SerializeField] List<GameObject> spawnPoints = new List<GameObject>();
-    [SerializeField] GameObject zombieObj, playerCrosshair;
+    [SerializeField] List<ZombieSpawnPoint> activeSpawnPoints = new List<ZombieSpawnPoint>();
+    [SerializeField] List<ZombieSpawnPoint> startingSpawnPoints = new List<ZombieSpawnPoint>();
+    [SerializeField] GameObject zombieObj;
     [SerializeField] Transform zombieParent;
     [SerializeField] int maxNumberOfAliveZombies, startingAmountToSpawn;
-    [SerializeField] float zombieSpawnCooldown, gracePeriodLength;
-    TMP_Text currentWaveText, waveText;
-
-    public static int currentRound;
+    [SerializeField] float zombieSpawnCooldown;
 
     public bool canSpawnZombies = true;
 
-    private void Awake()
-    {
-        currentWaveText = GameObject.FindGameObjectWithTag("CurrentRoundText").GetComponent<TMP_Text>();
-        waveText = currentWaveText.transform.parent.GetChild(1).GetComponent<TMP_Text>();
-    }
+    public static Action onAllZombiesKilled;
+
     private void OnEnable()
     {
         ZombieHealth.onDeath += KillZombie;
+        ZombieSpawnPoint.onSpawnPointActivateStatusUpdated += UpdateSpawnPoint;
+        RoundManager.onNewRoundStarted += StartSpawning;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        amountToSpawn = startingAmountToSpawn;
-        canSpawnZombie = true;
-        spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("ZombieSpawnPoint"));
-        currentRound = 1;
-        UpdateCurrentWaveText();
-        PlayWaveTextIntroAnimation();
-    }
-
     private void OnDisable()
     {
         ZombieHealth.onDeath -= KillZombie;
+        ZombieSpawnPoint.onSpawnPointActivateStatusUpdated -= UpdateSpawnPoint;
+        RoundManager.onNewRoundStarted -= StartSpawning;
     }
-    // Update is called once per frame
+
+    void Start()
+    {
+        totalAmountToSpawn = startingAmountToSpawn;
+        remaningAmountToSpawn = totalAmountToSpawn;
+        canSpawnZombie = true;
+        //InitStartingSpawnPoints();
+
+    }
+
     void Update()
     {
-        if(canSpawnZombies)
+        if(canSpawn)
         {
-            if(spawnPoints.Count > 0)
+            if(remaningAmountToSpawn == 0)
             {
-                while (amountToSpawn > 0 && canSpawnZombie && aliveZombies < maxNumberOfAliveZombies)
-                {
-                    canSpawnZombie = false;
-                    amountToSpawn--;
-                    aliveZombies++;
-                    int rand = Random.Range(0, spawnPoints.Count);
-
-                    if(zombieParent)
-                        Instantiate(zombieObj, spawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
-                    else
-                        Instantiate(zombieObj, spawnPoints[rand].transform.position, Quaternion.identity);
-
-                    StartCoroutine(SpawnCooldown());
-                }
+                canSpawn = false;
             }
 
-            if (amountToSpawn == 0 && aliveZombies == 0 && canStartNextWave)
+            if(aliveZombies < maxNumberOfAliveZombies)
             {
-                NextRound();
-            }
-
-            if(Input.GetKey(KeyCode.LeftShift))
-            {
-                if(Input.GetKeyDown(KeyCode.L))
-                {
-                    NextRound();
-                }
+                TrySpawnZombie();
             }
         }
     }
 
-    void NextRound()
+    void StartSpawning(int currentRound)
     {
-        canStartNextWave = false;
-        PlayWaveTextNextWaveAnimation();
-        //StartCoroutine(NewRoundGracePeriod());
-        //play new round UI anims
-        //play new round jingle
+        if(canSpawnZombies)
+        {
+            totalAmountToSpawn = startingAmountToSpawn * currentRound;
+            remaningAmountToSpawn = totalAmountToSpawn;
+            zombiesKilledThisRound = 0;
+            canSpawn = true;
+        }
     }
 
-    //IEnumerator NewRoundGracePeriod()
-    //{
-    //    yield return new WaitForSeconds(gracePeriodLength);
-    //    amountToSpawn = startingAmountToSpawn * currentRound;
-    //    canStartNextWave = true;
-    //}
+    void TrySpawnZombie()
+    {
+        if(canSpawnZombie)
+        {
+            canSpawnZombie = false;
+            remaningAmountToSpawn--;
+
+            aliveZombies++;
+            int rand = UnityEngine.Random.Range(0, activeSpawnPoints.Count);
+
+            if (zombieParent)
+                Instantiate(zombieObj, activeSpawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
+
+            StartCoroutine(SpawnCooldown());
+        }
+    }
+
+    void InitStartingSpawnPoints()
+    {
+        foreach(ZombieSpawnPoint spawnPoint in startingSpawnPoints)
+        {
+            spawnPoint.SetIsActive(true);
+        }
+    }
+
+    void UpdateSpawnPoint(ZombieSpawnPoint spawnPointToUpdate, bool _isSpawnPointActive)
+    {
+        //Debug.Log(_isSpawnPointActive);
+
+        //if (spawnPointToUpdate == null)
+        //    return;
+
+
+        if(_isSpawnPointActive)
+            activeSpawnPoints.Add(spawnPointToUpdate);
+        else
+            activeSpawnPoints.Remove(spawnPointToUpdate);
+    }
 
     IEnumerator SpawnCooldown()
     {
@@ -108,47 +120,10 @@ public class ZombieSpawnManager : MonoBehaviour
     void KillZombie(int playerIndex, bool wasHeadshot)
     {
         aliveZombies--;
-    }
-
-    void UpdateCurrentWaveText()
-    {
-        currentWaveText.text = currentRound.ToString();
-    }
-
-    void PlayWaveTextIntroAnimation()
-    {
-        currentWaveText.DOColor(Color.red, 2).OnComplete(() => 
+        zombiesKilledThisRound++;
+        if(zombiesKilledThisRound == totalAmountToSpawn)
         {
-            currentWaveText.transform.DOScale(.75f, 1).SetEase(Ease.OutCirc);
-            waveText.DOColor(Color.clear, .3f).OnComplete(() =>
-                {
-                    Destroy(waveText);
-                }
-            );
-
-            currentWaveText.GetComponent<RectTransform>().DOLocalMove(new Vector3(50, -50, 0), 1).SetDelay(.35f).SetEase(Ease.OutCirc).OnComplete(() =>
-            {
-                if(canSpawnZombies)
-                    canStartNextWave = true;
-            });
-        });
-        
-    }
-
-    void PlayWaveTextNextWaveAnimation()
-    {
-        currentWaveText.DOColor(Color.clear, 2.5f).OnComplete(() => 
-        { 
-            canStartNextWave = true;
-            currentRound++;
-            amountToSpawn = startingAmountToSpawn * currentRound;
-            UpdateCurrentWaveText();
-            currentWaveText.DOColor(Color.red, 2.5f).OnComplete(() =>
-            {
-                currentWaveText.DOColor(Color.white, 1f).SetLoops(4, LoopType.Yoyo);
-                canStartNextWave = true;
-            });
+            onAllZombiesKilled?.Invoke();
         }
-        );
     }
 }

@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using HighlightPlus;
-using TMPro.EditorUtilities;
 
 public class PlayerPickUpManager : MonoBehaviour
 {
@@ -48,7 +45,7 @@ public class PlayerPickUpManager : MonoBehaviour
                 {
                     if (PointsManager.instance.currentPoints >= costOfAmmo)
                     {
-                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name)
+                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name && !WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                         {
                             if (!WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
@@ -58,7 +55,7 @@ public class PlayerPickUpManager : MonoBehaviour
                             else
                                 return;
                         }
-                        else if (weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name && !WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                        else if (WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name && !WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                         {
                             if (!WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
@@ -68,7 +65,7 @@ public class PlayerPickUpManager : MonoBehaviour
                             else
                                 return;
                         }
-                        else if (weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name && !WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                        else if (WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name && !WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                         {
                             if (!WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
