@@ -6,7 +6,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     ZombieAI zombieAI;
     Animator animator;
 
-    [SerializeField] int hitPoints, baseKillPoints, extraHeadshotPoints, startingHealth;
+    [SerializeField] int hitPoints, baseKillPoints, extraHeadshotPoints;
     [SerializeField] SkinnedMeshRenderer zombieHead;
 
     [SerializeField] GameObject zombieRagdoll;
@@ -38,7 +38,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = startingHealth;
+        //SetHealth(startingHealth);
     }
 
     public void TakeDamage(int healthToRemove, bool hitHead)
@@ -110,6 +110,11 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         else
             return false;
 
+    }
+
+    public void SetHealth(int health)
+    {
+        currentHealth = health;
     }
 
     public void OnDamaged(int damageTaken, bool wasHeadshot)
