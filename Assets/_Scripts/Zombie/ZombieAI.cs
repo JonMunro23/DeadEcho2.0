@@ -159,6 +159,7 @@ public class ZombieAI : MonoBehaviour
 
         zombieAudioSource.clip = zombieGrowlAudioClips[rand];
         zombieAudioSource.Play();
+        StartCoroutine(GrowlCooldown());
     }
 
     void PlayAttackAudio()
