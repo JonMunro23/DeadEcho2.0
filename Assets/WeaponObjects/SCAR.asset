@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SCAR
   m_EditorClassIdentifier: 
   weaponSlotType: 0
+  reloadType: 0
   name: SCAR
   description: 
   cost: 1200
@@ -58,14 +59,17 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   isAutomatic: 1
+  isScoped: 0
+  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
-  blastRadius: 0
   projectileInitalVelocity: 0
-  projectileDestructionEffect: {fileID: 0}
   fireSFX:
   - {fileID: 8300000, guid: 8f04b3ff514c3254898fc3754113a032, type: 3}
-  reloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  fullReloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  reloadStartSFX: {fileID: 0}
+  insertShellSFX: {fileID: 0}
+  reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
   canUseSightAttachment: 1
   canUseMagAttachment: 1

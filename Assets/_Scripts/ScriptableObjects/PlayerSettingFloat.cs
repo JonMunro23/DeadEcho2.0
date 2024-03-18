@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlayerSettingFloat", menuName = "New PlayerSettingFloat")]
+[CreateAssetMenu(fileName = "PlayerSettingFloat", menuName = "PlayerSettings/New PlayerSettingFloat")]
 public class PlayerSettingFloat : PlayerSetting
 {
     public float defaultValue;

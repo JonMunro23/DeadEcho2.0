@@ -247,12 +247,27 @@ MonoBehaviour:
   meleePerformTime: 2
   meleeRange: 0.5
   distanceToPerformMeleeAttack: 2
+  minTimeBetweenGrowls: 4
+  maxTimeBetweenGrowls: 8
   damage: 25
   isDead: 0
   isMoving: 0
   isAttacking: 0
   canPerformMeleeAttack: 1
   seekPlayer: 1
+  canGrowl: 0
+  zombieGrowlAudioClips:
+  - {fileID: 8300000, guid: 215c3190693b00f469bb580b7dd26701, type: 3}
+  - {fileID: 8300000, guid: 6966a4b0bf0aacc47a66730db6afd40e, type: 3}
+  - {fileID: 8300000, guid: 4f1cb4e29fb230446ad02dd979557eec, type: 3}
+  - {fileID: 8300000, guid: 0435848aeebaf5a488c8a40d0fa5c222, type: 3}
+  - {fileID: 8300000, guid: 8b46a614ec762374897cc5016695eb2e, type: 3}
+  zombieAttackingAudioClips:
+  - {fileID: 8300000, guid: 6a2dc18aa537da74094811b78a0399d8, type: 3}
+  - {fileID: 8300000, guid: 43f404a82b621754da131b76eef77a18, type: 3}
+  - {fileID: 8300000, guid: 98a8a7b1c3b1f6142a7ba69930c818d9, type: 3}
+  - {fileID: 8300000, guid: 86704547ecd21634184dac33ce5960ab, type: 3}
+  - {fileID: 8300000, guid: 0375099a504656541826075545d3ca18, type: 3}
 --- !u!82 &5304284615476171007
 AudioSource:
   m_ObjectHideFlags: 0
@@ -262,10 +277,10 @@ AudioSource:
   m_GameObject: {fileID: 172121580578702208}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -772457700625401899, guid: 5bc508d5edc3c2047b566530fc955973, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -309,7 +324,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

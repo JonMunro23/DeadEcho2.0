@@ -14,8 +14,14 @@ public class ZombieAI : MonoBehaviour
     Transform meleePos, playerPosition;
     public float speed, meleeCooldown, meleePerformTime, meleeRange;
     public float distanceToPerformMeleeAttack;
+    [SerializeField] float minTimeBetweenGrowls, maxTimeBetweenGrowls;
     public int damage;
-    public bool isDead, isMoving, isAttacking, canPerformMeleeAttack = true, seekPlayer = true;
+    public bool isDead, isMoving, isAttacking, canPerformMeleeAttack = true, seekPlayer = true, canGrowl;
+
+    AudioSource zombieAudioSource;
+    [SerializeField]
+    AudioClip[] zombieGrowlAudioClips, zombieAttackingAudioClips;
+
 
     private void OnEnable()
     {
@@ -33,7 +39,8 @@ public class ZombieAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         zombieHealth = GetComponent<ZombieHealth>();
         animator = GetComponent<Animator>();
-
+        zombieAudioSource = GetComponent<AudioSource>();
+        StartCoroutine(GrowlCooldown());
     }
 
     // Start is called before the first frame update
@@ -47,7 +54,13 @@ public class ZombieAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!zombieHealth.isDead && seekPlayer)
+        if (zombieHealth.isDead)
+            return;
+
+        if (canGrowl)
+            Growl();
+
+        if (seekPlayer)
         {
             SetTarget();    
 
@@ -95,6 +108,7 @@ public class ZombieAI : MonoBehaviour
     {
         canPerformMeleeAttack = false;
         animator.SetTrigger("MeleeAttack");
+        PlayAttackAudio();
         StartCoroutine(MeleeAttackCooldown());
     }
 
@@ -135,5 +149,32 @@ public class ZombieAI : MonoBehaviour
     {
         seekPlayer = false;
         HaltMovement();
+    }
+
+    void Growl()
+    {
+        Debug.Log("growling");
+        canGrowl = false;
+        int rand = Random.Range(0, zombieGrowlAudioClips.Length);
+
+        zombieAudioSource.clip = zombieGrowlAudioClips[rand];
+        zombieAudioSource.Play();
+    }
+
+    void PlayAttackAudio()
+    {
+        Debug.Log("Playing attack audio");
+
+        int rand = Random.Range(0, zombieAttackingAudioClips.Length);
+
+        zombieAudioSource.clip = zombieAttackingAudioClips[rand];
+        zombieAudioSource.Play();
+    }
+
+    IEnumerator GrowlCooldown()
+    {
+        float cooldownTime = Random.Range(minTimeBetweenGrowls, maxTimeBetweenGrowls);
+        yield return new WaitForSeconds(cooldownTime);
+        canGrowl = true;
     }
 }

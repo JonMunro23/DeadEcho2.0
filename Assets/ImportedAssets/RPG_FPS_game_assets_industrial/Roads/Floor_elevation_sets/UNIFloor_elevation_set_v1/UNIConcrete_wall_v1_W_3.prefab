@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 33000011536278338}
   - component: {fileID: 23000011399825770}
   - component: {fileID: 64000012496255942}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UNIConcrete_wall_v1_W_tile_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000013051101908
 Transform:
@@ -92,9 +92,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010056762816}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300056, guid: c6d026d6367d43a438c71a59c9da8290, type: 3}
@@ -107,12 +115,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4000010940606070}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UNIConcrete_wall_v1_W_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000010940606070
 Transform:
@@ -129,7 +137,7 @@ Transform:
   - {fileID: 4000013737074336}
   - {fileID: 4000013051101908}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 317
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1000012954073910
 GameObject:
@@ -143,12 +151,12 @@ GameObject:
   - component: {fileID: 33000010845941340}
   - component: {fileID: 23000013995215450}
   - component: {fileID: 65000014136442070}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Road_set_v1_s_floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4000013737074336
 Transform:
@@ -223,8 +231,16 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000012954073910}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 10, y: 0, z: 10}
   m_Center: {x: 0.0000038146973, y: -0.00005, z: 0}

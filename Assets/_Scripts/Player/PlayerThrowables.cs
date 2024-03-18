@@ -14,13 +14,24 @@ public class PlayerThrowables : MonoBehaviour
 
     public bool canThrowGrenade;
 
-    [SerializeField] int startingGrenadeCount;
+    [SerializeField] int startingGrenadeCount, grenadesPerRound, maxHeldGrenades;
     [SerializeField] float grenadeReactivationTime;
     [HideInInspector] public int currentGrenadeCount;
 
    TMP_Text currentGrenadeCountText;
 
     public static Action onEquipmentUsed;
+
+    private void OnEnable()
+    {
+        RoundManager.onNewRoundStarted += AddEquipment;
+    }
+
+    private void OnDisable()
+    {
+        RoundManager.onNewRoundStarted -= AddEquipment;
+
+    }
 
     private void Awake()
     {
@@ -29,9 +40,15 @@ public class PlayerThrowables : MonoBehaviour
 
     private void Start()
     {
-        currentGrenadeCount = startingGrenadeCount;
         canThrowGrenade = true;
-        currentGrenadeCountText.text = currentGrenadeCount.ToString();
+    }
+
+    void AddEquipment(int currentRound)
+    {
+        if (currentRound == 1)
+            AddGrenades(startingGrenadeCount);
+        else
+            AddGrenades(grenadesPerRound);
     }
 
 
@@ -59,6 +76,8 @@ public class PlayerThrowables : MonoBehaviour
     public void AddGrenades(int amountToAdd)
     {
         currentGrenadeCount += amountToAdd;
+        if(currentGrenadeCount > maxHeldGrenades)
+            currentGrenadeCount = maxHeldGrenades;
         currentGrenadeCountText.text = currentGrenadeCount.ToString();
     }
 
