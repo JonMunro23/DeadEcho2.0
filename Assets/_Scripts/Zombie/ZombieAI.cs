@@ -153,7 +153,6 @@ public class ZombieAI : MonoBehaviour
 
     void Growl()
     {
-        Debug.Log("growling");
         canGrowl = false;
         int rand = Random.Range(0, zombieGrowlAudioClips.Length);
 
@@ -164,8 +163,6 @@ public class ZombieAI : MonoBehaviour
 
     void PlayAttackAudio()
     {
-        Debug.Log("Playing attack audio");
-
         int rand = Random.Range(0, zombieAttackingAudioClips.Length);
 
         zombieAudioSource.clip = zombieAttackingAudioClips[rand];
