@@ -13,6 +13,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     TMP_Text loadingText;
 
+    [SerializeField] OptionsMenu optionsMenu;
+
     AsyncOperation loadingOperation;
 
     bool isLoadingFinished;
@@ -52,6 +54,11 @@ public class MainMenu : MonoBehaviour
         }
 
 
+    }
+
+    public void OpenOptionsMenu()
+    {
+        optionsMenu.OpenMenu();
     }
 
     public void Quit()
