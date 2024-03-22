@@ -37,6 +37,7 @@ public class PlayerPickUpManager : MonoBehaviour
                             WeaponSwapping.instance.PickUpWeapon(weaponToPurchase);
                         else
                             return;
+
                         Purchase(weaponToPurchase.cost);
                     }
                     isBuyingWeapon = false;

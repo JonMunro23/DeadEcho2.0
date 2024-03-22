@@ -65,6 +65,7 @@ public class AudioManager : MonoBehaviour
 
     void PlayTrack()
     {
+        Debug.Log("Music Index: " + musicIndex);
         musicSource.clip = musicTracks[musicIndex];
         musicSource.Play();
     }

@@ -1,53 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class RecoilManager : MonoBehaviour
 {
+    WeaponSwapping weaponSwapping;
+    Weapon currentWeapon;
 
+    Vector3 currentRotation;
+    Vector3 targetRotation;
 
-    
+    [SerializeField] float snappiness;
+    [SerializeField] float returnSpeed;
 
-    //private void OnEnable()
-    //{
-    //    WeaponShooting.onWeaponFired += ApplyRecoil;
-    //}
+    private void OnEnable()
+    {
+        WeaponShooting.onWeaponFired += RecoilFire;
+    }
 
-    //private void OnDisable()
-    //{
-    //    WeaponShooting.onWeaponFired -= ApplyRecoil;
-    //}
+    private void OnDisable()
+    {
+        WeaponShooting.onWeaponFired -= RecoilFire;
+    }
 
-    
+    private void Awake()
+    {
+        weaponSwapping = GetComponentInChildren<WeaponSwapping>();
+    }
 
-    //private void Update()
-    //{
-    //    Recoiling();
-    //}
+    private void Update()
+    {
+        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.fixedDeltaTime);
 
-    //public void StartRecoil(float recoilParam, float maxRecoil_xParam, float recoilSpeedParam)
-    //{
-    //    // in seconds
-    //    recoil = recoilParam;
-    //    maxRecoil_x = maxRecoil_xParam;
-    //    recoilSpeed = recoilSpeedParam;
-    //    maxRecoil_y = Random.Range(-maxRecoil_xParam, maxRecoil_xParam);
-    //}
+        transform.localRotation = Quaternion.Euler(currentRotation);
+    }
 
-    //void Recoiling()
-    //{
-    //    if (recoil < 0f)
-    //    {
-    //        Quaternion maxRecoil = Quaternion.Euler(maxRecoil_x, maxRecoil_y, 0f);
-    //        // Dampen towards the target rotation
-    //        transform.localRotation = Quaternion.Slerp(transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed);
-    //        recoil += Time.deltaTime;
-    //    }
-    //    else
-    //    {
-    //        recoil = 0f;
-    //        // Dampen towards the target rotation
-    //        transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.identity, Time.deltaTime * recoilSpeed / 2);
-    //    }
-    //}
+    public void RecoilFire(bool isAiming)
+    {
+        currentWeapon = weaponSwapping.currentlyEquippedWeapon;
+
+        if (isAiming)
+        {
+            targetRotation += new Vector3(currentWeapon.ADSRecoilX, Random.Range(-currentWeapon.ADSRecoilY, currentWeapon.ADSRecoilY), Random.Range(-currentWeapon.ADSRecoilZ, currentWeapon.ADSRecoilZ));
+            return;
+        }
+
+        targetRotation += new Vector3(currentWeapon.recoilX, Random.Range(-currentWeapon.recoilY, currentWeapon.recoilY), Random.Range(-currentWeapon.recoilZ, currentWeapon.recoilZ));
+        
+    }
 }

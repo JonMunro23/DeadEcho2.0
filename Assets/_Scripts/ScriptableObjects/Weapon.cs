@@ -55,6 +55,14 @@ public class Weapon : ScriptableObject
     public AudioClip[] fireSFX;
     public AudioClip fullReloadSFX, reloadStartSFX, insertShellSFX, reloadEndSFX, equipSFX;
 
+    [Header("Recoil")]
+    public float recoilX;
+    public float recoilY;
+    public float recoilZ;
+    public float ADSRecoilX;
+    public float ADSRecoilY;
+    public float ADSRecoilZ;
+
     [Header("Attachments")]
     public bool canUseSightAttachment;
     public bool canUseMagAttachment;

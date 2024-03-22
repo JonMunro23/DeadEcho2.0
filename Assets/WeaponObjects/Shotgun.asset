@@ -63,9 +63,7 @@ MonoBehaviour:
   scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
-  blastRadius: 0
   projectileInitalVelocity: 0
-  projectileDestructionEffect: {fileID: 0}
   fireSFX:
   - {fileID: 8300000, guid: a2236a73bcfdb5244a8f38748b045f50, type: 3}
   fullReloadSFX: {fileID: 0}
@@ -73,6 +71,12 @@ MonoBehaviour:
   insertShellSFX: {fileID: 8300000, guid: ccd89f9433f4489478c3b6421fd95e9f, type: 3}
   reloadEndSFX: {fileID: 8300000, guid: 876e49cd4a9864f44b4ca4e0d110c281, type: 3}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  recoilX: -8
+  recoilY: 4
+  recoilZ: 2
+  ADSRecoilX: -4.8
+  ADSRecoilY: 2.8
+  ADSRecoilZ: 1.2
   canUseSightAttachment: 0
   canUseMagAttachment: 0
   canUseMuzzleAttachment: 0

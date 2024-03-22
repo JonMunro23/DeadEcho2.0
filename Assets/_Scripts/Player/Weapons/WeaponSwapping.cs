@@ -158,10 +158,25 @@ public class WeaponSwapping : MonoBehaviour
 
     void SpawnNewWeapon(Weapon weaponToSpawn, int weaponSlot)
     {
-        if (currentlyEquippedWeaponObj && currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isReloading)
+        if (currentlyEquippedWeaponObj)
         {
-            currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
+            if(TryGetComponent<WeaponShooting>(out WeaponShooting weaponShooting))
+            {
+                if (weaponShooting.isReloading)
+                    weaponShooting.CancelReload();
+
+                if (weaponShooting.isAiming)
+                    weaponShooting.StopADS();
+            }
+
+            if(currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isReloading)
+                currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
+
+            if(currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isAiming)
+                currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().StopADS();
+
         }
+
         DeactivateWeapons();
         GameObject clone = Instantiate(weaponToSpawn.weaponObj);
         //PlayerMovement.instance.animator = clone.GetComponent<Animator>();
