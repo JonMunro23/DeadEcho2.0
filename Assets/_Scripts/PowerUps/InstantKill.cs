@@ -1,8 +1,5 @@
-using DG.Tweening;
 using System;
-using Unity.Burst;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class InstantKill : PowerUpBase
 { 

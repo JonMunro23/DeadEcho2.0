@@ -72,8 +72,8 @@ MonoBehaviour:
   reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
   recoilX: -2
-  recoilY: 2
-  recoilZ: 0.5
+  recoilY: 1.5
+  recoilZ: 0.35
   ADSRecoilX: -0.8
   ADSRecoilY: 0.4
   ADSRecoilZ: 0.25

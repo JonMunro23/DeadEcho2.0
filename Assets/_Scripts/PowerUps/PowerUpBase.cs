@@ -9,7 +9,8 @@ public enum PowerUpType
 {
     MaxAmmo,
     InstantKill,
-    DoublePoints
+    DoublePoints,
+    BottomlessClip
 }
 
 public class PowerUpBase : MonoBehaviour
@@ -30,6 +31,8 @@ public class PowerUpBase : MonoBehaviour
 
     public float timeVisible = 0.3f;
     public float timeInvisible = 0.3f;
+
+    public Action endAction;
 
     private void Awake()
     {

@@ -1,8 +1,6 @@
 using DG.Tweening;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -23,19 +21,18 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField]
     Transform activePowerUpContainer;
 
-    activePowerUpUIElement activeInstantKillElement;
-
-    Coroutine instaKillCoroutine;
+    activePowerUpUIElement activeInstantKillElement, activeBottomlessClipElement;
 
     [SerializeField] int powerUpDuration;
 
-    public static Action onInstantKillEnded;
-    bool instantKillStatus;
+    public static Action onInstantKillEnded, onBottomlessClipEnded;
+    bool instantKillStatus, bottomlessClipStatus;
 
     private void OnEnable()
     {
         ZombieHealth.dropPowerUp += SpawnPowerUp;
         onInstantKillEnded += InstantKillEnded;
+        onBottomlessClipEnded += BottomlessClipEnded;
     }
 
     void InstantKillEnded()
@@ -43,10 +40,16 @@ public class PowerUpManager : MonoBehaviour
         SetInstantKillStatus(false);
     }
 
+    void BottomlessClipEnded()
+    {
+        SetBottomlessClipStatus(false);
+    }
+
     private void OnDisable()
     {
         ZombieHealth.dropPowerUp -= SpawnPowerUp;
         onInstantKillEnded -= InstantKillEnded;
+        onBottomlessClipEnded -= BottomlessClipEnded;
     }
 
     private void Awake()
@@ -83,8 +86,16 @@ public class PowerUpManager : MonoBehaviour
                 activePowerUps.Add(powerUp);
                 SetInstantKillStatus(true);
                 break;
-
-
+            case PowerUpType.BottomlessClip:
+                if(GetBottomlessClipStatus())
+                {
+                    activeBottomlessClipElement.RefreshDuration();
+                    break;
+                }
+                SpawnPowerUpUIElement(powerUp);
+                activePowerUps.Add(powerUp);
+                SetBottomlessClipStatus(true);
+                break;
         }
         SpawnPowerUpNameText(powerUp);
     }
@@ -105,8 +116,29 @@ public class PowerUpManager : MonoBehaviour
     {
         GameObject clone = Instantiate(powerUpUIElement, activePowerUpContainer);
         var activePowerUpUIElement = clone.GetComponent<activePowerUpUIElement>();
-        activeInstantKillElement = activePowerUpUIElement;
-        activePowerUpUIElement.Init(powerUpDuration, _activePowerUp.powerUpUIIcon, onInstantKillEnded);
+        switch (_activePowerUp.powerUpType)
+        {
+            case PowerUpType.InstantKill:
+                activeInstantKillElement = activePowerUpUIElement;
+                break;
+            case PowerUpType.BottomlessClip:
+                activeBottomlessClipElement = activePowerUpUIElement;
+                break;
+        }
+        activePowerUpUIElement.Init(powerUpDuration, _activePowerUp.powerUpUIIcon, GetActionToInvokeOnEnd(_activePowerUp));
+    }
+
+    Action GetActionToInvokeOnEnd(PowerUpBase _activePowerUp)
+    {
+        switch (_activePowerUp.powerUpType)
+        {
+            case PowerUpType.InstantKill:
+                return onInstantKillEnded;
+            case PowerUpType.BottomlessClip:
+                return onBottomlessClipEnded;
+            default:
+                return null;
+        }
     }
 
     void SetInstantKillStatus(bool status)
@@ -114,8 +146,18 @@ public class PowerUpManager : MonoBehaviour
         instantKillStatus = status;
     }
 
+    void SetBottomlessClipStatus(bool status)
+    {
+        bottomlessClipStatus = status;
+    }
+
     public bool GetInstantKillStatus()
     {
         return instantKillStatus;
+    }
+
+    public bool GetBottomlessClipStatus()
+    {
+        return bottomlessClipStatus;
     }
 }

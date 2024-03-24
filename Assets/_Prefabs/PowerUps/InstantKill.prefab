@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3356749124883387530}
-  - component: {fileID: 1090553497413566228}
+  - component: {fileID: -6574000317275651009}
   - component: {fileID: 1526175411915945483}
   - component: {fileID: 4467720734741253026}
   m_Layer: 2
@@ -26,6 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4045478466513652942}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.584917, y: 0.492, z: 11.19734}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,9 +34,8 @@ Transform:
   m_Children:
   - {fileID: 6851123865239740404}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1090553497413566228
+--- !u!114 &-6574000317275651009
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,12 +44,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4045478466513652942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43b0d7192e85f314db60c0813d64557d, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d11b0c76f067d44b884b984724e091a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpName: 
-  powerUpUIIcon: {fileID: 21300000, guid: 465fe297a723340d7a9c7161619487fc, type: 3}
-  pickupSfx: {fileID: 8300000, guid: fb4e9ec951044d146854dc74a02114d8, type: 3}
+  powerUpUIIcon: {fileID: 21300000, guid: 4a8763918f0974977a14a2af467e461a, type: 3}
+  pickupSfx: {fileID: 8300000, guid: edffd5b066c927a4eb3b83c7dd4107d6, type: 3}
   totalLifetime: 30
   powerUpType: 1
   timeVisible: 0.3

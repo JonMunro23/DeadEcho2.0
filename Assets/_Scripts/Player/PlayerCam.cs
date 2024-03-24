@@ -24,16 +24,25 @@ public class PlayerCam : MonoBehaviour
     Coroutine weaponLocalPositionLerpCoroutine;
 
 
+    [Header("Recoil")]
+    [SerializeField] float recoilSnappiness;
+    [SerializeField] float recoilReturnSpeed;
+    Vector3 currentRecoilRot;
+    Vector3 targetRecoilRotation;
+    WeaponSwapping weaponSwapping;
+    Weapon currentWeapon;
+
     private void Awake()
     {
         weaponCamera = GetComponent<Camera>();
+        weaponSwapping = GetComponentInChildren<WeaponSwapping>();
         orientation = GameObject.FindGameObjectWithTag("PlayerOrientation").transform;
     }
 
     private void OnEnable()
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
-        WeaponShooting.onWeaponFired += ApplyRecoil;
+        WeaponShooting.onWeaponFired += RecoilFire;
         PlayerHealth.onDeath += DisableCameraLook;
         OptionsMenu.updateSettings += UpdateCameraFOV;
         OptionsMenu.updateSettings += UpdateMouseSensitivity;
@@ -50,7 +59,7 @@ public class PlayerCam : MonoBehaviour
     private void OnDisable()
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
-        WeaponShooting.onWeaponFired -= ApplyRecoil;
+        WeaponShooting.onWeaponFired -= RecoilFire;
         PlayerHealth.onDeath -= DisableCameraLook;
         OptionsMenu.updateSettings -= UpdateCameraFOV;
         OptionsMenu.updateSettings -= UpdateMouseSensitivity;
@@ -70,20 +79,30 @@ public class PlayerCam : MonoBehaviour
 
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+            targetRecoilRotation = Vector3.Lerp(targetRecoilRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
+            currentRecoilRot = Vector3.Slerp(currentRecoilRot, targetRecoilRotation, recoilSnappiness * Time.fixedDeltaTime);
+            
+            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0) * Quaternion.Euler(currentRecoilRot);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
+
+
     }
 
-    void ApplyRecoil(bool isAiming)
+    public void RecoilFire(bool isAiming)
     {
-        if (!isAiming)
-        {
+        currentWeapon = weaponSwapping.currentlyEquippedWeapon;
 
+        if (isAiming)
+        {
+            targetRecoilRotation += new Vector3(currentWeapon.ADSRecoilX, Random.Range(-currentWeapon.ADSRecoilY, currentWeapon.ADSRecoilY), Random.Range(-currentWeapon.ADSRecoilZ, currentWeapon.ADSRecoilZ));
+            return;
         }
+
+        targetRecoilRotation += new Vector3(currentWeapon.recoilX, Random.Range(-currentWeapon.recoilY, currentWeapon.recoilY), Random.Range(-currentWeapon.recoilZ, currentWeapon.recoilZ));
+
     }
 
-    
     public void ToggleAiming(bool _isAiming, WeaponShooting weaponToToggle)
     {
         if (_isAiming)

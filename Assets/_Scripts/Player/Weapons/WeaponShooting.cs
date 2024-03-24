@@ -46,8 +46,10 @@ public class WeaponShooting : MonoBehaviour
     public static event Action<int, int> onAmmoUpdated;
     public static event Action<bool> onWeaponFired;
 
-    bool isInstantKillActive = false;
-    bool stopShellByShellReload = false;
+    bool isInstantKillActive, isBottomlessClipActive;
+    bool stopShellByShellReload;
+
+    public float reloadSpeedMultiplier;
 
     private void Awake()
     {
@@ -65,7 +67,9 @@ public class WeaponShooting : MonoBehaviour
         PlayerMelee.onMeleePerformed += CancelWeaponActions;
         PlayerThrowables.onEquipmentUsed += CancelWeaponActions;
         InstantKill.onInstantKillGrabbed += EnableInstantKills;
+        BottomlessClip.onBottomlessClipGrabbed += EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded += DisableInstantKills;
+        PowerUpManager.onBottomlessClipEnded += DisableBottomlessClip;
     }
 
     private void OnDisable()
@@ -73,8 +77,9 @@ public class WeaponShooting : MonoBehaviour
         PlayerMelee.onMeleePerformed -= CancelWeaponActions;
         PlayerThrowables.onEquipmentUsed -= CancelWeaponActions;
         InstantKill.onInstantKillGrabbed -= EnableInstantKills;
+        BottomlessClip.onBottomlessClipGrabbed -= EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded -= DisableInstantKills;
-
+        PowerUpManager.onBottomlessClipEnded -= DisableBottomlessClip;
     }
 
     public void InitialiseNewWeaponObj(Weapon weaponToInitialise)
@@ -110,6 +115,7 @@ public class WeaponShooting : MonoBehaviour
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         CheckInstantKillStatus();
+        CheckBottomlessClipStatus();
     }
     public void CheckInstantKillStatus()
     {
@@ -119,9 +125,19 @@ public class WeaponShooting : MonoBehaviour
         }
     }
 
+    public void CheckBottomlessClipStatus()
+    {
+        if(PowerUpManager.Instance.GetBottomlessClipStatus())
+        {
+            isBottomlessClipActive = true;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
+        weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + reloadSpeedMultiplier);
+
         if(!PauseMenu.isPaused)
         {
             if(isAutomatic)
@@ -167,7 +183,7 @@ public class WeaponShooting : MonoBehaviour
 
     void FireWeapon()
     {
-        if (canShoot && currentLoadedAmmo != 0 && !isReloading && !PlayerMovement.instance.isSprinting)
+        if (canShoot && (currentLoadedAmmo != 0 || isBottomlessClipActive) && !isReloading && !PlayerMovement.instance.isSprinting)
         {
             canShoot = false;
             StartCoroutine(PerShotCooldown());
@@ -184,7 +200,10 @@ public class WeaponShooting : MonoBehaviour
                 //Simulate recoil
 
             }
-            currentLoadedAmmo--;
+
+            if(!isBottomlessClipActive)
+                currentLoadedAmmo--;
+
             onWeaponFired?.Invoke(isAiming);
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
 
@@ -259,7 +278,7 @@ public class WeaponShooting : MonoBehaviour
                 }
             }
         }
-        else if (canShoot && currentLoadedAmmo == 0 && currentReserveAmmo > 0)
+        else if (canShoot && (currentLoadedAmmo == 0 && !isBottomlessClipActive) && currentReserveAmmo > 0)
         {
             ReloadWeapon();
         }
@@ -384,15 +403,15 @@ public class WeaponShooting : MonoBehaviour
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
         //SFXSource.PlayOneShot(reloadStartSFX);
-        yield return new WaitForSeconds(.6f);
-
+        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength * reloadSpeedMultiplier);
         //maxmagsize - 1 due to EndReload anim slotting a round
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
             weaponAnimator.Play("InsertShell");
+            
             loadedAmmoBeforeReload = currentLoadedAmmo;
             reserveAmmoBeforeReload = currentReserveAmmo;
-            yield return new WaitForSeconds(1.4f);
+            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength * reloadSpeedMultiplier);
             currentLoadedAmmo++;
             currentReserveAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -404,7 +423,7 @@ public class WeaponShooting : MonoBehaviour
         weaponAnimator.Play("EndReload");
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
-        yield return new WaitForSeconds(2.4f);
+        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength * reloadSpeedMultiplier);
         currentLoadedAmmo++;
         currentReserveAmmo--;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -498,6 +517,16 @@ public class WeaponShooting : MonoBehaviour
         isInstantKillActive = false;
     }
 
+    void EnableBottomlessClip()
+    {
+        isBottomlessClipActive = true;
+    }
+
+    void DisableBottomlessClip()
+    {
+        isBottomlessClipActive = false;
+    }
+
     IEnumerator PerShotCooldown()
     {
         yield return new WaitForSeconds(perShotCooldown);
@@ -506,7 +535,10 @@ public class WeaponShooting : MonoBehaviour
 
     IEnumerator ReloadCooldown()
     {
-        yield return new WaitForSeconds(reloadSpeed);
+        if (reloadSpeedMultiplier != 0)
+            yield return new WaitForSeconds(reloadSpeed * reloadSpeedMultiplier);
+        else
+            yield return new WaitForSeconds(reloadSpeed);
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         isReloading = false;
         canShoot = true;

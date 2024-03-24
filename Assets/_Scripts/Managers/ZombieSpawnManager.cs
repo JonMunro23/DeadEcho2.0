@@ -84,7 +84,7 @@ public class ZombieSpawnManager : MonoBehaviour
 
             if (zombieParent)
             {
-                if (activeSpawnPoints[rand])
+                if (rand < activeSpawnPoints.Count - 1)
                 {
                     GameObject clone = Instantiate(zombieObj, activeSpawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
                     if(clone.TryGetComponent<ZombieHealth>(out ZombieHealth zombieHealth))

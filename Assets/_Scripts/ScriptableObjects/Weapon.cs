@@ -55,6 +55,8 @@ public class Weapon : ScriptableObject
     public AudioClip[] fireSFX;
     public AudioClip fullReloadSFX, reloadStartSFX, insertShellSFX, reloadEndSFX, equipSFX;
 
+    public float reloadStartAnimLength, reloadShellAnimLength, reloadEndAnimLength;
+
     [Header("Recoil")]
     public float recoilX;
     public float recoilY;
