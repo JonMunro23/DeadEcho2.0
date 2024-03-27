@@ -102,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if(!PauseMenu.isPaused && canMove)
+        if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canMove)
             PlayerInput();
 
         SpeedControl();

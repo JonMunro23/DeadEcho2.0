@@ -14,8 +14,8 @@ public class PlayerPickUpManager : MonoBehaviour
     Weapon weaponToPurchase;
     bool canBuy, isBuyingWeapon, isBuyingAmmo;
 
-    HighlightEffect wallBuyHighlightEffect;
-    Color originalHighlightEffectColor;
+    //HighlightEffect wallBuyHighlightEffect;
+    //Color originalHighlightEffectColor;
 
     private void Awake()
     {
@@ -115,8 +115,8 @@ public class PlayerPickUpManager : MonoBehaviour
     {
         if (other.CompareTag("WallBuy"))
         {
-            wallBuyHighlightEffect = other.GetComponentInChildren<HighlightEffect>();
-            originalHighlightEffectColor = wallBuyHighlightEffect.outlineColor;
+            //wallBuyHighlightEffect = other.GetComponentInChildren<HighlightEffect>();
+            //originalHighlightEffectColor = wallBuyHighlightEffect.outlineColor;
             canBuy = true;
             WallBuy wallBuy = other.GetComponent<WallBuy>();
             weaponToPurchase = wallBuy.weapon;
@@ -124,11 +124,11 @@ public class PlayerPickUpManager : MonoBehaviour
             //change highlight outline color
             if (PointsManager.instance.currentPoints >= weaponToPurchase.cost && PointsManager.instance.currentPoints >= costOfAmmo)
             {
-                wallBuyHighlightEffect.outlineColor = Color.green;
+                //wallBuyHighlightEffect.outlineColor = Color.green;
             }
             else if (PointsManager.instance.currentPoints < weaponToPurchase.cost && PointsManager.instance.currentPoints < costOfAmmo)
             {
-                wallBuyHighlightEffect.outlineColor = Color.red;
+                //wallBuyHighlightEffect.outlineColor = Color.red;
             }                
 
             if (WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name || WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name || WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name)
@@ -153,8 +153,8 @@ public class PlayerPickUpManager : MonoBehaviour
         isBuyingAmmo = false;
         isBuyingWeapon = false;
         purchasePickupText.text = "";
-        if(wallBuyHighlightEffect)
-            wallBuyHighlightEffect.outlineColor = originalHighlightEffectColor;
+        //if(wallBuyHighlightEffect)
+        //    wallBuyHighlightEffect.outlineColor = originalHighlightEffectColor;
     }
 
 

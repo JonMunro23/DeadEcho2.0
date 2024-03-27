@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponSwapping : MonoBehaviour
@@ -13,6 +14,8 @@ public class WeaponSwapping : MonoBehaviour
     public GameObject currentPrimary1WeaponObj, currentPrimary2WeaponObj, currentSecondaryWeaponObj;
 
     public Weapon startingSecondaryWeapon;
+
+    public List<GameObject> currentlyEquippedWeaponsList = new List<GameObject>();
 
     //1 == primary1, 2 == primary2, 3 == secondary
     public int currentlyEquippedWeaponSlot;
@@ -143,12 +146,15 @@ public class WeaponSwapping : MonoBehaviour
         {
             case 1:
                 Destroy(currentPrimary1WeaponObj);
+                currentlyEquippedWeaponsList.Remove(currentPrimary1WeaponObj);
                 break;
             case 2:
                 Destroy(currentPrimary2WeaponObj);
+                currentlyEquippedWeaponsList.Remove(currentPrimary2WeaponObj);
                 break;
             case 3:
                 Destroy(currentSecondaryWeaponObj);
+                currentlyEquippedWeaponsList.Remove(currentSecondaryWeaponObj);
                 break;
         }
     }
@@ -205,7 +211,8 @@ public class WeaponSwapping : MonoBehaviour
             clone.transform.localPosition = weaponSpawnDefaultPosition;
 
         clone.transform.localRotation = new Quaternion(0, 0, 0, 0);
-        clone.GetComponent<WeaponShooting>().InitialiseNewWeaponObj(weaponToSpawn);
+        clone.GetComponent<WeaponShooting>().InitialiseWeapon(weaponToSpawn);
+        currentlyEquippedWeaponsList.Add(clone);
         currentlyEquippedWeaponSlot = weaponSlot;
         currentlyEquippedWeapon = weaponToSpawn;
         currentlyEquippedWeaponObj = clone;
@@ -254,6 +261,7 @@ public class WeaponSwapping : MonoBehaviour
         weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
+        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().ApplyUpgradeModifiers();
         onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
     }
 

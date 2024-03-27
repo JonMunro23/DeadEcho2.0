@@ -31,7 +31,7 @@ MonoBehaviour:
   maxSpreadDeviationAngle: 2.5
   damage: 50
   headshotMultiplier: 2
-  perShotCooldown: 0.15
+  fireRate: 450
   timeToADS: 3
   aimingFOV: 45
   ADSCurve:

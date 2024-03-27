@@ -40,13 +40,15 @@ public class PauseMenu : MonoBehaviour
 
     void Unpause()
     {
-
         isPaused = false;
         onPaused?.Invoke(isPaused);
         pauseMenu.SetActive(false);
-        Time.timeScale = 1.0f;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if(!UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
+        {
+            Time.timeScale = 1.0f;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     void Pause()

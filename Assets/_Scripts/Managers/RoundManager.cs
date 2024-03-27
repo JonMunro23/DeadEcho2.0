@@ -13,6 +13,8 @@ public class RoundManager : MonoBehaviour
 
     public static Action<int> onNewRoundStarted;
 
+    UpgradeSelectionMenu upgradeSelectionMenu;
+
     private void OnEnable()
     {
         ZombieSpawnManager.onAllZombiesKilled += StartNewRound;
@@ -26,25 +28,24 @@ public class RoundManager : MonoBehaviour
     private void Awake()
     {
         currentRoundText = GameObject.FindGameObjectWithTag("CurrentRoundText").GetComponent<TMP_Text>();
+        upgradeSelectionMenu = GameObject.FindGameObjectWithTag("upgradeSelectionMenu").GetComponent<UpgradeSelectionMenu>();
         roundText = currentRoundText.transform.parent.GetChild(1).GetComponent<TMP_Text>();
     }
 
     private void Start()
     {
-        StartGame();
-    }
-
-    void StartGame()
-    {
-        currentRound = 1;
-        UpdateCurrentRoundText();
-        PlayWaveTextIntroAnimation();
+        StartNewRound();
     }
 
     public void StartNewRound()
     {
         currentRound++;
         UpdateCurrentRoundText();
+        if(currentRound == 1)
+        {
+            PlayWaveTextIntroAnimation();
+            return;
+        }
         PlayNewRoundStartedAnimation();
     }
 
@@ -66,6 +67,7 @@ public class RoundManager : MonoBehaviour
 
             currentRoundText.GetComponent<RectTransform>().DOLocalMove(new Vector3(50, -75, 0), 1).SetDelay(.35f).SetEase(Ease.OutCirc).OnComplete(() =>
             {
+                OpenUpgradeSelectionMenu();
                 onNewRoundStarted?.Invoke(currentRound);
             });
         });
@@ -77,8 +79,14 @@ public class RoundManager : MonoBehaviour
         {
             currentRoundText.DOColor(Color.white, 1f).SetLoops(4, LoopType.Yoyo).OnComplete(() =>
             {
+                OpenUpgradeSelectionMenu();
                 onNewRoundStarted?.Invoke(currentRound);
             });
         });
+    }
+
+    void OpenUpgradeSelectionMenu()
+    {
+        upgradeSelectionMenu.OpenMenu();
     }
 }

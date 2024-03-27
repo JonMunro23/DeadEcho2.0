@@ -61,7 +61,7 @@ public class PlayerThrowables : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!PauseMenu.isPaused) 
+        if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen) 
         {
             if(canThrowGrenade && currentGrenadeCount > 0)
             {
