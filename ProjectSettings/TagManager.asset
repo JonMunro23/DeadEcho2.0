@@ -27,6 +27,7 @@ TagManager:
   - PlayerOrientation
   - ScopeOverlay
   - PlayerSpawnRadius
+  - powerUpNameText
   layers:
   - Default
   - TransparentFX

@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpName: 
   powerUpUIIcon: {fileID: 21300000, guid: 4a8763918f0974977a14a2af467e461a, type: 3}
-  pickupSfx: {fileID: 8300000, guid: edffd5b066c927a4eb3b83c7dd4107d6, type: 3}
+  pickupSfx: {fileID: 8300000, guid: f49778aebb4963f458cb660981bb86cd, type: 3}
   totalLifetime: 30
   powerUpType: 1
   timeVisible: 0.3

@@ -1,9 +1,8 @@
-using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public enum PowerUpType
 {
@@ -24,6 +23,9 @@ public class PowerUpBase : MonoBehaviour
     AudioClip pickupSfx;
     AudioSource audioSource;
 
+    Color powerUpNameTextStartingColour;
+    TMP_Text powerUpNameText;
+
     [SerializeField]
     int totalLifetime = 30;
 
@@ -39,10 +41,13 @@ public class PowerUpBase : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        powerUpNameText = GameObject.FindGameObjectWithTag("powerUpNameText").GetComponent<TMP_Text>();
     }
 
     private void Start()
     {
+        powerUpNameTextStartingColour = powerUpNameText.color;
+
         SetPowerUpDisplayName();
         //StartCoroutine(StartDespawnTimer());
         blinkCoroutine = StartCoroutine(blink());
@@ -61,6 +66,9 @@ public class PowerUpBase : MonoBehaviour
             case PowerUpType.DoublePoints:
                 powerUpName = "Double Points";
                 break;
+            case PowerUpType.BottomlessClip:
+                powerUpName = "Bottomless Clip";
+                break;
         }
     }
 
@@ -71,11 +79,25 @@ public class PowerUpBase : MonoBehaviour
             GetComponent<Collider>().enabled = false;
             Destroy(transform.GetChild(0).gameObject);
             audioSource.PlayOneShot(pickupSfx);
+            SpawnPowerUpNameText(this);
             //play anim
             if (blinkCoroutine != null)
                 StopCoroutine(blinkCoroutine);
             Destroy(gameObject, 2);
         }
+    }
+
+    void SpawnPowerUpNameText(PowerUpBase activePowerUp)
+    {
+        Debug.Log(activePowerUp.powerUpName);
+        powerUpNameText.text = activePowerUp.powerUpName;
+        powerUpNameText.transform.DOScale(1, .5f);
+        powerUpNameText.DOColor(Color.clear, .3f).SetDelay(3).OnComplete(() =>
+        {
+            powerUpNameText.transform.localScale = Vector3.zero;
+            powerUpNameText.color = powerUpNameTextStartingColour;
+        }
+        );
     }
 
     public IEnumerator StartDespawnTimer()

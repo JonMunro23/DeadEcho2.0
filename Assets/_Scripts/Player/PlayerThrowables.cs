@@ -25,12 +25,13 @@ public class PlayerThrowables : MonoBehaviour
     private void OnEnable()
     {
         RoundManager.onNewRoundStarted += AddEquipment;
+        PlayerHealth.onDeath += DisableEquipment;
     }
 
     private void OnDisable()
     {
         RoundManager.onNewRoundStarted -= AddEquipment;
-
+        PlayerHealth.onDeath -= DisableEquipment;
     }
 
     private void Awake()
@@ -41,6 +42,11 @@ public class PlayerThrowables : MonoBehaviour
     private void Start()
     {
         canThrowGrenade = true;
+    }
+
+    void DisableEquipment()
+    {
+        canThrowGrenade = false;
     }
 
     void AddEquipment(int currentRound)

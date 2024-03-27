@@ -14,9 +14,6 @@ public class PowerUpManager : MonoBehaviour
 
     [SerializeField]
     GameObject powerUpUIElement;
-    [SerializeField]
-    TMP_Text powerUpNameText;
-    Color powerUpNameTextStartingColour;
 
     [SerializeField]
     Transform activePowerUpContainer;
@@ -57,11 +54,6 @@ public class PowerUpManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-        powerUpNameTextStartingColour = powerUpNameText.color;
-    }
-
     public void SpawnPowerUp(Vector3 spawnLocation)
     {
         Instantiate(GetRandomPowerUp(), spawnLocation + new Vector3(0,.9f,0), new Quaternion(0, UnityEngine.Random.Range(0, 180), 0, 0));
@@ -97,20 +89,9 @@ public class PowerUpManager : MonoBehaviour
                 SetBottomlessClipStatus(true);
                 break;
         }
-        SpawnPowerUpNameText(powerUp);
     }
 
-    void SpawnPowerUpNameText(PowerUpBase activePowerUp)
-    {
-        powerUpNameText.text = activePowerUp.powerUpName; 
-        powerUpNameText.transform.DOScale(1, .5f);
-        powerUpNameText.DOColor(Color.clear, .3f).SetDelay(3).OnComplete(() => 
-            { 
-                powerUpNameText.transform.localScale = Vector3.zero;
-                powerUpNameText.color = powerUpNameTextStartingColour;
-            }
-        );
-    }
+
 
     void SpawnPowerUpUIElement(PowerUpBase _activePowerUp)
     {

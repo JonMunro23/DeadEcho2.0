@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,6 @@ public class PlayerCam : MonoBehaviour
 
     Coroutine cameraFOVLerpCoroutine;
     Coroutine weaponLocalPositionLerpCoroutine;
-
 
     [Header("Recoil")]
     [SerializeField] float recoilSnappiness;
@@ -83,10 +83,9 @@ public class PlayerCam : MonoBehaviour
             currentRecoilRot = Vector3.Slerp(currentRecoilRot, targetRecoilRotation, recoilSnappiness * Time.fixedDeltaTime);
             
             transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0) * Quaternion.Euler(currentRecoilRot);
-            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);          
+
         }
-
-
     }
 
     public void RecoilFire(bool isAiming)

@@ -27,12 +27,14 @@ public class ZombieSpawnManager : MonoBehaviour
         ZombieHealth.onDeath += KillZombie;
         ZombieSpawnPoint.onSpawnPointActivateStatusUpdated += UpdateSpawnPoint;
         RoundManager.onNewRoundStarted += StartSpawning;
+        PlayerHealth.onDeath += StopSpawning;
     }
     private void OnDisable()
     {
         ZombieHealth.onDeath -= KillZombie;
         ZombieSpawnPoint.onSpawnPointActivateStatusUpdated -= UpdateSpawnPoint;
         RoundManager.onNewRoundStarted -= StartSpawning;
+        PlayerHealth.onDeath -= StopSpawning;
     }
 
     void Start()
@@ -70,6 +72,11 @@ public class ZombieSpawnManager : MonoBehaviour
             zombiesKilledThisRound = 0;
             canSpawn = true;
         }
+    }
+
+    void StopSpawning()
+    {
+        canSpawn = false;
     }
 
     void TrySpawnZombie()

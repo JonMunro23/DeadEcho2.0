@@ -301,7 +301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMove: 1
   baseMoveSpeed: 5
-  moveSpeed: 7
   groundDrag: 5
   groundLayer:
     serializedVersion: 2
@@ -322,6 +321,7 @@ MonoBehaviour:
   jumpCooldown: 0.25
   airMultiplier: 0.4
   hasJumped: 0
+  isAiming: 0
   aimingMovementSpeed: 0
   isSprinting: 0
   sprintSpeedMultiplier: 1.66
@@ -369,6 +369,7 @@ MonoBehaviour:
   lowHealthOverlay: {fileID: 0}
   healthbarImage: {fileID: 0}
   invincibilityLength: 0.5
+  syringeHealAmount: 50
   gettingHitSource: {fileID: 7654926387314604357}
   lowHealthSource: {fileID: 6140878727713330247}
   gettingHitSFX:

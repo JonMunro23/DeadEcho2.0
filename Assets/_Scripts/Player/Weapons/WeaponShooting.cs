@@ -1,10 +1,8 @@
 using System.Collections;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-using System.Runtime.CompilerServices;
 using DG.Tweening;
 
 public class WeaponShooting : MonoBehaviour
@@ -24,8 +22,8 @@ public class WeaponShooting : MonoBehaviour
     int maxMagSize, maxReserveAmmo, loadedAmmoBeforeReload, reserveAmmoBeforeReload, damage, projectileCount;
     public int currentReserveAmmo, currentLoadedAmmo;
     float maxSpreadDeviationAngle, perShotCooldown, reloadSpeed, headshotMultiplier;
-    bool isAutomatic;
-    public bool isAiming, canADS, isReloading;
+    bool isAutomatic, isPlayerDead;
+    public bool isAiming, canADS, isReloading, canReload;
     public GameObject zombieHitEffect;
     [SerializeField]
     GameObject bulletHole;
@@ -64,8 +62,11 @@ public class WeaponShooting : MonoBehaviour
     {
         canShoot = true;
         canADS = true;
+        canReload = true;
 
         PlayerMelee.onMeleePerformed += CancelWeaponActions;
+        PlayerHealing.onSyringeUsed += CancelWeaponActions;
+        PlayerHealth.onDeath += OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed += CancelWeaponActions;
         InstantKill.onInstantKillGrabbed += EnableInstantKills;
         BottomlessClip.onBottomlessClipGrabbed += EnableBottomlessClip;
@@ -76,6 +77,8 @@ public class WeaponShooting : MonoBehaviour
     private void OnDisable()
     {
         PlayerMelee.onMeleePerformed -= CancelWeaponActions;
+        PlayerHealing.onSyringeUsed -= CancelWeaponActions;
+        PlayerHealth.onDeath -= OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed -= CancelWeaponActions;
         InstantKill.onInstantKillGrabbed -= EnableInstantKills;
         BottomlessClip.onBottomlessClipGrabbed -= EnableBottomlessClip;
@@ -136,6 +139,14 @@ public class WeaponShooting : MonoBehaviour
         }
         else
             isBottomlessClipActive = false;
+    }
+
+    void OnPlayerDeath()
+    {
+        isPlayerDead = true;
+        canShoot = false;
+        canADS = false;
+        canReload = false;
     }
 
     // Update is called once per frame
@@ -373,53 +384,56 @@ public class WeaponShooting : MonoBehaviour
 
     void ReloadWeapon()
     {
-        if (isAiming)
+        if(canReload)
         {
-            StopADS();
-        }
-        canADS = false;
-        canShoot = false;
-        isReloading = true;
-        if(equippedWeapon.reloadType == Weapon.ReloadType.magazine)
-        {
-            SFXSource.PlayOneShot(fullReloadSFX);
-            weaponAnimator.Play("Reload");
+            if (isAiming)
+            {
+                StopADS();
+            }
+            canADS = false;
+            canShoot = false;
+            isReloading = true;
+            if(equippedWeapon.reloadType == Weapon.ReloadType.magazine)
+            {
+                SFXSource.PlayOneShot(fullReloadSFX);
+                weaponAnimator.Play("Reload");
             
-            loadedAmmoBeforeReload = currentLoadedAmmo;
-            reserveAmmoBeforeReload = currentReserveAmmo;
-            reloadCooldownCoroutine = StartCoroutine(ReloadCooldown());
-            if (currentLoadedAmmo != 0)
-            {
-                int ammoToLoad = maxMagSize - currentLoadedAmmo;
-                if (currentReserveAmmo >= ammoToLoad)
+                loadedAmmoBeforeReload = currentLoadedAmmo;
+                reserveAmmoBeforeReload = currentReserveAmmo;
+                reloadCooldownCoroutine = StartCoroutine(ReloadCooldown());
+                if (currentLoadedAmmo != 0)
                 {
-                    currentLoadedAmmo += ammoToLoad;
-                    currentReserveAmmo -= ammoToLoad;
+                    int ammoToLoad = maxMagSize - currentLoadedAmmo;
+                    if (currentReserveAmmo >= ammoToLoad)
+                    {
+                        currentLoadedAmmo += ammoToLoad;
+                        currentReserveAmmo -= ammoToLoad;
 
+                    }
+                    else
+                    {
+                        currentLoadedAmmo += currentReserveAmmo;
+                        currentReserveAmmo = 0;
+                    }
                 }
                 else
                 {
-                    currentLoadedAmmo += currentReserveAmmo;
-                    currentReserveAmmo = 0;
+                    if (currentReserveAmmo >= maxMagSize)
+                    {
+                        currentLoadedAmmo = maxMagSize;
+                        currentReserveAmmo -= maxMagSize;
+                    }
+                    else
+                    {
+                        currentLoadedAmmo += currentReserveAmmo;
+                        currentReserveAmmo = 0;
+                    }
                 }
             }
-            else
+            else if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
             {
-                if (currentReserveAmmo >= maxMagSize)
-                {
-                    currentLoadedAmmo = maxMagSize;
-                    currentReserveAmmo -= maxMagSize;
-                }
-                else
-                {
-                    currentLoadedAmmo += currentReserveAmmo;
-                    currentReserveAmmo = 0;
-                }
+                shellByShellReloadCoroutine = StartCoroutine(ShellByShellReload());
             }
-        }
-        else if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
-        {
-            shellByShellReloadCoroutine = StartCoroutine(ShellByShellReload());
         }
     }
 
@@ -558,7 +572,8 @@ public class WeaponShooting : MonoBehaviour
     IEnumerator PerShotCooldown()
     {
         yield return new WaitForSeconds(perShotCooldown);
-        canShoot = true;
+        if(!isPlayerDead)
+            canShoot = true;
     }
 
     IEnumerator ReloadCooldown()

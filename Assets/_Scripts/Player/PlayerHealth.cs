@@ -10,13 +10,14 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] GameObject lowHealthOverlay;
     [SerializeField] Image healthbarImage;
     [SerializeField] float invincibilityLength;
+    public float syringeHealAmount;
 
     bool canTakeDamage, isPlayingLowHealthSFX;
     Coroutine healthRegenCoRoutine;
     [SerializeField] AudioSource gettingHitSource, lowHealthSource;
     [SerializeField] AudioClip[] gettingHitSFX;
 
-    public static Action onDeath;
+    public static Action onDeath, onDamageTaken;
 
     private void Awake()
     {
@@ -50,6 +51,7 @@ public class PlayerHealth : MonoBehaviour
         {
             canTakeDamage = false;
             currentHealth -= damage;
+            onDamageTaken?.Invoke();
             healthbarImage.fillAmount = currentHealth / 100;
             gettingHitSource.PlayOneShot(GetRandomAudioClip());
 
@@ -67,10 +69,10 @@ public class PlayerHealth : MonoBehaviour
             {
                 onDeath?.Invoke();
 
-                if(healthRegenCoRoutine != null)
+                if (healthRegenCoRoutine != null)
                     StopCoroutine(healthRegenCoRoutine);
 
-                if(isPlayingLowHealthSFX)
+                if (isPlayingLowHealthSFX)
                 {
                     isPlayingLowHealthSFX = false;
                     lowHealthSource.Stop();
@@ -80,10 +82,10 @@ public class PlayerHealth : MonoBehaviour
 
             StartCoroutine(Invincibility());
             
-            if (healthRegenCoRoutine != null)
-                StopCoroutine(healthRegenCoRoutine);
+            //if (healthRegenCoRoutine != null)
+            //    StopCoroutine(healthRegenCoRoutine);
 
-            healthRegenCoRoutine = StartCoroutine(HealthRegen());
+            //healthRegenCoRoutine = StartCoroutine(HealthRegen());
 
         }
 
@@ -101,13 +103,25 @@ public class PlayerHealth : MonoBehaviour
         canTakeDamage = true;
     }
 
-
-
-    IEnumerator HealthRegen()
+    public void BeginHealthRegen()
     {
-        yield return new WaitForSeconds(5);
-        while (currentHealth < maxHealth)
+        healthRegenCoRoutine = StartCoroutine(HealthRegen(syringeHealAmount));
+    }
+
+    IEnumerator HealthRegen(float regenAmount)
+    {
+        //float healAmount;
+        //if (currentHealth + regenAmount > maxHealth)
+        //{
+        //    healAmount = maxHealth;
+        //}
+        //else
+        //    healAmount = currentHealth + regenAmount;
+        float healedAmount = 0;
+        while (healedAmount < regenAmount && currentHealth < maxHealth)
         {
+            healedAmount += maxHealth / 100;
+            Debug.Log(healedAmount);
             currentHealth += maxHealth / 100;
             healthbarImage.fillAmount = currentHealth / 100;
             if (currentHealth >= 30)

@@ -21,6 +21,17 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] AudioClip swapToMeleeSFX, hitEnemySFX;
 
     public static Action onMeleePerformed;
+
+    private void OnEnable()
+    {
+        PlayerHealth.onDeath += DisableMelee;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHealth.onDeath -= DisableMelee;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +43,11 @@ public class PlayerMelee : MonoBehaviour
     {
         if (!PauseMenu.isPaused)
             CheckInputs();
+    }
+
+    void DisableMelee()
+    {
+        canMelee = false;
     }
 
     void CheckInputs()

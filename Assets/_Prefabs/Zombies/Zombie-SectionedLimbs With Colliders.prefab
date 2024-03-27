@@ -309,7 +309,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 716320be700fdbc468e93389cb0604d2, type: 3}
   - {fileID: 8300000, guid: 7cb927ed1b24cfd4ba783d39b4317691, type: 3}
   - {fileID: 8300000, guid: 366d98a0c6040c547a9a3285fa4fb71e, type: 3}
-  powerUpDropChance: 100
+  powerUpDropChance: 2
 --- !u!195 &6535327460619246836
 NavMeshAgent:
   m_ObjectHideFlags: 0
