@@ -34,6 +34,8 @@ public class PowerUpBase : MonoBehaviour
 
     public Action endAction;
 
+    Coroutine blinkCoroutine;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -43,7 +45,7 @@ public class PowerUpBase : MonoBehaviour
     {
         SetPowerUpDisplayName();
         //StartCoroutine(StartDespawnTimer());
-        StartCoroutine(blink());
+        blinkCoroutine = StartCoroutine(blink());
     }
 
     void SetPowerUpDisplayName()
@@ -70,6 +72,8 @@ public class PowerUpBase : MonoBehaviour
             Destroy(transform.GetChild(0).gameObject);
             audioSource.PlayOneShot(pickupSfx);
             //play anim
+            if (blinkCoroutine != null)
+                StopCoroutine(blinkCoroutine);
             Destroy(gameObject, 2);
         }
     }

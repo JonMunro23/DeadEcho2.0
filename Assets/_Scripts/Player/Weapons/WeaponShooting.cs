@@ -51,6 +51,7 @@ public class WeaponShooting : MonoBehaviour
 
     public float reloadSpeedMultiplier;
 
+    public bool IsADSToggle;
     private void Awake()
     {
         weaponCamera = GameObject.FindGameObjectWithTag("WeaponCamera").GetComponent<Camera>();
@@ -123,6 +124,8 @@ public class WeaponShooting : MonoBehaviour
         {
             isInstantKillActive = true;
         }
+        else
+            isInstantKillActive = false;
     }
 
     public void CheckBottomlessClipStatus()
@@ -131,12 +134,15 @@ public class WeaponShooting : MonoBehaviour
         {
             isBottomlessClipActive = true;
         }
+        else
+            isBottomlessClipActive = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + reloadSpeedMultiplier);
+        
+        //weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + reloadSpeedMultiplier);
 
         if(!PauseMenu.isPaused)
         {
@@ -174,16 +180,30 @@ public class WeaponShooting : MonoBehaviour
                 ReloadWeapon();
             }
 
-            if (Input.GetKeyDown(ADSKey) && canADS)
+            if(IsADSToggle)
             {
-                ToggleWeaponAiming();
+                if (Input.GetKeyDown(ADSKey) && canADS)
+                {
+                    ToggleWeaponAiming();
+                }
+            }
+            else
+            {
+                if (Input.GetKeyDown(ADSKey) && canADS)
+                {
+                    BeginADS();
+                }
+                if(Input.GetKeyUp(ADSKey))
+                {
+                    StopADS();
+                }
             }
         }
     }
 
     void FireWeapon()
     {
-        if (canShoot && (currentLoadedAmmo != 0 || isBottomlessClipActive) && !isReloading && !PlayerMovement.instance.isSprinting)
+        if (canShoot && (currentLoadedAmmo != 0 || isBottomlessClipActive) && !isReloading)
         {
             canShoot = false;
             StartCoroutine(PerShotCooldown());
@@ -303,35 +323,41 @@ public class WeaponShooting : MonoBehaviour
 
     void BeginADS()
     {
-        onAimDownSights?.Invoke(isAiming, this);
-        isAiming = true;
-        weaponAnimator.SetBool("isAiming", isAiming);
-        if(equippedWeapon.isScoped)
+        if(isAiming == false)
         {
-            scopeOverlayFade.DOColor(Color.black, .4f).SetDelay(.2f).OnComplete(() =>
+            onAimDownSights?.Invoke(isAiming, this);
+            isAiming = true;
+            weaponAnimator.SetBool("isAiming", isAiming);
+            if(equippedWeapon.isScoped)
             {
-                scopeOverlay.enabled = true;
-                scopeOverlay.sprite = equippedWeapon.scopeOverlay;
-                HideWeaponModel();
-                scopeOverlayFade.DOColor(Color.clear, .2f);
-            });
+                scopeOverlayFade.DOColor(Color.black, .4f).SetDelay(.2f).OnComplete(() =>
+                {
+                    scopeOverlay.enabled = true;
+                    scopeOverlay.sprite = equippedWeapon.scopeOverlay;
+                    HideWeaponModel();
+                    scopeOverlayFade.DOColor(Color.clear, .2f);
+                });
+            }
         }
     }
 
     public void StopADS()
     {
-        onAimDownSights?.Invoke(isAiming, this);
-        isAiming = false;
-        weaponAnimator.SetBool("isAiming", isAiming);
-        if (equippedWeapon.isScoped)
+        if(isAiming)
         {
-            scopeOverlayFade.DOColor(Color.black, .2f).OnComplete(() =>
+            onAimDownSights?.Invoke(isAiming, this);
+            isAiming = false;
+            weaponAnimator.SetBool("isAiming", isAiming);
+            if (equippedWeapon.isScoped)
             {
-                scopeOverlay.enabled = false;
-                scopeOverlay.sprite = null;
-                ShowWeaponModel();
-                scopeOverlayFade.DOColor(Color.clear, .1f);
-            });
+                scopeOverlayFade.DOColor(Color.black, .2f).OnComplete(() =>
+                {
+                    scopeOverlay.enabled = false;
+                    scopeOverlay.sprite = null;
+                    ShowWeaponModel();
+                    scopeOverlayFade.DOColor(Color.clear, .1f);
+                });
+            }
         }
     }
 
@@ -403,7 +429,8 @@ public class WeaponShooting : MonoBehaviour
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
         //SFXSource.PlayOneShot(reloadStartSFX);
-        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength * reloadSpeedMultiplier);
+        Debug.Log(equippedWeapon.reloadStartAnimLength * (reloadSpeedMultiplier != 0 ? reloadSpeedMultiplier : 1));
+        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength * (reloadSpeedMultiplier != 0 ? reloadSpeedMultiplier : 1));
         //maxmagsize - 1 due to EndReload anim slotting a round
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
@@ -411,19 +438,20 @@ public class WeaponShooting : MonoBehaviour
             
             loadedAmmoBeforeReload = currentLoadedAmmo;
             reserveAmmoBeforeReload = currentReserveAmmo;
-            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength * reloadSpeedMultiplier);
+            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength * (reloadSpeedMultiplier != 0 ? reloadSpeedMultiplier : 1));
             currentLoadedAmmo++;
             currentReserveAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
 
         }
+
         if (stopShellByShellReload)
             stopShellByShellReload = false;
 
         weaponAnimator.Play("EndReload");
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
-        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength * reloadSpeedMultiplier);
+        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength * (reloadSpeedMultiplier != 0 ? reloadSpeedMultiplier : 1));
         currentLoadedAmmo++;
         currentReserveAmmo--;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -535,10 +563,8 @@ public class WeaponShooting : MonoBehaviour
 
     IEnumerator ReloadCooldown()
     {
-        if (reloadSpeedMultiplier != 0)
-            yield return new WaitForSeconds(reloadSpeed * reloadSpeedMultiplier);
-        else
-            yield return new WaitForSeconds(reloadSpeed);
+        Debug.Log(reloadSpeed * (reloadSpeedMultiplier != 0 ? reloadSpeedMultiplier : 1));
+        yield return new WaitForSeconds(reloadSpeed * (reloadSpeedMultiplier != 0 ? reloadSpeedMultiplier : 1));
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         isReloading = false;
         canShoot = true;

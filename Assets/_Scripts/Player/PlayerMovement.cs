@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     public bool canMove;
     public float baseMoveSpeed;
-    public float moveSpeed;
+    float currentMoveSpeed;
     public float groundDrag;
     public LayerMask groundLayer;
     public Transform orientation;
@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool hasJumped;
 
     [Header("Aiming")]
+    public bool isAiming;
     [HideInInspector] public float aimingMovementSpeed;
 
     [Header("Sprinting")]
@@ -75,14 +76,14 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
+        WeaponShooting.onWeaponFired += InterruptSprint;
         WeaponSwapping.onWeaponSwapped += SwapToNewWeaponAnimator;
         PlayerHealth.onDeath += StopMovement;
     }
 
     void Start()
     {
-        
-        moveSpeed = baseMoveSpeed;
+        currentMoveSpeed = baseMoveSpeed;
         rb.freezeRotation = true;
         readyToJump = true;
         aimingMovementSpeed = baseMoveSpeed / 2;
@@ -94,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
+        WeaponShooting.onWeaponFired -= InterruptSprint;
         WeaponSwapping.onWeaponSwapped -= SwapToNewWeaponAnimator;
         PlayerHealth.onDeath -= StopMovement;
     }
@@ -127,14 +129,20 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
+        if (verticalInput == -1 && isSprinting)
+        {
+            StopSprinting(false);
+            return;
+        }
+
         //sprinting
-        if(Input.GetKey(sprintKey) && isGrounded)
+        if (Input.GetKeyDown(sprintKey) && isGrounded && !isAiming)
         {
             BeginSprinting();
         }
-        if(Input.GetKeyUp(sprintKey))
+        if(Input.GetKeyUp(sprintKey) && isSprinting)
         {
-            StopSprinting();
+            StopSprinting(false);
         }
 
         //Crouching
@@ -142,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Crouch();
         }
-        if (Input.GetKeyUp(crouchKey))
+        if (Input.GetKeyUp(crouchKey) && isCrouching)
         {
             StopCrouching();
         }
@@ -178,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
                 jumpingAudioSource.PlayOneShot(PickSFXClip(landingSFX));
             }
 
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f, ForceMode.Force);
             if(horizontalInput != 0 || verticalInput != 0)
             {
                 if(isSprinting)
@@ -202,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
         // in air
         else if(!isGrounded)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f * airMultiplier, ForceMode.Force);
             animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
         }
     }
@@ -215,9 +223,9 @@ public class PlayerMovement : MonoBehaviour
         currentVelocity = flatVel;
 
         // limit velocity if needed
-        if(flatVel.magnitude > moveSpeed && !isSprinting)
+        if(flatVel.magnitude > currentMoveSpeed && !isSprinting)
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            Vector3 limitedVel = flatVel.normalized * currentMoveSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
         else if (flatVel.magnitude > sprintingMovementSpeed && isSprinting)
@@ -233,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
         if(!isCrouching)
         {
             isCrouching = true;
-            moveSpeed = crouchingMovementSpeed;
+            currentMoveSpeed = crouchingMovementSpeed;
             //animator.SetBool("isCrouching", isCrouching);
             movementAudioSource.volume = .5f;
         }
@@ -247,10 +255,10 @@ public class PlayerMovement : MonoBehaviour
             //animator.SetBool("isCrouching", isCrouching);
             if (GetCurrentWeaponShootingScript().isAiming)
             {
-                moveSpeed = aimingMovementSpeed;
+                currentMoveSpeed = aimingMovementSpeed;
             }
             else
-                moveSpeed = baseMoveSpeed;
+                currentMoveSpeed = baseMoveSpeed;
 
             movementAudioSource.volume = 1;
         }
@@ -278,23 +286,40 @@ public class PlayerMovement : MonoBehaviour
     #region Sprinting
     void BeginSprinting()
     {
+        if(verticalInput == -1)
+        {
+            InterruptSprint(false);
+            return;
+        }
+
+        if(GetCurrentWeaponShootingScript().isAiming)
+        {
+            GetCurrentWeaponShootingScript().StopADS();
+        }
+
         if(!isSprinting)
         { 
             if(sprintingBreathingSFXCoroutine == null)
                 sprintingBreathingSFXCoroutine = StartCoroutine(StartSprintingBreathingSFX());
         }
         isSprinting = true;
-        moveSpeed = sprintingMovementSpeed;
-        if(GetCurrentWeaponShootingScript().isAiming)
-        {
-            GetCurrentWeaponShootingScript().StopADS();
-        }
+        currentMoveSpeed = sprintingMovementSpeed;
     }
 
-    void StopSprinting()
+    void InterruptSprint(bool interruptedByAiming)
+    {
+        StopSprinting(interruptedByAiming);
+    }
+
+    void StopSprinting(bool stoppedByAiming)
     {
         isSprinting = false;
-        moveSpeed = baseMoveSpeed;
+
+        if (stoppedByAiming)
+            currentMoveSpeed = aimingMovementSpeed;
+        else
+            currentMoveSpeed = baseMoveSpeed;
+
         StartCoroutine(_Helpers.FadeOutAudio(sprintingAudioSource, 1.5f));
         if(sprintingBreathingSFXCoroutine != null)
         {
@@ -386,22 +411,25 @@ public class PlayerMovement : MonoBehaviour
     }
     public void BeginAiming()
     {
+        isAiming = true;
         if (isCrouching)
-            moveSpeed = crouchingMovementSpeed;
+            currentMoveSpeed = crouchingMovementSpeed;
         else
-            moveSpeed = aimingMovementSpeed;
+            currentMoveSpeed = aimingMovementSpeed;
 
         if (isSprinting)
-            StopSprinting();
+            StopSprinting(true);
     }
+
     public void StopAiming()
     {
+        isAiming = false;
         if (isCrouching)
         {
-            moveSpeed = crouchingMovementSpeed;
+            currentMoveSpeed = crouchingMovementSpeed;
         }
         else
-            moveSpeed = baseMoveSpeed;
+            currentMoveSpeed = baseMoveSpeed;
     }
     #endregion
 

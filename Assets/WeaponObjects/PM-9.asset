@@ -28,7 +28,7 @@ MonoBehaviour:
   maxReserveAmmo: 240
   reloadSpeed: 1.67
   projectileCount: 1
-  maxSpreadDeviationAngle: 2.5
+  maxSpreadDeviationAngle: 2
   damage: 20
   headshotMultiplier: 2
   perShotCooldown: 0.12
@@ -75,6 +75,9 @@ MonoBehaviour:
   insertShellSFX: {fileID: 0}
   reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  reloadStartAnimLength: 0
+  reloadShellAnimLength: 0
+  reloadEndAnimLength: 0
   recoilX: -2
   recoilY: 1.4
   recoilZ: 0.4

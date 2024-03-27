@@ -206,7 +206,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 8473277161432922213, guid: 5bc508d5edc3c2047b566530fc955973, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.3
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -489,6 +489,7 @@ MonoBehaviour:
   powerUpPrefabs:
   - {fileID: 4045478466513652942, guid: 166c5184ba991a94d94c367ff813d3ca, type: 3}
   - {fileID: 4045478466513652942, guid: 836b80bd546edaf45af7c14db9bbbbe4, type: 3}
+  - {fileID: 4045478466513652942, guid: 44fc5110a9eefc0409a79165539f1732, type: 3}
   powerUpUIElement: {fileID: 2048807792859048983, guid: c237ff9bf5077cf4892541d0a4165069, type: 3}
   powerUpNameText: {fileID: 0}
   activePowerUpContainer: {fileID: 0}
