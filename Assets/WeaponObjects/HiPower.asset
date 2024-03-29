@@ -32,6 +32,7 @@ MonoBehaviour:
   damage: 20
   headshotMultiplier: 2
   perShotCooldown: 0.12
+  fireRate: 650
   timeToADS: 1
   aimingFOV: 50
   ADSCurve:

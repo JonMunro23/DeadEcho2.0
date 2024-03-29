@@ -92,7 +92,7 @@ public class WeaponWorkbenchManager : MonoBehaviour
         wepNameText.text = weaponToDisplay.name;
         wepDmgText.text = "Damage: " + weaponToDisplay.damage;
         wepAccText.text = "Accuracy: " + weaponToDisplay.maxSpreadDeviationAngle;
-        wepFireRateText.text = "Fire Rate: " + weaponToDisplay.perShotCooldown;
+        wepFireRateText.text = "Fire Rate: " + weaponToDisplay.fireRate;
         wepReloadSpeedText.text = "Reload Speed: " + weaponToDisplay.reloadSpeed;
         wepMagSizeText.text = "Mag Size: " + weaponToDisplay.magSize;
         wepReserveAmmoText.text = "Max Reserve Ammo: " + weaponToDisplay.maxReserveAmmo;

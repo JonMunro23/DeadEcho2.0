@@ -68,23 +68,25 @@ public class PlayerCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (canLook)
+        if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
         {
-            float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * (sensitivity * 10);
-            float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * (sensitivity * 10);
+            if (canLook)
+            {
+                float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * (sensitivity * 10);
+                float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * (sensitivity * 10);
 
-            yRotation += mouseX;
-            xRotation -= mouseY;
+                yRotation += mouseX;
+                xRotation -= mouseY;
 
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+                xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-            targetRecoilRotation = Vector3.Lerp(targetRecoilRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
-            currentRecoilRot = Vector3.Slerp(currentRecoilRot, targetRecoilRotation, recoilSnappiness * Time.fixedDeltaTime);
+                targetRecoilRotation = Vector3.Lerp(targetRecoilRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
+                currentRecoilRot = Vector3.Slerp(currentRecoilRot, targetRecoilRotation, recoilSnappiness * Time.fixedDeltaTime);
             
-            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0) * Quaternion.Euler(currentRecoilRot);
-            orientation.rotation = Quaternion.Euler(0, yRotation, 0);          
+                transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0) * Quaternion.Euler(currentRecoilRot);
+                orientation.rotation = Quaternion.Euler(0, yRotation, 0);          
 
+            }
         }
     }
 

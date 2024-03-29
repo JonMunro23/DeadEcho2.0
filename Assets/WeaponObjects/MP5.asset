@@ -26,12 +26,12 @@ MonoBehaviour:
   UISprite: {fileID: 21300000, guid: 099714b640d608c419323511a8712aac, type: 3}
   magSize: 30
   maxReserveAmmo: 270
-  reloadSpeed: 2.8
+  reloadSpeed: 3.667
   projectileCount: 1
   maxSpreadDeviationAngle: 2
   damage: 40
   headshotMultiplier: 2
-  perShotCooldown: 0.1
+  fireRate: 600
   timeToADS: 2
   aimingFOV: 45
   ADSCurve:

@@ -51,7 +51,7 @@ public class ZombieSpawnManager : MonoBehaviour
         {
             if(remaningAmountToSpawn == 0)
             {
-                canSpawn = false;
+                StopSpawning();
             }
 
             if(aliveZombies < maxNumberOfAliveZombies)

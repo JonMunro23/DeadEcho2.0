@@ -39,6 +39,7 @@ public class PowerUpManager : MonoBehaviour
 
     void BottomlessClipEnded()
     {
+        Debug.Log("BottomlessClip disabled");
         SetBottomlessClipStatus(false);
     }
 

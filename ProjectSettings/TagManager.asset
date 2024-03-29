@@ -28,6 +28,7 @@ TagManager:
   - ScopeOverlay
   - PlayerSpawnRadius
   - powerUpNameText
+  - upgradeSelectionMenu
   layers:
   - Default
   - TransparentFX

@@ -31,7 +31,7 @@ MonoBehaviour:
   maxSpreadDeviationAngle: 10
   damage: 200
   headshotMultiplier: 2.5
-  perShotCooldown: 1.9
+  fireRate: 30
   timeToADS: 4
   aimingFOV: 20
   ADSCurve:
@@ -73,6 +73,15 @@ MonoBehaviour:
   insertShellSFX: {fileID: 0}
   reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  reloadStartAnimLength: 0
+  reloadShellAnimLength: 0
+  reloadEndAnimLength: 0
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  ADSRecoilX: 0
+  ADSRecoilY: 0
+  ADSRecoilZ: 0
   canUseSightAttachment: 1
   canUseMagAttachment: 1
   canUseMuzzleAttachment: 1

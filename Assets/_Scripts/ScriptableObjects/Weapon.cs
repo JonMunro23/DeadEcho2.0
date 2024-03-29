@@ -41,7 +41,8 @@ public class Weapon : ScriptableObject
     public float maxSpreadDeviationAngle;
     public int damage;
     public float headshotMultiplier;
-    public float perShotCooldown;
+    //public float perShotCooldown;
+    public float fireRate;
     public float timeToADS;
     public float aimingFOV;
     public AnimationCurve ADSCurve;
