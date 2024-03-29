@@ -8,9 +8,17 @@ public class Upgrade : ScriptableObject
     public string description;
     public Sprite imageSprite;
 
+    public int currentUpgradeLevel = 1;
+    public int maxUpgradeLevel;
+
     [Header("Stat Effects (%)")]
     public float damageModifier;
     public float moveSpeedModifier;
     public float reloadSpeedModifier;
     public float fireRateModifier;
+
+    public void LevelUp()
+    {
+        currentUpgradeLevel++;
+    }
 }

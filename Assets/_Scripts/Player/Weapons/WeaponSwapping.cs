@@ -261,7 +261,7 @@ public class WeaponSwapping : MonoBehaviour
         weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().ApplyUpgradeModifiers();
+        //currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().ApplyUpgradeModifiers();
         onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
     }
 

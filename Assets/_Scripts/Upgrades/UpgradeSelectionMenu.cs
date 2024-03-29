@@ -12,9 +12,11 @@ public class UpgradeSelectionMenu : MonoBehaviour
     [SerializeField]
     Transform upgradeSpawnParent;
 
-    public Upgrade[] possibleUpgrades;
+    public List<Upgrade> possibleUpgrades = new List<Upgrade>();
 
     List<UpgradeUIElement> generatedUpgrades = new List<UpgradeUIElement>();
+
+    public List<Upgrade> collectedUpgrades = new List<Upgrade>();
 
     public static bool isUpgradeSelectionMenuOpen;
 
@@ -91,7 +93,7 @@ public class UpgradeSelectionMenu : MonoBehaviour
 
     Upgrade GetUpgrade()
     {
-        int rand = Random.Range(0, possibleUpgrades.Length);
+        int rand = Random.Range(0, possibleUpgrades.Count);
         return possibleUpgrades[rand];
     }
 
@@ -102,4 +104,24 @@ public class UpgradeSelectionMenu : MonoBehaviour
             upgrade.gameObject.GetComponentInChildren<Button>().interactable = false;
         }
     }
+
+    public void AddUpgradeToCollection(Upgrade upgradeToAdd)
+    {
+        //if(collectedUpgrades.Contains(upgradeToAdd))
+        //{
+        //    upgradeToAdd.LevelUp();
+        //    if(upgradeToAdd.currentUpgradeLevel == upgradeToAdd.maxUpgradeLevel)
+        //    {
+        //        RemoveUpgradeFromPool(upgradeToAdd);
+        //    }
+        //}
+
+        collectedUpgrades.Add(upgradeToAdd);
+        PlayerStats.ApplyUpgrade(upgradeToAdd);
+    }
+
+    //void RemoveUpgradeFromPool(Upgrade upgrade)
+    //{
+    //    possibleUpgrades.Remove(upgrade);
+    //}
 }

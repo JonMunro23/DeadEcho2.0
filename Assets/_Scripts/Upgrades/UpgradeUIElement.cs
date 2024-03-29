@@ -28,7 +28,7 @@ public class UpgradeUIElement : MonoBehaviour
     public void SelectUpgrade()
     {
         upgradeMenu.DisableButtonInteraction();
-        PlayerStats.ApplyUpgrade(upgrade);
+        upgradeMenu.AddUpgradeToCollection(upgrade);
         transform.DOScale(1.2f, .6f).SetUpdate(true).OnComplete(() =>
         {
             upgradeMenu.CloseMenu();

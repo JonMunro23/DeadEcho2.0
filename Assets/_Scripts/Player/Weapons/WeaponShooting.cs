@@ -24,7 +24,8 @@ public class WeaponShooting : MonoBehaviour
     float maxSpreadDeviationAngle, perShotCooldown, reloadSpeed, headshotMultiplier;
     bool isAutomatic, isPlayerDead;
     public bool isAiming, canADS, isReloading, canReload;
-    public GameObject zombieHitEffect;
+    public float fireRate;
+
     [SerializeField]
     GameObject bulletHole;
     Image scopeOverlay, scopeOverlayFade;
@@ -46,9 +47,6 @@ public class WeaponShooting : MonoBehaviour
 
     bool isInstantKillActive, isBottomlessClipActive;
     bool stopShellByShellReload;
-
-    float reloadSpeedMultiplier = 1;
-    public float fireRate;
 
     public bool IsADSToggle;
     private void Awake()
@@ -73,7 +71,7 @@ public class WeaponShooting : MonoBehaviour
         BottomlessClip.onBottomlessClipGrabbed += EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded += DisableInstantKills;
         PowerUpManager.onBottomlessClipEnded += DisableBottomlessClip;
-        PlayerStats.onUpgradeApplied += ApplyUpgradeModifiers;
+        //PlayerStats.onUpgradeApplied += ApplyUpgradeModifiers;
     }
 
     private void OnDisable()
@@ -86,7 +84,7 @@ public class WeaponShooting : MonoBehaviour
         BottomlessClip.onBottomlessClipGrabbed -= EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded -= DisableInstantKills;
         PowerUpManager.onBottomlessClipEnded -= DisableBottomlessClip;
-        PlayerStats.onUpgradeApplied -= ApplyUpgradeModifiers;
+        //PlayerStats.onUpgradeApplied -= ApplyUpgradeModifiers;
     }
 
     public void InitialiseWeapon(Weapon weaponToInitialise)
@@ -124,20 +122,20 @@ public class WeaponShooting : MonoBehaviour
         CheckInstantKillStatus();
         CheckBottomlessClipStatus();
 
-        ApplyUpgradeModifiers();
+        //ApplyUpgradeModifiers();
     }
 
-    public void ApplyUpgradeModifiers()
-    {
-        fireRate += fireRate * PlayerStats.fireRateModifier;
-        damage += Mathf.RoundToInt(damage * PlayerStats.damageModifier);
+    //public void ApplyUpgradeModifiers()
+    //{
+    //    fireRate += fireRate * PlayerStats.fireRateModifier;
+    //    damage += Mathf.RoundToInt(damage * PlayerStats.damageModifier);
 
-        reloadSpeedMultiplier += PlayerStats.reloadSpeedModifier;
-        weaponAnimator.SetFloat("reloadSpeedMultiplier", reloadSpeedMultiplier);
-        reloadSpeed -= reloadSpeed * PlayerStats.reloadSpeedModifier;
+    //    reloadSpeedMultiplier += PlayerStats.reloadSpeedModifier;
+    //    weaponAnimator.SetFloat("reloadSpeedMultiplier", reloadSpeedMultiplier);
+    //    reloadSpeed -= reloadSpeed * PlayerStats.reloadSpeedModifier;
 
-        Debug.Log("upgrades applied");
-    }
+    //    Debug.Log("upgrades applied");
+    //}
 
     public void CheckInstantKillStatus()
     {
@@ -292,11 +290,11 @@ public class WeaponShooting : MonoBehaviour
                             {
                                 if (hit.transform.CompareTag("ZombieHead"))
                                 {
-                                    damageable.OnDamaged(Mathf.RoundToInt(damage * headshotMultiplier), true);
+                                    damageable.OnDamaged(Mathf.RoundToInt((damage + (damage * PlayerStats.damageModifier)) * headshotMultiplier), true);
                                 }
                                 else
                                 {
-                                    damageable.OnDamaged(Mathf.RoundToInt(damage), false);
+                                    damageable.OnDamaged(Mathf.RoundToInt(damage + (damage * PlayerStats.damageModifier)), false);
                                 }
 
                             }
@@ -398,6 +396,7 @@ public class WeaponShooting : MonoBehaviour
     {
         if(canReload)
         {
+            weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + PlayerStats.reloadSpeedModifier);
             if (isAiming)
             {
                 StopADS();
@@ -455,7 +454,7 @@ public class WeaponShooting : MonoBehaviour
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
         //SFXSource.PlayOneShot(reloadStartSFX);
-        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength * reloadSpeedMultiplier );
+        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength - (equippedWeapon.reloadStartAnimLength * PlayerStats.reloadSpeedModifier));
         //maxmagsize - 1 due to EndReload anim slotting a round
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
@@ -463,7 +462,7 @@ public class WeaponShooting : MonoBehaviour
             
             loadedAmmoBeforeReload = currentLoadedAmmo;
             reserveAmmoBeforeReload = currentReserveAmmo;
-            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength * reloadSpeedMultiplier);
+            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength - (equippedWeapon.reloadShellAnimLength * PlayerStats.reloadSpeedModifier));
             currentLoadedAmmo++;
             currentReserveAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -476,7 +475,7 @@ public class WeaponShooting : MonoBehaviour
         weaponAnimator.Play("EndReload");
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
-        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength * reloadSpeedMultiplier);
+        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength - (equippedWeapon.reloadEndAnimLength * PlayerStats.reloadSpeedModifier));
         currentLoadedAmmo++;
         currentReserveAmmo--;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -582,22 +581,25 @@ public class WeaponShooting : MonoBehaviour
 
     IEnumerator PerShotCooldown()
     {
-        float modifiedFireRate = 1 / (fireRate / 60f);
-        Debug.Log(modifiedFireRate);
-        yield return new WaitForSeconds(modifiedFireRate);
-        if(!isPlayerDead)
+        float modifiedFireRate = fireRate + (fireRate * PlayerStats.fireRateModifier);
+        float perSecCooldown = 1 / (modifiedFireRate / 60f);
+        yield return new WaitForSeconds(perSecCooldown);
+        if (!isPlayerDead)
             canShoot = true;
     }
 
-    IEnumerator ReloadCooldown()
-    {
-        yield return new WaitForSeconds(reloadSpeed * reloadSpeedMultiplier);
-        onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-        isReloading = false;
-        canShoot = true;
-        canADS = true;
-    }
+    //IEnumerator ReloadCooldown()
+    //{
+    //    Debug.Log(reloadSpeed);
+    //    Debug.Log(reloadSpeed - (reloadSpeed * PlayerStats.reloadSpeedModifier));
+    //    yield return new WaitForSeconds(reloadSpeed - (reloadSpeed * PlayerStats.reloadSpeedModifier));
+    //    onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+    //    isReloading = false;
+    //    canShoot = true;
+    //    canADS = true;
+    //}
 
+    //Called from animation event in reload anim
     public void ReloadFinished()
     {
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);

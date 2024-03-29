@@ -260,7 +260,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   meleePos: {fileID: 7874759558624874013}
   playerPosition: {fileID: 0}
-  speed: 3
+  speed: 2.25
   meleeCooldown: 3
   meleePerformTime: 2
   meleeRange: 0.5

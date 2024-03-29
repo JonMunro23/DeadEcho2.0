@@ -8,10 +8,10 @@ public class PlayerStats
 
     public static void ApplyUpgrade(Upgrade upgradeToApply)
     {
-        damageModifier += upgradeToApply.damageModifier;
-        moveSpeedModifier += upgradeToApply.moveSpeedModifier;
-        reloadSpeedModifier += upgradeToApply.reloadSpeedModifier;
-        fireRateModifier += upgradeToApply.fireRateModifier;
+        damageModifier += upgradeToApply.damageModifier * upgradeToApply.currentUpgradeLevel;
+        moveSpeedModifier += upgradeToApply.moveSpeedModifier * upgradeToApply.currentUpgradeLevel;
+        reloadSpeedModifier += upgradeToApply.reloadSpeedModifier * upgradeToApply.currentUpgradeLevel;
+        fireRateModifier += upgradeToApply.fireRateModifier * upgradeToApply.currentUpgradeLevel;
 
         onUpgradeApplied?.Invoke();
     }

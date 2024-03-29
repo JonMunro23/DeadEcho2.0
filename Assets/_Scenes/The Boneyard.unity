@@ -17889,6 +17889,8 @@ MonoBehaviour:
   upgradeSpawnParent: {fileID: 789716992}
   possibleUpgrades:
   - {fileID: 11400000, guid: 0efaf09510dd27248abb4cacfb6edeab, type: 2}
+  - {fileID: 11400000, guid: ca95b3c61733a9b4b97fc12782b46b61, type: 2}
+  - {fileID: 11400000, guid: 2bfcc2dc16a82ee40a2a92ae5bdc293c, type: 2}
   OpenUpgradeSelectionMenuKey: 116
   numberOfUpgradeSelections: 3
   rerollCost: 1000
@@ -59001,6 +59003,7 @@ MonoBehaviour:
   currentPrimary2WeaponObj: {fileID: 0}
   currentSecondaryWeaponObj: {fileID: 0}
   startingSecondaryWeapon: {fileID: 11400000, guid: 141c175528f3390429aa97c89c24ac2c, type: 2}
+  currentlyEquippedWeaponsList: []
   currentlyEquippedWeaponSlot: 0
   currentlyEquippedWeapon: {fileID: 0}
   currentlyEquippedWeaponObj: {fileID: 0}
@@ -59216,7 +59219,7 @@ PrefabInstance:
       objectReference: {fileID: 305443990}
     - target: {fileID: 1491499456446127384, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: canSpawnZombies
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1491499456446127384, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: zombieSpawnCooldown

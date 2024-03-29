@@ -15,6 +15,9 @@ MonoBehaviour:
   name: Damage Up
   description: Increase All Damage By 10%
   imageSprite: {fileID: 21300000, guid: bd395c0b8e7b340238cbfd019a6a5b24, type: 3}
+  currentUpgradeLevel: 1
+  maxUpgradeLevel: 3
   damageModifier: 0.1
-  speedModifier: 0
+  moveSpeedModifier: 0
+  reloadSpeedModifier: 0
   fireRateModifier: 0
