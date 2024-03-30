@@ -30,7 +30,7 @@ public class PlayerCam : MonoBehaviour
     Vector3 currentRecoilRot;
     Vector3 targetRecoilRotation;
     WeaponSwapping weaponSwapping;
-    Weapon currentWeapon;
+    WeaponData currentWeapon;
 
     private void Awake()
     {

@@ -1,14 +1,22 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UpgradeData", menuName = "New Upgrade")]
-public class Upgrade : ScriptableObject
+[CreateAssetMenu(fileName = "UpgradeData", menuName = "New Upgrade Data")]
+public class UpgradeData : ScriptableObject
 {
+    public enum Rarity
+    {
+        Common,
+        Rare,
+        Legendary
+    };
+
+    public Rarity upgradeRarity;
+
     public new string name;
     [TextArea(3, 10)]
     public string description;
     public Sprite imageSprite;
-
-    public int currentUpgradeLevel = 1;
+    [Tooltip("0 = Can be taken infinitely")]
     public int maxUpgradeLevel;
 
     [Header("Stat Effects (%)")]
@@ -16,9 +24,5 @@ public class Upgrade : ScriptableObject
     public float moveSpeedModifier;
     public float reloadSpeedModifier;
     public float fireRateModifier;
-
-    public void LevelUp()
-    {
-        currentUpgradeLevel++;
-    }
+    public float bonusHeadshotMultiplier;
 }

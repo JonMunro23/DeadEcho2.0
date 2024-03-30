@@ -50,7 +50,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
             {
                 if(hitHead)
                 {
-                    ExplodeHead();
+                    ExplodeHead(false);
                     return;
                 }
 
@@ -63,12 +63,14 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         }
     }
 
-    public void ExplodeHead()
+    public void ExplodeHead(bool wasInstantlKill)
     {
         zombieHead.enabled = false;
         if (!isDead)
         {
-            onPointsGiven?.Invoke(extraHeadshotPoints);
+            if(!wasInstantlKill)
+                onPointsGiven?.Invoke(extraHeadshotPoints);
+
             Die(true);
         }
         //play head explosing particle effect
@@ -124,6 +126,6 @@ public class ZombieHealth : MonoBehaviour, IDamageable
 
     public void InstantlyKill()
     {
-        Die(false);
+        ExplodeHead(true);
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class RecoilManager : MonoBehaviour
 {
     WeaponSwapping weaponSwapping;
-    Weapon currentWeapon;
+    WeaponData currentWeapon;
 
     Vector3 currentRotation;
     Quaternion memeeRot;

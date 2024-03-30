@@ -6073,6 +6073,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &167781616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 167781617}
+  - component: {fileID: 167781618}
+  m_Layer: 0
+  m_Name: PlayerUpgrades
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &167781617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167781616}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2129780332}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &167781618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167781616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f99af350aa4e754885c83e1e7f2baa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allUpgrades:
+  - {fileID: 11400000, guid: 2bfcc2dc16a82ee40a2a92ae5bdc293c, type: 2}
+  - {fileID: 11400000, guid: ca95b3c61733a9b4b97fc12782b46b61, type: 2}
+  - {fileID: 11400000, guid: 05d94fe3c9c17e24d8b050f2f19dce9d, type: 2}
+  - {fileID: 11400000, guid: 0efaf09510dd27248abb4cacfb6edeab, type: 2}
+  availableUpgrades: []
+  collectedUpgrades: []
 --- !u!1001 &168411644
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17887,10 +17938,7 @@ MonoBehaviour:
   upgradeSelectionMenu: {fileID: 1682662590}
   upgradeUIElement: {fileID: 3832920116681685429, guid: 48073e97163a739488d2f7d79de64673, type: 3}
   upgradeSpawnParent: {fileID: 789716992}
-  possibleUpgrades:
-  - {fileID: 11400000, guid: 0efaf09510dd27248abb4cacfb6edeab, type: 2}
-  - {fileID: 11400000, guid: ca95b3c61733a9b4b97fc12782b46b61, type: 2}
-  - {fileID: 11400000, guid: 2bfcc2dc16a82ee40a2a92ae5bdc293c, type: 2}
+  generatedUpgrades: []
   OpenUpgradeSelectionMenuKey: 116
   numberOfUpgradeSelections: 3
   rerollCost: 1000
@@ -58421,6 +58469,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000013617410114, guid: 8ec728fea85097b43ad9358333759bfa, type: 3}
   m_PrefabInstance: {fileID: 2125095124}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2129780332 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3928184490971590666, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
+  m_PrefabInstance: {fileID: 1401262441315371649}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2130348793 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000011444727360, guid: b69a894e9ba3d9c40ac239743745cae4, type: 3}
@@ -59246,6 +59299,10 @@ PrefabInstance:
       value: Managers
       objectReference: {fileID: 0}
     - target: {fileID: 3263936669749662054, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
+      propertyPath: startingPointsValue
+      value: 100000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263936669749662054, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: gainedPointsTextSpawnLocation
       value: 
       objectReference: {fileID: 1556166333}
@@ -59351,7 +59408,10 @@ PrefabInstance:
       objectReference: {fileID: 1432630941}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3928184490971590666, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 167781617}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
 --- !u!4 &1458098850868547659

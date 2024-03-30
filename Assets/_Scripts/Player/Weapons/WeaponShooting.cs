@@ -18,10 +18,10 @@ public class WeaponShooting : MonoBehaviour
     public bool canShoot;
     public Animator weaponAnimator;
 
-    public Weapon equippedWeapon;
-    int maxMagSize, maxReserveAmmo, loadedAmmoBeforeReload, reserveAmmoBeforeReload, damage, projectileCount;
+    public WeaponData equippedWeapon;
+    int maxMagSize, maxReserveAmmo, loadedAmmoBeforeReload, reserveAmmoBeforeReload, weaponBaseDamage, projectileCount;
     public int currentReserveAmmo, currentLoadedAmmo;
-    float maxSpreadDeviationAngle, perShotCooldown, reloadSpeed, headshotMultiplier;
+    float maxSpreadDeviationAngle, reloadSpeed, headshotMultiplier;
     bool isAutomatic, isPlayerDead;
     public bool isAiming, canADS, isReloading, canReload;
     public float fireRate;
@@ -87,7 +87,7 @@ public class WeaponShooting : MonoBehaviour
         //PlayerStats.onUpgradeApplied -= ApplyUpgradeModifiers;
     }
 
-    public void InitialiseWeapon(Weapon weaponToInitialise)
+    public void InitialiseWeapon(WeaponData weaponToInitialise)
     {
         weaponAnimator = GetComponent<Animator>();
         PlayerMovement.instance.animator = weaponAnimator;
@@ -97,7 +97,7 @@ public class WeaponShooting : MonoBehaviour
         currentLoadedAmmo = maxMagSize;
         currentReserveAmmo = maxReserveAmmo;
         reloadSpeed = weaponToInitialise.reloadSpeed;
-        damage = weaponToInitialise.damage;
+        weaponBaseDamage = weaponToInitialise.damage;
         projectileCount = weaponToInitialise.projectileCount;
         fireRate = weaponToInitialise.fireRate;
         maxSpreadDeviationAngle = weaponToInitialise.maxSpreadDeviationAngle;
@@ -105,7 +105,7 @@ public class WeaponShooting : MonoBehaviour
         hitEffectData = weaponToInitialise.hitEffectData;
         firingSFX = weaponToInitialise.fireSFX;
 
-        if(weaponToInitialise.reloadType == Weapon.ReloadType.shellByShell)
+        if(weaponToInitialise.reloadType == WeaponData.ReloadType.shellByShell)
         {
             reloadStartSFX = weaponToInitialise.reloadStartSFX;
             insertShellSFX = weaponToInitialise.insertShellSFX;
@@ -174,7 +174,7 @@ public class WeaponShooting : MonoBehaviour
             {
                 if(Input.GetKey(fireKey))
                 {
-                    if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                    if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell && isReloading == true)
                     {
                         InterruptShellByShellReload();
                         return;
@@ -187,7 +187,7 @@ public class WeaponShooting : MonoBehaviour
             {
                 if(Input.GetKeyDown(fireKey))
                 {
-                    if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell && isReloading == true)
+                    if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell && isReloading == true)
                     {
                         InterruptShellByShellReload();
                         return;
@@ -290,11 +290,12 @@ public class WeaponShooting : MonoBehaviour
                             {
                                 if (hit.transform.CompareTag("ZombieHead"))
                                 {
-                                    damageable.OnDamaged(Mathf.RoundToInt((damage + (damage * PlayerStats.damageModifier)) * headshotMultiplier), true);
+                                    float headshotDamage = (weaponBaseDamage + (weaponBaseDamage * PlayerUpgrades.damageModifier) * (headshotMultiplier + PlayerUpgrades.bonusheadshotMultiplier));
+                                    damageable.OnDamaged(Mathf.RoundToInt(headshotDamage), true);
                                 }
                                 else
                                 {
-                                    damageable.OnDamaged(Mathf.RoundToInt(damage + (damage * PlayerStats.damageModifier)), false);
+                                    damageable.OnDamaged(Mathf.RoundToInt(weaponBaseDamage + (weaponBaseDamage * PlayerUpgrades.damageModifier)), false);
                                 }
 
                             }
@@ -396,7 +397,7 @@ public class WeaponShooting : MonoBehaviour
     {
         if(canReload)
         {
-            weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + PlayerStats.reloadSpeedModifier);
+            weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + PlayerUpgrades.reloadSpeedModifier);
             if (isAiming)
             {
                 StopADS();
@@ -404,7 +405,7 @@ public class WeaponShooting : MonoBehaviour
             canADS = false;
             canShoot = false;
             isReloading = true;
-            if(equippedWeapon.reloadType == Weapon.ReloadType.magazine)
+            if(equippedWeapon.reloadType == WeaponData.ReloadType.magazine)
             {
                 SFXSource.PlayOneShot(fullReloadSFX);
                 weaponAnimator.Play("Reload");
@@ -441,7 +442,7 @@ public class WeaponShooting : MonoBehaviour
                     }
                 }
             }
-            else if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
+            else if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell)
             {
                 shellByShellReloadCoroutine = StartCoroutine(ShellByShellReload());
             }
@@ -454,7 +455,7 @@ public class WeaponShooting : MonoBehaviour
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
         //SFXSource.PlayOneShot(reloadStartSFX);
-        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength - (equippedWeapon.reloadStartAnimLength * PlayerStats.reloadSpeedModifier));
+        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength - (equippedWeapon.reloadStartAnimLength * PlayerUpgrades.reloadSpeedModifier));
         //maxmagsize - 1 due to EndReload anim slotting a round
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
@@ -462,7 +463,7 @@ public class WeaponShooting : MonoBehaviour
             
             loadedAmmoBeforeReload = currentLoadedAmmo;
             reserveAmmoBeforeReload = currentReserveAmmo;
-            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength - (equippedWeapon.reloadShellAnimLength * PlayerStats.reloadSpeedModifier));
+            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength - (equippedWeapon.reloadShellAnimLength * PlayerUpgrades.reloadSpeedModifier));
             currentLoadedAmmo++;
             currentReserveAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -475,7 +476,7 @@ public class WeaponShooting : MonoBehaviour
         weaponAnimator.Play("EndReload");
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
-        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength - (equippedWeapon.reloadEndAnimLength * PlayerStats.reloadSpeedModifier));
+        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength - (equippedWeapon.reloadEndAnimLength * PlayerUpgrades.reloadSpeedModifier));
         currentLoadedAmmo++;
         currentReserveAmmo--;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -509,7 +510,7 @@ public class WeaponShooting : MonoBehaviour
 
         SFXSource.Stop();
 
-        if (equippedWeapon.reloadType == Weapon.ReloadType.shellByShell)
+        if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell)
         {
             if (shellByShellReloadCoroutine != null)
                 StopCoroutine(shellByShellReloadCoroutine);
@@ -581,7 +582,7 @@ public class WeaponShooting : MonoBehaviour
 
     IEnumerator PerShotCooldown()
     {
-        float modifiedFireRate = fireRate + (fireRate * PlayerStats.fireRateModifier);
+        float modifiedFireRate = fireRate + (fireRate * PlayerUpgrades.fireRateModifier);
         float perSecCooldown = 1 / (modifiedFireRate / 60f);
         yield return new WaitForSeconds(perSecCooldown);
         if (!isPlayerDead)

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SCAR
   m_EditorClassIdentifier: 
   weaponSlotType: 0
+  weaponType: 2
   reloadType: 0
   name: SCAR
   description: 

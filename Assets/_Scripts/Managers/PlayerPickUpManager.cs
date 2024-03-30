@@ -11,7 +11,7 @@ public class PlayerPickUpManager : MonoBehaviour
 
     [SerializeField] AudioSource purchaseWeaponAudioSource;
     [SerializeField] int costOfAmmo;
-    Weapon weaponToPurchase;
+    WeaponData weaponToPurchase;
     bool canBuy, isBuyingWeapon, isBuyingAmmo;
 
     //HighlightEffect wallBuyHighlightEffect;

@@ -10,30 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2f836e6ddf12a24db5922ec18ff9d2c, type: 3}
-  m_Name: MP5
+  m_Name: Sniper
   m_EditorClassIdentifier: 
   weaponSlotType: 0
+  weaponType: 2
   reloadType: 0
-  name: MP5K
+  name: Sniper1
   description: 
-  cost: 800
-  weaponObj: {fileID: 1060585169976870, guid: 3d0ee8c7f71372b4fbd720bea3abbbfe, type: 3}
-  weaponWallBuyObj: {fileID: 1060585169976870, guid: d3c0169cb1a6e3049a9e930874158a9a, type: 3}
+  cost: 1500
+  weaponObj: {fileID: 1977984898015220, guid: 30e365fcd1d27fe4c94ab350c0484231, type: 3}
+  weaponWallBuyObj: {fileID: 1977984898015220, guid: 70bcbb812db260649a46bdc691c09690, type: 3}
   UIObj: {fileID: 0}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   defaultYPos: -1.7
-  aimingYPos: -1.68
-  UISprite: {fileID: 21300000, guid: 099714b640d608c419323511a8712aac, type: 3}
-  magSize: 30
-  maxReserveAmmo: 270
-  reloadSpeed: 3.667
+  aimingYPos: 0
+  UISprite: {fileID: 21300000, guid: 92a6affaf5d451a49a99f6e38eb8af72, type: 3}
+  magSize: 5
+  maxReserveAmmo: 45
+  reloadSpeed: 2.8
   projectileCount: 1
-  maxSpreadDeviationAngle: 2
-  damage: 40
-  headshotMultiplier: 2
-  fireRate: 600
-  timeToADS: 2
-  aimingFOV: 45
+  maxSpreadDeviationAngle: 10
+  damage: 70
+  headshotMultiplier: 2.5
+  fireRate: 0
+  timeToADS: 4
+  aimingFOV: 30
   ADSCurve:
     serializedVersion: 2
     m_Curve:
@@ -58,17 +59,17 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  isAutomatic: 1
+  isAutomatic: 0
   isScoped: 0
   scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
   projectileInitalVelocity: 0
   fireSFX:
-  - {fileID: 8300000, guid: 8018acccaecddce498259f8e5a93b440, type: 3}
-  - {fileID: 8300000, guid: 9fac002407092764e8936cb3d0387616, type: 3}
-  - {fileID: 8300000, guid: 73e3ceb9aff1022448528283abfd07c3, type: 3}
-  fullReloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  - {fileID: 8300000, guid: 5693fed405509e848b0b55568ab65ece, type: 3}
+  - {fileID: 8300000, guid: 01940605c84c7b742b521b75a01a8b9a, type: 3}
+  - {fileID: 8300000, guid: f3a989eaf5b21a6428f44f9d476fd98b, type: 3}
+  fullReloadSFX: {fileID: 0}
   reloadStartSFX: {fileID: 0}
   insertShellSFX: {fileID: 0}
   reloadEndSFX: {fileID: 0}
@@ -76,12 +77,12 @@ MonoBehaviour:
   reloadStartAnimLength: 0
   reloadShellAnimLength: 0
   reloadEndAnimLength: 0
-  recoilX: -1.4
-  recoilY: 1
-  recoilZ: 0.3
-  ADSRecoilX: -0.6
-  ADSRecoilY: 0.4
-  ADSRecoilZ: 0.15
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  ADSRecoilX: 0
+  ADSRecoilY: 0
+  ADSRecoilZ: 0
   canUseSightAttachment: 1
   canUseMagAttachment: 1
   canUseMuzzleAttachment: 1

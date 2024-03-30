@@ -8,17 +8,22 @@ public class UpgradeUIElement : MonoBehaviour
     [SerializeField]
     new TMP_Text name;
     [SerializeField]
-    TMP_Text description;
+    TMP_Text description, rank;
     [SerializeField]
     Image image;
 
-    Upgrade upgrade;
+    UpgradeData upgrade;
     UpgradeSelectionMenu upgradeMenu;
 
-    public void Init(Upgrade _upgradeToInit, UpgradeSelectionMenu _upgradeMenu)
+    public void Init(UpgradeData _upgradeToInit, UpgradeSelectionMenu _upgradeMenu)
     {
         upgrade = _upgradeToInit;
         upgradeMenu = _upgradeMenu;
+
+        if (_upgradeToInit.maxUpgradeLevel != 0)
+            rank.text = "Rank : " + PlayerUpgrades.Instance.GetCurrentUpgradeRank(_upgradeToInit).ToString() + " / " + _upgradeToInit.maxUpgradeLevel;
+        else
+            rank.text = "Rank : " + PlayerUpgrades.Instance.GetCurrentUpgradeRank(_upgradeToInit).ToString();
 
         name.text = _upgradeToInit.name;
         description.text = _upgradeToInit.description;
@@ -28,7 +33,7 @@ public class UpgradeUIElement : MonoBehaviour
     public void SelectUpgrade()
     {
         upgradeMenu.DisableButtonInteraction();
-        upgradeMenu.AddUpgradeToCollection(upgrade);
+        PlayerUpgrades.Instance.AddUpgradeToCollection(upgrade);
         transform.DOScale(1.2f, .6f).SetUpdate(true).OnComplete(() =>
         {
             upgradeMenu.CloseMenu();

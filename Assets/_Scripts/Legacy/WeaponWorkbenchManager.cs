@@ -75,7 +75,7 @@ public class WeaponWorkbenchManager : MonoBehaviour
         Cursor.visible = false;
     }
 
-    public void DisplayWeapon(Weapon weaponToDisplay)
+    public void DisplayWeapon(WeaponData weaponToDisplay)
     {
         if(currentlyDisplayedWeaponObj != null)
             Destroy(currentlyDisplayedWeaponObj);
@@ -85,7 +85,7 @@ public class WeaponWorkbenchManager : MonoBehaviour
         DisplayAttachmentPoints(weaponToDisplay);
     }
 
-    void DisplayWeaponStats(Weapon weaponToDisplay)
+    void DisplayWeaponStats(WeaponData weaponToDisplay)
     {
         weaponStatsPanel.SetActive(true);
 
@@ -98,7 +98,7 @@ public class WeaponWorkbenchManager : MonoBehaviour
         wepReserveAmmoText.text = "Max Reserve Ammo: " + weaponToDisplay.maxReserveAmmo;
     }
 
-    void DisplayAttachmentPoints(Weapon weaponToDisplay)
+    void DisplayAttachmentPoints(WeaponData weaponToDisplay)
     {
         AttachmentsPanel.SetActive(true);
 

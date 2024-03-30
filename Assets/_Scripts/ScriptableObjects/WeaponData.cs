@@ -1,9 +1,7 @@
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "WeaponObject", menuName = "New Weapon")]
-public class Weapon : ScriptableObject
+public class WeaponData : ScriptableObject
 {
     public enum WeaponSlotType
     {
@@ -11,6 +9,16 @@ public class Weapon : ScriptableObject
         secondary
     };
     public WeaponSlotType weaponSlotType;
+
+    public enum WeaponType
+    {
+        Pistol,
+        SMG,
+        Rifle,
+        Shotgun,
+        Explosive
+    };
+    public WeaponType weaponType;
 
     public enum ReloadType
     {
