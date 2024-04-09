@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] float startingHealth;
-    public float currentHealth, maxHealth;
+    public float currentHealth, currentMaxHealth, baseMaxHealth;
     [SerializeField] GameObject lowHealthOverlay;
     [SerializeField] Image healthbarImage;
     [SerializeField] float invincibilityLength;
@@ -24,12 +23,22 @@ public class PlayerHealth : MonoBehaviour
         healthbarImage = GameObject.FindGameObjectWithTag("HealthBarImage").GetComponent<Image>();
     }
 
+    private void OnEnable()
+    {
+        PlayerUpgrades.onUpgradesRefreshed += UpdateMaxHealth;
+    }
+
+    private void OnDisable()
+    {
+        PlayerUpgrades.onUpgradesRefreshed -= UpdateMaxHealth;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         canTakeDamage = true;
-        maxHealth = startingHealth;
-        currentHealth = maxHealth;
+        currentMaxHealth = baseMaxHealth;
+        currentHealth = baseMaxHealth;
         isPlayingLowHealthSFX = false;
     }
 
@@ -40,7 +49,7 @@ public class PlayerHealth : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.Alpha4))
             {
-                TakeDamage(maxHealth / 4);
+                TakeDamage(25);
             }
         }
     }
@@ -52,7 +61,7 @@ public class PlayerHealth : MonoBehaviour
             canTakeDamage = false;
             currentHealth -= damage;
             onDamageTaken?.Invoke();
-            healthbarImage.fillAmount = currentHealth / 100;
+            UpdateHealthModifiers();
             gettingHitSource.PlayOneShot(GetRandomAudioClip());
 
             if (currentHealth <= 30)
@@ -81,14 +90,22 @@ public class PlayerHealth : MonoBehaviour
             }
 
             StartCoroutine(Invincibility());
-            
-            //if (healthRegenCoRoutine != null)
-            //    StopCoroutine(healthRegenCoRoutine);
-
-            //healthRegenCoRoutine = StartCoroutine(HealthRegen());
-
+           
         }
 
+    }
+
+    void UpdateHealthModifiers()
+    {
+        healthbarImage.fillAmount = currentHealth / currentMaxHealth;
+
+    }
+
+    public void UpdateMaxHealth()
+    {
+        currentMaxHealth = baseMaxHealth;
+        currentMaxHealth += baseMaxHealth * PlayerUpgrades.maxHealthModifier;
+        UpdateHealthModifiers();
     }
 
     AudioClip GetRandomAudioClip()
@@ -105,25 +122,18 @@ public class PlayerHealth : MonoBehaviour
 
     public void BeginHealthRegen()
     {
-        healthRegenCoRoutine = StartCoroutine(HealthRegen(syringeHealAmount));
+        healthRegenCoRoutine = StartCoroutine(HealthRegen(syringeHealAmount + syringeHealAmount * PlayerUpgrades.healthRecoverModifier));
     }
 
     IEnumerator HealthRegen(float regenAmount)
     {
-        //float healAmount;
-        //if (currentHealth + regenAmount > maxHealth)
-        //{
-        //    healAmount = maxHealth;
-        //}
-        //else
-        //    healAmount = currentHealth + regenAmount;
         float healedAmount = 0;
-        while (healedAmount < regenAmount && currentHealth < maxHealth)
+        while (healedAmount < regenAmount && currentHealth < currentMaxHealth)
         {
-            healedAmount += maxHealth / 100;
-            Debug.Log(healedAmount);
-            currentHealth += maxHealth / 100;
-            healthbarImage.fillAmount = currentHealth / 100;
+            healedAmount += currentMaxHealth / currentMaxHealth;
+            //Debug.Log(healedAmount);
+            currentHealth += currentMaxHealth / currentMaxHealth;
+            UpdateHealthModifiers();
             if (currentHealth >= 30)
             {
                 if (isPlayingLowHealthSFX)

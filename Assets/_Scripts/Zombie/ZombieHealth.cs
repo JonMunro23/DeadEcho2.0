@@ -1,22 +1,33 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class ZombieHealth : MonoBehaviour, IDamageable
 {
     ZombieAI zombieAI;
-    Animator animator;
 
     [SerializeField] int hitPoints, baseKillPoints, extraHeadshotPoints;
     [SerializeField] SkinnedMeshRenderer zombieHead;
 
-    [SerializeField] GameObject zombieRagdoll;
+    //[SerializeField] GameObject zombieRagdoll;
 
     public int currentHealth;
     public bool isDead;
 
+    [SerializeField] Rigidbody[] rigidBodyParts;
+
     [Header("Sound")]
-    public AudioClip[] hitSFx;
+    [SerializeField] bool canPlayHitSFX;
+    [SerializeField] float hitSFxCooldown;
+    public AudioClip[] headHitSFx;
+    public AudioClip[] shoulderHitSFx;
+    public AudioClip[] legHitSFx;
     AudioSource gettngHitAudioSource;
+
+    [Header("Animation")]
+    public float hitAnimCooldown;
+    bool canPlayHitResponseAnim;
+    Animator animator;
 
     //int = index of player that killed, bool = wasHeadshot
     public static Action<int, bool> onDeath;
@@ -38,23 +49,45 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     void Start()
     {
-        //SetHealth(startingHealth);
+        SetRigidbodyActive(false);
+        //SetHealth(1000000);
+        canPlayHitSFX = true;
+        canPlayHitResponseAnim = true;
     }
 
-    public void TakeDamage(int healthToRemove, bool hitHead)
+    void SetRigidbodyActive(bool isActive)
+    {
+        foreach (Rigidbody rb in rigidBodyParts)
+        {
+            if(isActive)
+                rb.gameObject.layer = LayerMask.NameToLayer("ZombieRagdoll");
+
+
+            rb.useGravity = isActive;
+            rb.isKinematic = !isActive;
+        }
+    }
+
+    public void TakeDamage(int healthToRemove, string bodyPartTag)
     {
         if(!isDead)
         {
+            if(canPlayHitResponseAnim)
+                PlayHitResponse(bodyPartTag);
+
+            if(canPlayHitSFX)
+                PlayHitAudio(bodyPartTag);
+
             currentHealth -= healthToRemove;
             if (currentHealth <= 0)
             {
-                if(hitHead)
+                if(bodyPartTag == "ZombieHead")
                 {
-                    ExplodeHead();
+                    ExplodeHead(false);
                     return;
                 }
 
-                Die(hitHead);
+                Die(bodyPartTag == "ZombieHead");
                 return;
             }
 
@@ -63,12 +96,78 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         }
     }
 
-    public void ExplodeHead()
+    void PlayHitResponse(string bodyPartTag)
+    {
+        canPlayHitResponseAnim = false;
+        StartCoroutine(HitAnimResponseCooldown());
+        switch (bodyPartTag)
+        {
+            case "ZombieHead":
+                animator.Play("Hit-Head", 1);
+                break;
+            case "ZombieBody":
+                int rand = UnityEngine.Random.Range(0, 2);
+                if(rand == 1)
+                    animator.Play("Hit-LeftShoulder", 1);
+                else
+                    animator.Play("Hit-RightShoulder", 1);
+                break;
+            case "ZombieLeftArm":
+                animator.Play("Hit-LeftShoulder", 1);
+                break;
+            case "ZombieRightArm":
+                animator.Play("Hit-RightShoulder", 1);
+                break;
+            //case "ZombieLeftLeg":
+            //    animator.Play("Hit-LeftLeg", 0);
+            //    break;
+            //case "ZombieRightLeg":
+            //    animator.Play("Hit-RightLeg", 0);
+            //    break;
+        }
+    }
+
+    void PlayHitAudio(string bodyPartTag)
+    {
+        canPlayHitSFX = false;
+        StartCoroutine(HitSFXCooldown());
+        switch (bodyPartTag)
+        {
+            case "ZombieHead":
+                gettngHitAudioSource.PlayOneShot(GetRandomAudioClipFromArray(headHitSFx));
+                break;
+            case "ZombieBody":
+                gettngHitAudioSource.PlayOneShot(GetRandomAudioClipFromArray(shoulderHitSFx));
+                break;
+            case "ZombieLeftArm":
+                gettngHitAudioSource.PlayOneShot(GetRandomAudioClipFromArray(shoulderHitSFx));
+                break;
+            case "ZombieRightArm":
+                gettngHitAudioSource.PlayOneShot(GetRandomAudioClipFromArray(shoulderHitSFx));
+                break;
+            case "ZombieLeftLeg":
+                gettngHitAudioSource.PlayOneShot(GetRandomAudioClipFromArray(legHitSFx));
+                break;
+            case "ZombieRightLeg":
+                gettngHitAudioSource.PlayOneShot(GetRandomAudioClipFromArray(legHitSFx));
+                break;
+        }
+    }
+
+    AudioClip GetRandomAudioClipFromArray(AudioClip[] clipArray)
+    {
+        int rand = UnityEngine.Random.Range(0, clipArray.Length);
+        return clipArray[rand];
+    }
+
+    public void ExplodeHead(bool wasInstantlyKilled)
     {
         zombieHead.enabled = false;
         if (!isDead)
         {
-            onPointsGiven?.Invoke(extraHeadshotPoints);
+            if(!wasInstantlyKilled)
+                onPointsGiven?.Invoke(extraHeadshotPoints);
+
             Die(true);
         }
         //play head explosing particle effect
@@ -86,16 +185,26 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         zombieAI.isMoving = false;
         zombieAI.agent.velocity = Vector3.zero;
         zombieAI.agent.isStopped = true;
-        animator.SetTrigger("Die");
-        animator.SetBool("IsMoving", false);
-        transform.SetParent(null);
-        Collider[] colliders = GetComponentsInChildren<Collider>();
-        foreach (Collider collider in colliders)
-        {
-            collider.enabled = false;
-        }    
 
-        Destroy(zombieAI.agent);
+        SetRigidbodyActive(true);
+        animator.enabled = false;
+        zombieAI.agent.enabled = false;
+
+        //foreach(Rigidbody rb in rigidBodyParts)
+        //{
+        //    rb.AddForce(-transform.forward * 4, ForceMode.Impulse);
+        //}
+
+        //animator.SetBool("IsMoving", false);
+        //animator.SetBool("IsDead", isDead);
+        //transform.SetParent(null);
+        //Collider[] colliders = GetComponentsInChildren<Collider>();
+        //foreach (Collider collider in colliders)
+        //{
+        //    collider.enabled = false;
+        //}    
+
+        //Destroy(zombieAI.agent);
         //var ragdollClone = Instantiate(zombieRagdoll, transform.position, transform.rotation);
         //Destroy(ragdollClone, 12);
         Destroy(gameObject, 12);
@@ -117,13 +226,25 @@ public class ZombieHealth : MonoBehaviour, IDamageable
         currentHealth = health;
     }
 
-    public void OnDamaged(int damageTaken, bool wasHeadshot)
+    public void OnDamaged(int damageTaken, string bodyPartTag)
     {
-        TakeDamage(damageTaken, wasHeadshot);
+        TakeDamage(damageTaken, bodyPartTag);
     }
 
     public void InstantlyKill()
     {
-        Die(false);
+        ExplodeHead(true);
+    }
+
+    IEnumerator HitSFXCooldown()
+    {
+        yield return new WaitForSeconds(hitSFxCooldown);
+        canPlayHitSFX = true;
+    }
+
+    IEnumerator HitAnimResponseCooldown()
+    {
+        yield return new WaitForSeconds(hitAnimCooldown);
+        canPlayHitResponseAnim = true;
     }
 }

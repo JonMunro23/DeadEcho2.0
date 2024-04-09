@@ -12,7 +12,7 @@ public class WeaponInventoryDisplay : MonoBehaviour
     [SerializeField]
     Color selectedSlotColour, unselectedSlotColour, noAmmoColour;
 
-    public void Init(int currentlyEquippedWeaponSlot, Weapon secondary, Weapon primary1 = null, Weapon primary2 = null)
+    public void Init(int currentlyEquippedWeaponSlot, WeaponData secondary, WeaponData primary1 = null, WeaponData primary2 = null)
     {
         if (primary1 != null)
         {

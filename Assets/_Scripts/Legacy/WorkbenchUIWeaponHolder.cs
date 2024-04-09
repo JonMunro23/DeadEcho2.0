@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class WorkbenchUIWeaponHolder : MonoBehaviour
 {
-    public Weapon weapon;
+    public WeaponData weapon;
     [SerializeField] Image weaponImg;
 
     Button button;
@@ -13,7 +13,7 @@ public class WorkbenchUIWeaponHolder : MonoBehaviour
         button = GetComponent<Button>();
     }
 
-    public void InitialiseWeaponHolder(Weapon weaponToInitialise)
+    public void InitialiseWeaponHolder(WeaponData weaponToInitialise)
     {
         weapon = weaponToInitialise;
         weaponImg.sprite = weapon.UISprite;

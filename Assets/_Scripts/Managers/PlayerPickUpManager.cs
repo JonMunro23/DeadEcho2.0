@@ -11,7 +11,7 @@ public class PlayerPickUpManager : MonoBehaviour
 
     [SerializeField] AudioSource purchaseWeaponAudioSource;
     [SerializeField] int costOfAmmo;
-    Weapon weaponToPurchase;
+    WeaponData weaponToPurchase;
     bool canBuy, isBuyingWeapon, isBuyingAmmo;
 
     //HighlightEffect wallBuyHighlightEffect;
@@ -46,7 +46,7 @@ public class PlayerPickUpManager : MonoBehaviour
                 {
                     if (PointsManager.instance.currentPoints >= costOfAmmo)
                     {
-                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name && !WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name && !WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                         {
                             if (!WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {

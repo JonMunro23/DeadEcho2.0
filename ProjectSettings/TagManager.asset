@@ -29,6 +29,11 @@ TagManager:
   - PlayerSpawnRadius
   - powerUpNameText
   - upgradeSelectionMenu
+  - CinemachineTarget
+  - ZombieLeftLeg
+  - ZombieRightLeg
+  - ZombieRightArm
+  - ZombieLeftArm
   layers:
   - Default
   - TransparentFX
@@ -40,7 +45,7 @@ TagManager:
   - Weapon
   - WallBuyWeapon
   - UIWeapon
-  - 
+  - ZombieRagdoll
   - 
   - 
   - 

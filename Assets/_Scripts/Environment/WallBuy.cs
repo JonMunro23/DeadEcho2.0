@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WallBuy : MonoBehaviour
 {
-    public Weapon weapon;
+    public WeaponData weapon;
     Transform weaponObjSpawnHolder;
 
     [HideInInspector]

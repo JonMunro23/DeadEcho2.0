@@ -75,7 +75,7 @@ public class PlayerMelee : MonoBehaviour
         {
             if (collider.CompareTag("ZombieBody") || collider.CompareTag("ZombieHead"))
             {
-                collider.GetComponentInParent<ZombieHealth>().TakeDamage(damage, false);
+                collider.GetComponentInParent<ZombieHealth>().TakeDamage(damage, collider.tag);
             }
         }
     }

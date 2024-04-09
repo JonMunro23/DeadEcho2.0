@@ -14,7 +14,7 @@ public class PlayerThrowables : MonoBehaviour
 
     public bool canThrowGrenade;
 
-    [SerializeField] int startingGrenadeCount, grenadesPerRound, maxHeldGrenades;
+    [SerializeField] int startingGrenadeCount, grenadesPerRound, currentMaxHeldGrenades, baseMaxHeldGrenades;
     [SerializeField] float grenadeReactivationTime;
     [HideInInspector] public int currentGrenadeCount;
 
@@ -26,12 +26,14 @@ public class PlayerThrowables : MonoBehaviour
     {
         RoundManager.onNewRoundStarted += AddEquipment;
         PlayerHealth.onDeath += DisableEquipment;
+        PlayerUpgrades.onUpgradesRefreshed += UpdateGrenadeModifiers;
     }
 
     private void OnDisable()
     {
         RoundManager.onNewRoundStarted -= AddEquipment;
         PlayerHealth.onDeath -= DisableEquipment;
+        PlayerUpgrades.onUpgradesRefreshed -= UpdateGrenadeModifiers;
     }
 
     private void Awake()
@@ -41,6 +43,7 @@ public class PlayerThrowables : MonoBehaviour
 
     private void Start()
     {
+        currentMaxHeldGrenades = baseMaxHeldGrenades;
         canThrowGrenade = true;
     }
 
@@ -52,11 +55,16 @@ public class PlayerThrowables : MonoBehaviour
     void AddEquipment(int currentRound)
     {
         if (currentRound == 1)
-            AddGrenades(startingGrenadeCount);
+            AddGrenades(currentMaxHeldGrenades);
         else
-            AddGrenades(grenadesPerRound);
+            AddGrenades(grenadesPerRound + PlayerUpgrades.grenadesGainedPerRoundModifier);
     }
 
+    void UpdateGrenadeModifiers()
+    {
+        currentMaxHeldGrenades = baseMaxHeldGrenades;
+        currentMaxHeldGrenades = currentMaxHeldGrenades + PlayerUpgrades.grenadeCarryAmountModifier;
+    }
 
     // Update is called once per frame
     void Update()
@@ -82,8 +90,8 @@ public class PlayerThrowables : MonoBehaviour
     public void AddGrenades(int amountToAdd)
     {
         currentGrenadeCount += amountToAdd;
-        if(currentGrenadeCount > maxHeldGrenades)
-            currentGrenadeCount = maxHeldGrenades;
+        if(currentGrenadeCount > currentMaxHeldGrenades)
+            currentGrenadeCount = currentMaxHeldGrenades;
         currentGrenadeCountText.text = currentGrenadeCount.ToString();
     }
 

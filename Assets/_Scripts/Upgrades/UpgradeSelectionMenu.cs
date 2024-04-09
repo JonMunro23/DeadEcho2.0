@@ -1,10 +1,11 @@
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradeSelectionMenu : MonoBehaviour
 {
+    public static UpgradeSelectionMenu instance;
+
     [SerializeField]
     GameObject upgradeSelectionMenu;
     [SerializeField]
@@ -12,17 +13,20 @@ public class UpgradeSelectionMenu : MonoBehaviour
     [SerializeField]
     Transform upgradeSpawnParent;
 
-    public List<Upgrade> possibleUpgrades = new List<Upgrade>();
+    List<Upgrade> possibleUpgrades = new List<Upgrade>();
 
-    List<UpgradeUIElement> generatedUpgrades = new List<UpgradeUIElement>();
-
-    public List<Upgrade> collectedUpgrades = new List<Upgrade>();
+    public List<UpgradeUIElement> generatedUpgrades = new List<UpgradeUIElement>();
 
     public static bool isUpgradeSelectionMenuOpen;
 
     public KeyCode OpenUpgradeSelectionMenuKey = KeyCode.T;
 
     public int numberOfUpgradeSelections, rerollCost;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Update()
     {
@@ -64,12 +68,30 @@ public class UpgradeSelectionMenu : MonoBehaviour
 
     void GenerateNewUpgrades()
     {
+        possibleUpgrades.AddRange(PlayerUpgrades.Instance.availableUpgrades);
+
+        if (PlayerUpgrades.Instance.availableUpgrades.Count < numberOfUpgradeSelections)
+        {
+            for (int i = 0; i < PlayerUpgrades.Instance.availableUpgrades.Count; i++)
+            {
+                UpgradeUIElement clone = Instantiate(upgradeUIElement, upgradeSpawnParent);
+                generatedUpgrades.Add(clone);
+                clone.Init(GetUpgrade(), this);
+            }
+            possibleUpgrades.Clear();
+            return;
+        }
+
+
         for (int i = 0; i < numberOfUpgradeSelections; i++)
         {
             UpgradeUIElement clone = Instantiate(upgradeUIElement, upgradeSpawnParent);
             generatedUpgrades.Add(clone);
             clone.Init(GetUpgrade(), this);
         }
+        possibleUpgrades.Clear();
+
+
     }
 
     void RemoveGeneratedUpgrades()
@@ -94,7 +116,11 @@ public class UpgradeSelectionMenu : MonoBehaviour
     Upgrade GetUpgrade()
     {
         int rand = Random.Range(0, possibleUpgrades.Count);
-        return possibleUpgrades[rand];
+        Upgrade upgradeToReturn = possibleUpgrades[rand];
+
+        possibleUpgrades.Remove(upgradeToReturn);
+
+        return upgradeToReturn;
     }
 
     public void DisableButtonInteraction()
@@ -104,24 +130,4 @@ public class UpgradeSelectionMenu : MonoBehaviour
             upgrade.gameObject.GetComponentInChildren<Button>().interactable = false;
         }
     }
-
-    public void AddUpgradeToCollection(Upgrade upgradeToAdd)
-    {
-        //if(collectedUpgrades.Contains(upgradeToAdd))
-        //{
-        //    upgradeToAdd.LevelUp();
-        //    if(upgradeToAdd.currentUpgradeLevel == upgradeToAdd.maxUpgradeLevel)
-        //    {
-        //        RemoveUpgradeFromPool(upgradeToAdd);
-        //    }
-        //}
-
-        collectedUpgrades.Add(upgradeToAdd);
-        PlayerStats.ApplyUpgrade(upgradeToAdd);
-    }
-
-    //void RemoveUpgradeFromPool(Upgrade upgrade)
-    //{
-    //    possibleUpgrades.Remove(upgrade);
-    //}
 }

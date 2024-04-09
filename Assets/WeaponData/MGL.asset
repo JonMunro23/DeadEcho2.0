@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f836e6ddf12a24db5922ec18ff9d2c, type: 3}
+  m_Name: MGL
+  m_EditorClassIdentifier: 
+  weaponSlotType: 0
+  weaponType: 3
+  reloadType: 0
+  name: MGL
+  description: 
+  cost: 1500
+  weaponObj: {fileID: 1162446373548900, guid: de3ce606167c3e14698b0790ea606d60, type: 3}
+  weaponWallBuyObj: {fileID: 1162446373548900, guid: 9bd8a56f00fb07140928efdb126ca13c, type: 3}
+  UIObj: {fileID: 0}
+  hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
+  defaultYPos: -1.7
+  aimingYPos: -1.68
+  UISprite: {fileID: 21300000, guid: 49f6413b7187d9748a1c26b89ac57bd1, type: 3}
+  magSize: 6
+  maxReserveAmmo: 30
+  reloadSpeed: 10.35
+  projectileCount: 1
+  maxSpreadDeviationAngle: 4
+  damage: 200
+  headshotMultiplier: 2.5
+  fireRate: 60
+  timeToADS: 1.5
+  aimingFOV: 55
+  ADSCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isAutomatic: 0
+  isScoped: 0
+  scopeOverlay: {fileID: 0}
+  isProjectile: 1
+  projectile: {fileID: 1849819198618100, guid: 8c075030aa3dabd4bbe965ca3f54a42c, type: 3}
+  projectileInitalVelocity: 35
+  fireSFX:
+  - {fileID: 8300000, guid: fa058034e4ca16c43a3ef6e17e43d667, type: 3}
+  fullReloadSFX: {fileID: 8300000, guid: aeb5e01a260114f4391089be7ca23888, type: 3}
+  reloadStartSFX: {fileID: 0}
+  insertShellSFX: {fileID: 0}
+  reloadEndSFX: {fileID: 0}
+  equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  reloadStartAnimLength: 0
+  reloadShellAnimLength: 0
+  reloadEndAnimLength: 0
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  ADSRecoilX: 0
+  ADSRecoilY: 0
+  ADSRecoilZ: 0
+  canUseSightAttachment: 1
+  canUseMagAttachment: 1
+  canUseMuzzleAttachment: 1
+  canUseStockAttachment: 1

@@ -11,7 +11,7 @@ public class ZombieSpawnManager : MonoBehaviour
 
     [SerializeField] List<ZombieSpawnPoint> activeSpawnPoints = new List<ZombieSpawnPoint>();
     [SerializeField] List<ZombieSpawnPoint> startingSpawnPoints = new List<ZombieSpawnPoint>();
-    [SerializeField] GameObject zombieObj;
+    [SerializeField] GameObject walkingZombie, runningZombie, sprintingZombie;
     [SerializeField] Transform zombieParent;
     [SerializeField] int maxNumberOfAliveZombies, startingAmountToSpawn;
     [SerializeField] float zombieSpawnCooldown;
@@ -87,26 +87,37 @@ public class ZombieSpawnManager : MonoBehaviour
             remaningAmountToSpawn--;
 
             aliveZombies++;
+            GameObject zombieToSpawn = walkingZombie;
+
+            if (currentRound >= 8)
+            {
+                zombieToSpawn = sprintingZombie;
+            }
+            else if(currentRound >= 3 && currentRound < 8)
+            {
+                zombieToSpawn = runningZombie;
+            }
+
             int rand = UnityEngine.Random.Range(0, activeSpawnPoints.Count);
 
             if (zombieParent)
             {
-                if (rand < activeSpawnPoints.Count - 1)
-                {
-                    GameObject clone = Instantiate(zombieObj, activeSpawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
+                //if (rand < activeSpawnPoints.Count - 1)
+                //{
+                    GameObject clone = Instantiate(zombieToSpawn, activeSpawnPoints[rand].transform.position, Quaternion.identity, zombieParent);
                     if(clone.TryGetComponent<ZombieHealth>(out ZombieHealth zombieHealth))
                     {
                         zombieHealth.SetHealth(100 + (currentRound * 10));
                     }
-                }
-                else
-                {
-                    GameObject clone = Instantiate(zombieObj, activeSpawnPoints[0].transform.position, Quaternion.identity, zombieParent);
-                    if (clone.TryGetComponent<ZombieHealth>(out ZombieHealth zombieHealth))
-                    {
-                        zombieHealth.SetHealth(100 + (currentRound * 10));
-                    }
-                }
+                //}
+                //else
+                //{
+                //    GameObject clone = Instantiate(zombieToSpawn, activeSpawnPoints[0].transform.position, Quaternion.identity, zombieParent);
+                //    if (clone.TryGetComponent<ZombieHealth>(out ZombieHealth zombieHealth))
+                //    {
+                //        zombieHealth.SetHealth(100 + (currentRound * 10));
+                //    }
+                //}
 
             }
 
@@ -116,10 +127,10 @@ public class ZombieSpawnManager : MonoBehaviour
 
     void UpdateSpawnPoint(ZombieSpawnPoint spawnPointToUpdate, bool _isSpawnPointActive)
     {
-        if(_isSpawnPointActive)
+        if(_isSpawnPointActive && !activeSpawnPoints.Contains(spawnPointToUpdate))
             activeSpawnPoints.Add(spawnPointToUpdate);
-        else
-            activeSpawnPoints.Remove(spawnPointToUpdate);
+        //else
+        //    activeSpawnPoints.Remove(spawnPointToUpdate);
     }
 
     IEnumerator SpawnCooldown()

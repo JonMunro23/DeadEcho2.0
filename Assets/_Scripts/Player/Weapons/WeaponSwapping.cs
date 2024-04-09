@@ -10,16 +10,16 @@ public class WeaponSwapping : MonoBehaviour
 
     [SerializeField] GameObject primaryWeapon1Holder, primaryWeapon2Holder, secondaryWeaponHolder;
 
-    public Weapon currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
+    public WeaponData currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
     public GameObject currentPrimary1WeaponObj, currentPrimary2WeaponObj, currentSecondaryWeaponObj;
 
-    public Weapon startingSecondaryWeapon;
+    public WeaponData startingSecondaryWeapon;
 
     public List<GameObject> currentlyEquippedWeaponsList = new List<GameObject>();
 
     //1 == primary1, 2 == primary2, 3 == secondary
     public int currentlyEquippedWeaponSlot;
-    public Weapon currentlyEquippedWeapon;
+    public WeaponData currentlyEquippedWeapon;
     public GameObject currentlyEquippedWeaponObj;
 
     [Header("Weapon Inventory")]
@@ -79,10 +79,10 @@ public class WeaponSwapping : MonoBehaviour
         }
     }
 
-    public void PickUpWeapon(Weapon weaponToPickup)
+    public void PickUpWeapon(WeaponData weaponToPickup)
     {
 
-        if (weaponToPickup.weaponSlotType == Weapon.WeaponSlotType.primary)
+        if (weaponToPickup.weaponSlotType == WeaponData.WeaponSlotType.primary)
         {
             if (!currentPrimary1Weapon)
             {
@@ -97,7 +97,7 @@ public class WeaponSwapping : MonoBehaviour
                 ExchangePrimaryWeapon(weaponToPickup);
             }
         }
-        else if (weaponToPickup.weaponSlotType == Weapon.WeaponSlotType.secondary)
+        else if (weaponToPickup.weaponSlotType == WeaponData.WeaponSlotType.secondary)
         {
 
             if (!currentSecondaryWeapon)
@@ -114,7 +114,7 @@ public class WeaponSwapping : MonoBehaviour
     }
 
 
-    void ExchangePrimaryWeapon(Weapon newWeapon)
+    void ExchangePrimaryWeapon(WeaponData newWeapon)
     {
         switch (currentlyEquippedWeaponSlot)
         {
@@ -134,7 +134,7 @@ public class WeaponSwapping : MonoBehaviour
         }
 
     }
-    void ExchangeSecondaryWeapon(Weapon newWeapon)
+    void ExchangeSecondaryWeapon(WeaponData newWeapon)
     {
         DestroyPreviousWeapon(3);
         SpawnNewWeapon(newWeapon, 3);
@@ -159,7 +159,7 @@ public class WeaponSwapping : MonoBehaviour
         }
     }
 
-    void SpawnNewWeapon(Weapon weaponToSpawn, int weaponSlot)
+    void SpawnNewWeapon(WeaponData weaponToSpawn, int weaponSlot)
     {
         if (currentlyEquippedWeaponObj)
         {
@@ -234,7 +234,6 @@ public class WeaponSwapping : MonoBehaviour
                     currentlyEquippedWeapon = currentPrimary1Weapon;
                     currentlyEquippedWeaponObj = currentPrimary1WeaponObj;
                     primaryWeapon1Holder.SetActive(true);
-                    //PlayerMovement.instance.animator = currentlyEquippedWeaponObj.GetComponent<Animator>();
                 }
                 break;
             case 2:
@@ -244,7 +243,6 @@ public class WeaponSwapping : MonoBehaviour
                     currentlyEquippedWeapon = currentPrimary2Weapon;
                     currentlyEquippedWeaponObj = currentPrimary2WeaponObj;
                     primaryWeapon2Holder.SetActive(true);
-                    //PlayerMovement.instance.animator = currentlyEquippedWeaponObj.GetComponent<Animator>();
                 }
                 break;
             case 3:
@@ -254,14 +252,12 @@ public class WeaponSwapping : MonoBehaviour
                     currentlyEquippedWeapon = currentSecondaryWeapon;
                     currentlyEquippedWeaponObj = currentSecondaryWeaponObj;
                     secondaryWeaponHolder.SetActive(true);
-                    //PlayerMovement.instance.animator = currentlyEquippedWeaponObj.GetComponent<Animator>();
                 }
                 break;
         }
         weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-        //currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().ApplyUpgradeModifiers();
         onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
     }
 

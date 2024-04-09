@@ -1,9 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class zombieOffNavMeshLink : MonoBehaviour
 {
+    [SerializeField]
+    SplineContainer navLinkSpline;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -12,5 +15,12 @@ public class zombieOffNavMeshLink : MonoBehaviour
         {
             meme.enabled = false;
         }
+    }
+
+    void GenerateSplinePath()
+    {
+        Spline linkSpline = new Spline();
+       // linkSpline.Add();
+        navLinkSpline.AddSpline(linkSpline);
     }
 }
