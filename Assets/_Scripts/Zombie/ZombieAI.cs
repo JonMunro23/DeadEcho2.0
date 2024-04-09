@@ -13,7 +13,7 @@ public class ZombieAI : MonoBehaviour
     public float distanceToPerformMeleeAttack;
     [SerializeField] float minTimeBetweenGrowls, maxTimeBetweenGrowls;
     public int damage;
-    public bool isDead, isMoving, isAttacking, canPerformMeleeAttack = true, seekPlayer = true, canGrowl;
+    public bool isDead, isMoving, canPerformMeleeAttack = true, seekPlayer = true, canGrowl;
 
     AudioSource zombieAudioSource;
     [SerializeField]
@@ -97,7 +97,12 @@ public class ZombieAI : MonoBehaviour
         }
     }
 
-
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawSphere(leftMeleePos.position, meleeRange);
+    //    Gizmos.DrawSphere(rightMeleePos.position, meleeRange);
+    //    Gizmos.color = Color.yellow;
+    //}
 
     void SyncAnimatiorAndAgent()
     {
@@ -159,33 +164,12 @@ public class ZombieAI : MonoBehaviour
         StartCoroutine(MeleeAttackCooldown());
     }
 
-    void EnableLeftHandMeleeCollider()
+    void CheckForHit()
     {
-        leftMeleePos.GetComponent<Collider>().enabled = true;
-    }
-
-    void DisableLeftHandMeleeCollider()
-    {
-        leftMeleePos.GetComponent<Collider>().enabled = false;
-    }
-
-    void EnableRightHandMeleeCollider()
-    {
-        rightMeleePos.GetComponent<Collider>().enabled = true;
-    }
-
-    void DisableRightHandMeleeCollider()
-    {
-        rightMeleePos.GetComponent<Collider>().enabled = false;
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        Debug.Log("Yeet");
-        if(other.CompareTag("Player"))
-        {
-            other.GetComponent<PlayerHealth>().TakeDamage(damage);
-        }
+        if (animator.GetInteger("MeleeAttackIndex") == 0 || animator.GetInteger("MeleeAttackIndex") == 1)
+            CheckForRightHandHit();
+        else
+            CheckForLeftHandHit();
     }
 
     void CheckForLeftHandHit()
@@ -194,9 +178,9 @@ public class ZombieAI : MonoBehaviour
         colliders = Physics.OverlapSphere(leftMeleePos.position, meleeRange);
         foreach (Collider collider in colliders)
         {
-            if (collider.CompareTag("Player"))
+            if (collider.CompareTag("PlayerBody"))
             {
-                collider.GetComponent<PlayerHealth>().TakeDamage(damage);
+                collider.GetComponentInParent<PlayerHealth>().TakeDamage(damage);
             }
         }
     }
@@ -207,9 +191,9 @@ public class ZombieAI : MonoBehaviour
         colliders = Physics.OverlapSphere(rightMeleePos.position, meleeRange);
         foreach (Collider collider in colliders)
         {
-            if (collider.CompareTag("Player"))
+            if (collider.CompareTag("PlayerBody"))
             {
-                collider.GetComponent<PlayerHealth>().TakeDamage(damage);
+                collider.GetComponentInParent<PlayerHealth>().TakeDamage(damage);
             }
         }
     }

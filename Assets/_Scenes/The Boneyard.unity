@@ -53407,10 +53407,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3681153510122642189, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: m_TagString
+      value: PlayerBody
+      objectReference: {fileID: 0}
     - target: {fileID: 4208324484240436933, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
       propertyPath: lowHealthOverlay
       value: 
       objectReference: {fileID: 661995377}
+    - target: {fileID: 4208324484240436933, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: invincibilityLength
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5882179577331821263, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
