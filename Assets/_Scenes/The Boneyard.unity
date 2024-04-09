@@ -59540,10 +59540,14 @@ PrefabInstance:
     - target: {fileID: 1491499456446127384, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: walkingZombie
       value: 
-      objectReference: {fileID: 172121580578702208, guid: e21331f162ed6d9499231edbba92e6d2, type: 3}
+      objectReference: {fileID: 172121580578702208, guid: b5d4d5c7ed9254c448a615606e29a455, type: 3}
+    - target: {fileID: 1491499456446127384, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
+      propertyPath: sprintingZombie
+      value: 
+      objectReference: {fileID: 172121580578702208, guid: 646f99252ee7f50459314dddf27a348d, type: 3}
     - target: {fileID: 1491499456446127384, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: maxNumberOfAliveZombies
-      value: 1
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1491499456446127384, guid: eebeb8d1da6a21e49b4b6e123cdae300, type: 3}
       propertyPath: startingSpawnPoints.Array.data[0]

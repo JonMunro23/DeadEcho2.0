@@ -138,9 +138,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  walkingZombie: {fileID: 172121580578702208, guid: a80170f99a961b74f8e914cec6999d7a, type: 3}
+  walkingZombie: {fileID: 172121580578702208, guid: b5d4d5c7ed9254c448a615606e29a455, type: 3}
   runningZombie: {fileID: 172121580578702208, guid: e21331f162ed6d9499231edbba92e6d2, type: 3}
-  sprintingZombie: {fileID: 172121580578702208, guid: b5bc2ea444e557045921c245cd558f59, type: 3}
+  sprintingZombie: {fileID: 172121580578702208, guid: 646f99252ee7f50459314dddf27a348d, type: 3}
   zombieParent: {fileID: 0}
   maxNumberOfAliveZombies: 60
   startingAmountToSpawn: 8
@@ -549,7 +549,7 @@ MonoBehaviour:
   - {fileID: 4045478466513652942, guid: 44fc5110a9eefc0409a79165539f1732, type: 3}
   powerUpUIElement: {fileID: 2048807792859048983, guid: c237ff9bf5077cf4892541d0a4165069, type: 3}
   activePowerUpContainer: {fileID: 0}
-  powerUpDuration: 30
+  powerUpDuration: 10
 --- !u!1 &8060153358141915584
 GameObject:
   m_ObjectHideFlags: 0
