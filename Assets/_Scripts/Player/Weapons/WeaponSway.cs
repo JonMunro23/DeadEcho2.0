@@ -40,6 +40,9 @@ public class WeaponSway : MonoBehaviour
     [Header("Bob Rotation")]
     public Vector3 multiplier;
     Vector3 bobEulerRotation;
+
+    Vector3 startPos;
+
     private void OnEnable()
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
@@ -54,7 +57,7 @@ public class WeaponSway : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        startPos = transform.localPosition;
     }
 
     // Update is called once per frame
@@ -109,7 +112,7 @@ public class WeaponSway : MonoBehaviour
 
     void CompositePositionRotation()
     {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition, Time.deltaTime * smooth);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + startPos, Time.deltaTime * smooth);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
     }
 
