@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering;
-using static UnityEngine.GraphicsBuffer;
 
 public class ZombieAI : MonoBehaviour
 {
@@ -11,7 +8,7 @@ public class ZombieAI : MonoBehaviour
     public NavMeshAgent agent;
     Animator animator;
     [SerializeField]
-    Transform meleePos, playerPosition;
+    Transform leftMeleePos, rightMeleePos, playerPosition;
     public float speed, meleeCooldown, meleePerformTime, meleeRange;
     public float distanceToPerformMeleeAttack;
     [SerializeField] float minTimeBetweenGrowls, maxTimeBetweenGrowls;
@@ -22,7 +19,8 @@ public class ZombieAI : MonoBehaviour
     [SerializeField]
     AudioClip[] zombieGrowlAudioClips, zombieAttackingAudioClips;
 
-
+    Vector2 velocity;
+    Vector2 SmoothDeltaPosition;
     private void OnEnable()
     {
         PlayerHealth.onDeath += SetIdle;
@@ -41,6 +39,10 @@ public class ZombieAI : MonoBehaviour
         animator = GetComponent<Animator>();
         zombieAudioSource = GetComponent<AudioSource>();
         StartCoroutine(GrowlCooldown());
+
+        animator.applyRootMotion = true;
+        agent.updatePosition = false;
+        agent.updateRotation = true;
     }
 
     // Start is called before the first frame update
@@ -48,7 +50,16 @@ public class ZombieAI : MonoBehaviour
     {
         agent.speed = speed;
         agent.height = 1.82f;
-        agent.baseOffset = -.065f;
+        //GetComponent<AgentLinkMover>().StartCoroutine(Start());
+        //agent.baseOffset = -.065f;
+    }
+
+    private void OnAnimatorMove()
+    {
+        Vector3 rootPosition = animator.rootPosition;
+        rootPosition.y = agent.nextPosition.y;
+        transform.position = rootPosition;
+        agent.nextPosition = rootPosition;
     }
 
     // Update is called once per frame
@@ -56,6 +67,8 @@ public class ZombieAI : MonoBehaviour
     {
         if (zombieHealth.isDead)
             return;
+
+        SyncAnimatiorAndAgent();
 
         if (canGrowl)
             Growl();
@@ -84,6 +97,38 @@ public class ZombieAI : MonoBehaviour
         }
     }
 
+
+
+    void SyncAnimatiorAndAgent()
+    {
+        Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
+        worldDeltaPosition.y = 0;
+
+        float dx = Vector3.Dot(transform.right, worldDeltaPosition);
+        float dy = Vector3.Dot(transform.forward, worldDeltaPosition);
+        Vector2 deltaPosition = new Vector2(dx, dy);
+
+        float smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
+        SmoothDeltaPosition = Vector2.Lerp(SmoothDeltaPosition, deltaPosition, smooth);
+
+        velocity = SmoothDeltaPosition / Time.deltaTime;
+        if(agent.remainingDistance <= agent.stoppingDistance)
+        {
+            velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
+        }
+
+        bool shouldMove = velocity.magnitude > .5f && agent.remainingDistance > agent.stoppingDistance;
+
+        animator.SetBool("IsMoving", shouldMove);
+        animator.SetFloat("locomotion", velocity.magnitude);
+
+        float deltaMagnitude = worldDeltaPosition.magnitude;
+        if(deltaMagnitude > agent.radius / 2f)
+        {
+            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
+        }
+    }
+
     void HaltMovement()
     {
         isMoving = false;
@@ -107,30 +152,66 @@ public class ZombieAI : MonoBehaviour
     void MeleeAttack()
     {
         canPerformMeleeAttack = false;
-        animator.SetTrigger("MeleeAttack");
+        int rand = Random.Range(0, 4);
+        animator.SetInteger("MeleeAttackIndex", rand);
+        animator.Play("MeleeAttack", 2);
         PlayAttackAudio();
         StartCoroutine(MeleeAttackCooldown());
     }
 
-    void CheckForHit()
+    void EnableLeftHandMeleeCollider()
+    {
+        leftMeleePos.GetComponent<Collider>().enabled = true;
+    }
+
+    void DisableLeftHandMeleeCollider()
+    {
+        leftMeleePos.GetComponent<Collider>().enabled = false;
+    }
+
+    void EnableRightHandMeleeCollider()
+    {
+        rightMeleePos.GetComponent<Collider>().enabled = true;
+    }
+
+    void DisableRightHandMeleeCollider()
+    {
+        rightMeleePos.GetComponent<Collider>().enabled = false;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("Yeet");
+        if(other.CompareTag("Player"))
+        {
+            other.GetComponent<PlayerHealth>().TakeDamage(damage);
+        }
+    }
+
+    void CheckForLeftHandHit()
     {
         Collider[] colliders;
-        colliders = Physics.OverlapSphere(meleePos.position, meleeRange);
+        colliders = Physics.OverlapSphere(leftMeleePos.position, meleeRange);
         foreach (Collider collider in colliders)
         {
             if (collider.CompareTag("Player"))
             {
                 collider.GetComponent<PlayerHealth>().TakeDamage(damage);
-                Debug.Log("Hit Player");
             }
         }
     }
 
-    void OnDrawGizmosSelected()
+    void CheckForRightHandHit()
     {
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(meleePos.position, meleeRange);
+        Collider[] colliders;
+        colliders = Physics.OverlapSphere(rightMeleePos.position, meleeRange);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.CompareTag("Player"))
+            {
+                collider.GetComponent<PlayerHealth>().TakeDamage(damage);
+            }
+        }
     }
 
     IEnumerator MeleeAttackCooldown()

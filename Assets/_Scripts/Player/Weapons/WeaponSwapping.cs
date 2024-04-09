@@ -234,7 +234,6 @@ public class WeaponSwapping : MonoBehaviour
                     currentlyEquippedWeapon = currentPrimary1Weapon;
                     currentlyEquippedWeaponObj = currentPrimary1WeaponObj;
                     primaryWeapon1Holder.SetActive(true);
-                    //PlayerMovement.instance.animator = currentlyEquippedWeaponObj.GetComponent<Animator>();
                 }
                 break;
             case 2:
@@ -244,7 +243,6 @@ public class WeaponSwapping : MonoBehaviour
                     currentlyEquippedWeapon = currentPrimary2Weapon;
                     currentlyEquippedWeaponObj = currentPrimary2WeaponObj;
                     primaryWeapon2Holder.SetActive(true);
-                    //PlayerMovement.instance.animator = currentlyEquippedWeaponObj.GetComponent<Animator>();
                 }
                 break;
             case 3:
@@ -254,14 +252,12 @@ public class WeaponSwapping : MonoBehaviour
                     currentlyEquippedWeapon = currentSecondaryWeapon;
                     currentlyEquippedWeaponObj = currentSecondaryWeaponObj;
                     secondaryWeaponHolder.SetActive(true);
-                    //PlayerMovement.instance.animator = currentlyEquippedWeaponObj.GetComponent<Animator>();
                 }
                 break;
         }
         weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
         currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-        //currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().ApplyUpgradeModifiers();
         onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
     }
 

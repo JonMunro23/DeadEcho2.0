@@ -45,7 +45,7 @@ public class WeaponShooting : MonoBehaviour
     public static event Action<int, int> onAmmoUpdated;
     public static event Action<bool> onWeaponFired;
 
-    bool isInstantKillActive, isBottomlessClipActive;
+    [SerializeField] bool isInstantKillActive, isBottomlessClipActive;
     bool stopShellByShellReload;
 
     public bool IsADSToggle;
@@ -71,7 +71,6 @@ public class WeaponShooting : MonoBehaviour
         BottomlessClip.onBottomlessClipGrabbed += EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded += DisableInstantKills;
         PowerUpManager.onBottomlessClipEnded += DisableBottomlessClip;
-        //PlayerStats.onUpgradeApplied += ApplyUpgradeModifiers;
     }
 
     private void OnDisable()
@@ -84,7 +83,6 @@ public class WeaponShooting : MonoBehaviour
         BottomlessClip.onBottomlessClipGrabbed -= EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded -= DisableInstantKills;
         PowerUpManager.onBottomlessClipEnded -= DisableBottomlessClip;
-        //PlayerStats.onUpgradeApplied -= ApplyUpgradeModifiers;
     }
 
     public void InitialiseWeapon(WeaponData weaponToInitialise)
@@ -121,21 +119,8 @@ public class WeaponShooting : MonoBehaviour
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         CheckInstantKillStatus();
         CheckBottomlessClipStatus();
-
-        //ApplyUpgradeModifiers();
     }
 
-    //public void ApplyUpgradeModifiers()
-    //{
-    //    fireRate += fireRate * PlayerStats.fireRateModifier;
-    //    damage += Mathf.RoundToInt(damage * PlayerStats.damageModifier);
-
-    //    reloadSpeedMultiplier += PlayerStats.reloadSpeedModifier;
-    //    weaponAnimator.SetFloat("reloadSpeedMultiplier", reloadSpeedMultiplier);
-    //    reloadSpeed -= reloadSpeed * PlayerStats.reloadSpeedModifier;
-
-    //    Debug.Log("upgrades applied");
-    //}
 
     public void CheckInstantKillStatus()
     {
@@ -290,12 +275,12 @@ public class WeaponShooting : MonoBehaviour
                             {
                                 if (hit.transform.CompareTag("ZombieHead"))
                                 {
-                                    float headshotDamage = (weaponBaseDamage + (weaponBaseDamage * PlayerUpgrades.damageModifier) * (headshotMultiplier + PlayerUpgrades.bonusheadshotMultiplier));
-                                    damageable.OnDamaged(Mathf.RoundToInt(headshotDamage), true);
+                                    float headshotDamage = (weaponBaseDamage + (weaponBaseDamage * PlayerUpgrades.weaponDamageModifier) * (headshotMultiplier + PlayerUpgrades.bonusheadshotMultiplier));
+                                    damageable.OnDamaged(Mathf.RoundToInt(headshotDamage), hit.transform.tag);
                                 }
                                 else
                                 {
-                                    damageable.OnDamaged(Mathf.RoundToInt(weaponBaseDamage + (weaponBaseDamage * PlayerUpgrades.damageModifier)), false);
+                                    damageable.OnDamaged(Mathf.RoundToInt(weaponBaseDamage + (weaponBaseDamage * PlayerUpgrades.weaponDamageModifier)), hit.transform.tag);
                                 }
 
                             }
@@ -568,6 +553,7 @@ public class WeaponShooting : MonoBehaviour
     void DisableInstantKills()
     {
         isInstantKillActive = false;
+        Debug.Log("Instant Kill Disabled");
     }
 
     void EnableBottomlessClip()
@@ -578,6 +564,7 @@ public class WeaponShooting : MonoBehaviour
     void DisableBottomlessClip()
     {
         isBottomlessClipActive = false;
+        Debug.Log("Bottomless Disabled");
     }
 
     IEnumerator PerShotCooldown()

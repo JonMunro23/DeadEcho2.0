@@ -82,6 +82,7 @@ Transform:
   - {fileID: 4675041389286521268}
   - {fileID: 8457273465846131292}
   - {fileID: 2744585320965636969}
+  - {fileID: 8777746299346085987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6565530754065279952
@@ -137,11 +138,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  zombieObj: {fileID: 172121580578702208, guid: 06afc9caa1c721b4da1d33eef1d1d668, type: 3}
+  walkingZombie: {fileID: 172121580578702208, guid: a80170f99a961b74f8e914cec6999d7a, type: 3}
+  runningZombie: {fileID: 172121580578702208, guid: e21331f162ed6d9499231edbba92e6d2, type: 3}
+  sprintingZombie: {fileID: 172121580578702208, guid: b5bc2ea444e557045921c245cd558f59, type: 3}
   zombieParent: {fileID: 0}
-  maxNumberOfAliveZombies: 20
+  maxNumberOfAliveZombies: 60
   startingAmountToSpawn: 8
-  zombieSpawnCooldown: 2
+  zombieSpawnCooldown: 1
   canSpawnZombies: 1
 --- !u!1 &6934477777443712108
 GameObject:
@@ -290,6 +293,60 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &7565455249846573246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8777746299346085987}
+  - component: {fileID: 3626653246366574325}
+  m_Layer: 0
+  m_Name: PlayerUpgrades
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8777746299346085987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565455249846573246}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3928184490971590666}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3626653246366574325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565455249846573246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f99af350aa4e754885c83e1e7f2baa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allUpgradeData:
+  - {fileID: 11400000, guid: 5985f460a64f4f84eba23e8917440307, type: 2}
+  - {fileID: 11400000, guid: 8b4a79ee904f63a4bb5827fd24313a80, type: 2}
+  - {fileID: 11400000, guid: 2bfcc2dc16a82ee40a2a92ae5bdc293c, type: 2}
+  - {fileID: 11400000, guid: ca95b3c61733a9b4b97fc12782b46b61, type: 2}
+  - {fileID: 11400000, guid: 05d94fe3c9c17e24d8b050f2f19dce9d, type: 2}
+  - {fileID: 11400000, guid: 0efaf09510dd27248abb4cacfb6edeab, type: 2}
+  - {fileID: 11400000, guid: 1d749a0324f284b43bdf7622c0111f39, type: 2}
+  availableUpgrades: []
+  collectedUpgrades: []
 --- !u!1 &7616032671261032112
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,7 +548,6 @@ MonoBehaviour:
   - {fileID: 4045478466513652942, guid: 836b80bd546edaf45af7c14db9bbbbe4, type: 3}
   - {fileID: 4045478466513652942, guid: 44fc5110a9eefc0409a79165539f1732, type: 3}
   powerUpUIElement: {fileID: 2048807792859048983, guid: c237ff9bf5077cf4892541d0a4165069, type: 3}
-  powerUpNameText: {fileID: 0}
   activePowerUpContainer: {fileID: 0}
   powerUpDuration: 30
 --- !u!1 &8060153358141915584
@@ -683,6 +739,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addMoreCash: 51
   currentPoints: 0
-  startingPointsValue: 1000
+  startingPointsValue: 100000
   gainedPointsTextSpawnLocation: {fileID: 0}
   gainedPointsText: {fileID: 6191365265559086262, guid: 7a9dbac811d6ac948963d6ba8645ff6c, type: 3}

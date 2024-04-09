@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f0fea8f629456e4784edab7a2a539fb, type: 3}
+  m_Name: MaxHealthUp
+  m_EditorClassIdentifier: 
+  name: Max Health Up
+  description: Increase Max Health by 25%
+  upgradeRarity: 0
+  imageSprite: {fileID: 21300000, guid: 002cf14d583b14a8e86ff64e538f4915, type: 3}
+  maxUpgradeLevel: 4
+  weaponStats: []
+  playerStats:
+  - statToModify: 2
+    modifyAmount: 0.25

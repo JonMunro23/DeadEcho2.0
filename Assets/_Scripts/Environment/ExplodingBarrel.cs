@@ -57,7 +57,7 @@ public class ExplodingBarrel : MonoBehaviour
                 float proximity = (transform.position - collider.transform.position).magnitude;
                 float effect = 1 - (proximity / blastRadius);
                 int damageTaken = Mathf.RoundToInt(damage * effect);
-                collider.GetComponentInParent<ZombieHealth>().TakeDamage(damageTaken, false);
+                collider.GetComponentInParent<ZombieHealth>().TakeDamage(damageTaken, collider.tag);
             }
             //else if (collider.CompareTag("ExplodingBarrel"))
             //{

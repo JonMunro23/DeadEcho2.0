@@ -12,6 +12,14 @@ public class Scoreboard : MonoBehaviour
     [Space]
     [SerializeField]
     GameObject scoreBoard;
+
+    [SerializeField]
+    Transform collectedUpgradesParent;
+    [SerializeField]
+    CollectedUpgradeUIElement collectedUpgradeUIElement;
+
+    List<CollectedUpgradeUIElement> spawnedCollectedUpgradeUIElements = new List<CollectedUpgradeUIElement>();
+
     [SerializeField]
     PlayerScoreboardRow playerScoreboardRow;
 
@@ -61,6 +69,26 @@ public class Scoreboard : MonoBehaviour
         clone.AddScore(PointsManager.instance.currentPoints);
     }
 
+    void SpawnCollectedUpgrades()
+    {
+        List<Upgrade> collectedUpgrades = PlayerUpgrades.Instance.GetCollectedUpgrades();
+        foreach (Upgrade upgrade in collectedUpgrades)
+        {
+            CollectedUpgradeUIElement clone = Instantiate(collectedUpgradeUIElement, collectedUpgradesParent);
+            clone.Init(upgrade);
+            spawnedCollectedUpgradeUIElements.Add(clone);
+        }
+    }
+
+    void RemoveSpawnedCollectedUpgradeUIElements()
+    {
+        foreach (CollectedUpgradeUIElement UIElement in spawnedCollectedUpgradeUIElements)
+        {
+            Destroy(UIElement.gameObject);
+        }
+        spawnedCollectedUpgradeUIElements.Clear();
+    }
+
     private void Update()
     {
         if(!PauseMenu.isPaused)
@@ -86,10 +114,12 @@ public class Scoreboard : MonoBehaviour
     {
         isScoreboardOpen = true;
         scoreBoard.SetActive(true);
+        SpawnCollectedUpgrades();
     }
     void CloseScoreboard()
     {
         isScoreboardOpen = false;
+        RemoveSpawnedCollectedUpgradeUIElements();
         scoreBoard.SetActive(false);
     }
     public void UpdateScore(int playerIndex, int scoreToAdd)

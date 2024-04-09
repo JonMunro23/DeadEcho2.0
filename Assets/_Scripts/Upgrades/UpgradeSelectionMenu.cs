@@ -13,7 +13,7 @@ public class UpgradeSelectionMenu : MonoBehaviour
     [SerializeField]
     Transform upgradeSpawnParent;
 
-    List<UpgradeData> possibleUpgrades = new List<UpgradeData>();
+    List<Upgrade> possibleUpgrades = new List<Upgrade>();
 
     public List<UpgradeUIElement> generatedUpgrades = new List<UpgradeUIElement>();
 
@@ -68,10 +68,11 @@ public class UpgradeSelectionMenu : MonoBehaviour
 
     void GenerateNewUpgrades()
     {
-        RefreshAvailableUpgrades();
-        if (possibleUpgrades.Count < numberOfUpgradeSelections)
+        possibleUpgrades.AddRange(PlayerUpgrades.Instance.availableUpgrades);
+
+        if (PlayerUpgrades.Instance.availableUpgrades.Count < numberOfUpgradeSelections)
         {
-            for (int i = 0; i < possibleUpgrades.Count; i++)
+            for (int i = 0; i < PlayerUpgrades.Instance.availableUpgrades.Count; i++)
             {
                 UpgradeUIElement clone = Instantiate(upgradeUIElement, upgradeSpawnParent);
                 generatedUpgrades.Add(clone);
@@ -112,18 +113,10 @@ public class UpgradeSelectionMenu : MonoBehaviour
         }
     }
 
-    public void RefreshAvailableUpgrades()
+    Upgrade GetUpgrade()
     {
-        possibleUpgrades.Clear();
-        possibleUpgrades.AddRange(PlayerUpgrades.Instance.availableUpgrades);
-    }
-
-    UpgradeData GetUpgrade()
-    {
-
-
         int rand = Random.Range(0, possibleUpgrades.Count);
-        UpgradeData upgradeToReturn = possibleUpgrades[rand];
+        Upgrade upgradeToReturn = possibleUpgrades[rand];
 
         possibleUpgrades.Remove(upgradeToReturn);
 

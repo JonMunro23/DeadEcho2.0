@@ -12,22 +12,22 @@ public class UpgradeUIElement : MonoBehaviour
     [SerializeField]
     Image image;
 
-    UpgradeData upgrade;
+    Upgrade upgrade;
     UpgradeSelectionMenu upgradeMenu;
 
-    public void Init(UpgradeData _upgradeToInit, UpgradeSelectionMenu _upgradeMenu)
+    public void Init(Upgrade _upgradeToInit, UpgradeSelectionMenu _upgradeMenu)
     {
         upgrade = _upgradeToInit;
         upgradeMenu = _upgradeMenu;
 
-        if (_upgradeToInit.maxUpgradeLevel != 0)
-            rank.text = "Rank : " + PlayerUpgrades.Instance.GetCurrentUpgradeRank(_upgradeToInit).ToString() + " / " + _upgradeToInit.maxUpgradeLevel;
+        if (_upgradeToInit.upgradeData.maxUpgradeLevel != 0)
+            rank.text = "Rank : " + _upgradeToInit.currentUpgradeLevel + " / " + _upgradeToInit.upgradeData.maxUpgradeLevel;
         else
-            rank.text = "Rank : " + PlayerUpgrades.Instance.GetCurrentUpgradeRank(_upgradeToInit).ToString();
+            rank.text = "Rank : " + _upgradeToInit.currentUpgradeLevel;
 
-        name.text = _upgradeToInit.name;
-        description.text = _upgradeToInit.description;
-        image.sprite = _upgradeToInit.imageSprite;
+        name.text = _upgradeToInit.upgradeData.name;
+        description.text = _upgradeToInit.upgradeData.description;
+        image.sprite = _upgradeToInit.upgradeData.imageSprite;
     }
 
     public void SelectUpgrade()

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f0fea8f629456e4784edab7a2a539fb, type: 3}
+  m_Name: FireRateUp
+  m_EditorClassIdentifier: 
+  name: Fire Rate Up
+  description: Increase fire rate by 10%
+  upgradeRarity: 0
+  imageSprite: {fileID: 21300000, guid: 007c6183751174e4b9d1e2251ed1a43b, type: 3}
+  maxUpgradeLevel: 0
+  weaponStats:
+  - statToModify: 2
+    affectedWeaponType: 0
+    modifyAmount: 0.1
+  playerStats: []

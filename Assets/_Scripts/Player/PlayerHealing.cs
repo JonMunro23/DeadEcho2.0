@@ -59,7 +59,7 @@ public class PlayerHealing : MonoBehaviour
     {
         if (Input.GetKeyDown(healKey))
         {
-            if(canHeal && playerHealth.currentHealth < playerHealth.maxHealth)
+            if(canHeal && playerHealth.currentHealth < playerHealth.currentMaxHealth)
             {
                 canHeal = false;
                 onSyringeUsed?.Invoke();
