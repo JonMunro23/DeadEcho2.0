@@ -1,32 +1,28 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class activePowerUpUIElement : MonoBehaviour
+public class ActivePowerUpUIElement : MonoBehaviour
 {
     public int powerUpDuration;
-
-    Action endAction;
-
-    Coroutine activeCoroutine;
-
     [SerializeField]
     Transform UIParent;
     [SerializeField]
     Image spriteIcon;
-
     [SerializeField]
     TMP_Text text;
 
-    public void Init(int _powerUpDuration, Sprite powerUpIconSprite ,Action actionToInvokeAtEnd)
+    Action endAction;
+    Coroutine activeCoroutine;
+
+    public void Init(PowerUpData powerUpData, Action onPowerUpEnded)
     {
-        spriteIcon.sprite = powerUpIconSprite;
-        powerUpDuration = _powerUpDuration;
-        endAction = actionToInvokeAtEnd;
+        spriteIcon.sprite = powerUpData.UIIcon;
+        powerUpDuration = powerUpData.powerUpDuration;
+        endAction = onPowerUpEnded;
         UpdateText(powerUpDuration);
         activeCoroutine = StartCoroutine(StartPowerUpTimer(endAction));
         PlaySpawnAnimation();
@@ -57,7 +53,7 @@ public class activePowerUpUIElement : MonoBehaviour
         text.text = remainingTime.ToString();
     }
 
-    public IEnumerator StartPowerUpTimer(Action actionToInvokeAtEnd)
+    public IEnumerator StartPowerUpTimer(Action onPowerUpEnded)
     {
         int counter = powerUpDuration;
         while (counter > -1)
@@ -66,7 +62,7 @@ public class activePowerUpUIElement : MonoBehaviour
             yield return new WaitForSeconds(1);
             counter--;
         }
-        actionToInvokeAtEnd?.Invoke();
+        onPowerUpEnded?.Invoke();
 
         Destroy(gameObject);
     }

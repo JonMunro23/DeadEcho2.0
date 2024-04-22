@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MP7
   m_EditorClassIdentifier: 
   weaponSlotType: 0
-  weaponType: 1
+  weaponType: 0
   reloadType: 0
   name: MP7
   description: 
@@ -26,6 +26,7 @@ MonoBehaviour:
   bulletPenConfig: {fileID: 0}
   weaponSpawnPos: {x: 0.0039, y: -0.0035, z: 0.0038}
   gunBoneAimingPos: {x: -0.0039, y: 0.0136, z: 0.02}
+  hasLaserSight: 1
   UISprite: {fileID: 0}
   infiniteAmmo: 0
   magSize: 60
@@ -64,7 +65,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   isAutomatic: 1
   isScoped: 0
-  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
   projectileInitalVelocity: 0

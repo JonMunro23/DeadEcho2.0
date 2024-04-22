@@ -7,7 +7,8 @@ public class WeaponData : ScriptableObject
     public enum WeaponSlotType
     {
         primary,
-        secondary
+        secondary,
+        powerUp
     };
     public WeaponSlotType weaponSlotType;
 
@@ -43,6 +44,8 @@ public class WeaponData : ScriptableObject
 
     public Vector3 weaponSpawnPos;
     public Vector3 gunBoneAimingPos;
+
+    public bool hasLaserSight;
 
     public Sprite UISprite;
 

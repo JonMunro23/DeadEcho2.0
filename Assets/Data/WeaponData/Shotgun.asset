@@ -21,10 +21,14 @@ MonoBehaviour:
   weaponObj: {fileID: 1409424844601486, guid: 3f43a9c20d605da49979b66a5273f3df, type: 3}
   weaponWallBuyObj: {fileID: 1409424844601486, guid: f8de140166bc0c44892691442476e9ca, type: 3}
   UIObj: {fileID: 0}
+  armsController: {fileID: 0}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  defaultPos: {x: 0, y: -1.7, z: 0}
-  aimingPos: {x: 0, y: 0, z: 0}
+  bulletPenConfig: {fileID: 0}
+  weaponSpawnPos: {x: 0, y: 0, z: 0}
+  gunBoneAimingPos: {x: 0, y: 0, z: 0}
+  hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 1e521cefafd36614ebeb1607ef395659, type: 3}
+  infiniteAmmo: 0
   magSize: 6
   maxReserveAmmo: 48
   reloadSpeed: 2
@@ -61,7 +65,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   isAutomatic: 0
   isScoped: 0
-  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
   projectileInitalVelocity: 0

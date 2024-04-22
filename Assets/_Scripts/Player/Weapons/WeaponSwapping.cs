@@ -21,6 +21,9 @@ public class WeaponSwapping : MonoBehaviour
     [Header("Secondary Data")]
     public WeaponShooting currentSecondaryWeapon;
     public GameObject currentSecondaryWeaponObj;
+    [Header("PowerUp Weapon Data")]
+    public WeaponShooting currentPowerUpWeapon;
+    public GameObject currentPowerUpWeaponObj;
     [Space]
     public int currentActiveSlot;
 
@@ -39,15 +42,15 @@ public class WeaponSwapping : MonoBehaviour
 
     public static event Action<GameObject> onWeaponSwapped;
 
-    private void OnEnable()
-    {
-        MaxAmmo.onMaxAmmoGrabbed += RefillWeaponAmmunition;
-    }
+    //private void OnEnable()
+    //{
+    //    MaxAmmo.onMaxAmmoGrabbed += RefillWeaponAmmunition;
+    //}
 
-    private void OnDisable()
-    {
-        MaxAmmo.onMaxAmmoGrabbed -= RefillWeaponAmmunition;
-    }
+    //private void OnDisable()
+    //{
+    //    MaxAmmo.onMaxAmmoGrabbed -= RefillWeaponAmmunition;
+    //}
 
     private void Awake()
     {
@@ -146,6 +149,13 @@ public class WeaponSwapping : MonoBehaviour
                 FPSArmsAnimator.runtimeAnimatorController = currentSecondaryWeapon.weaponData.armsController;
                 weaponToSetActive = currentSecondaryWeaponObj;
                 break;
+            case 4:
+                AttachWeaponToGunBone(currentPowerUpWeaponObj.transform);
+                SetCurrentlyEquippedWeapon(currentPowerUpWeapon);
+                currentPowerUpWeaponObj.transform.localPosition = currentPowerUpWeapon.weaponData.weaponSpawnPos;
+                FPSArmsAnimator.runtimeAnimatorController = currentPowerUpWeapon.weaponData.armsController;
+                weaponToSetActive = currentPowerUpWeaponObj;
+                break;
         }
         onWeaponSwapped?.Invoke(weaponToSetActive);
     }
@@ -193,6 +203,14 @@ public class WeaponSwapping : MonoBehaviour
                 else
                     ExchangeWeaponInSlot(3, weaponToAssign);
 
+                break;
+            case WeaponData.WeaponSlotType.powerUp:
+                if (currentPowerUpWeapon == null)
+                {
+                    currentPowerUpWeapon = weaponToAssign;
+                    currentPowerUpWeaponObj = weaponToAssign.gameObject;
+                    currentPowerUpWeapon.weaponSlot = 4;
+                }
                 break;
         }
     }
@@ -265,11 +283,26 @@ public class WeaponSwapping : MonoBehaviour
         }
     }
 
+    public void GivePowerUpWeapon(WeaponData weaponToGive)
+    {
+        SpawnNewWeapon(weaponToGive);
+    }
+
+    public void RemovePowerUpWeapon()
+    {
+        if (currentPrimary1Weapon != null)
+            SwapToWeapon(1);
+        else if (currentPrimary2Weapon != null)
+            SwapToWeapon(2);
+        else 
+            SwapToWeapon(3);
+    }
+
     void ShowWeaponInventory()
     {
         weaponInventoryDisplayUI.SetActive(true);
         isWeaponInventoryDisplayOpen = true;
-        weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().Init(currentActiveSlot, currentSecondaryWeapon.weaponData, currentPrimary1Weapon != null ? currentPrimary1Weapon.weaponData : null, currentPrimary2Weapon != null ? currentPrimary2Weapon.weaponData : null);
+        //weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().Init(currentActiveSlot, currentSecondaryWeapon.weaponData, currentPrimary1Weapon != null ? currentPrimary1Weapon.weaponData : null, currentPrimary2Weapon != null ? currentPrimary2Weapon.weaponData : null);
         weaponInventoryDisplayUI.transform.DOScaleY(1, .2f).OnComplete(() =>
         {
             if(displayCounter != null)
@@ -311,8 +344,6 @@ public class WeaponSwapping : MonoBehaviour
         yield return new WaitForSeconds(reactivationTime);
         grenadeObjHolder.SetActive(false);
         ShowWeapon(currentlyEquippedWeaponObj, true, true);
-        currentlyEquippedWeapon.CheckInstantKillStatus();
-        currentlyEquippedWeapon.CheckBottomlessClipStatus();
     }
 
 }

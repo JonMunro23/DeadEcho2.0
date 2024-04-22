@@ -306,7 +306,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   orientation: {fileID: 819219961728615059}
-  animator: {fileID: 0}
   cameraPos: {fileID: 7370035124297081520}
   walkingMovementSpeed: 0
   currentVelocity: {x: 0, y: 0, z: 0}
@@ -1099,7 +1098,7 @@ GameObject:
   - component: {fileID: 6197907703445710885}
   m_Layer: 2
   m_Name: PlayerPickupRadius
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

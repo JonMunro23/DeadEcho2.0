@@ -50,7 +50,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
     void Start()
     {
         SetRigidbodyActive(false);
-        //SetHealth(1000000);
+        SetHealth(100);
         canPlayHitSFX = true;
         canPlayHitResponseAnim = true;
     }

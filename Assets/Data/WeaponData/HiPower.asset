@@ -26,6 +26,7 @@ MonoBehaviour:
   bulletPenConfig: {fileID: 0}
   weaponSpawnPos: {x: -0.0018, y: -0.0637, z: -0.0257}
   gunBoneAimingPos: {x: -0.0072, y: 0.0139, z: 0.019}
+  hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 86e14b86b0d58674e8c4cf27dbd0dd27, type: 3}
   infiniteAmmo: 0
   magSize: 10
@@ -64,7 +65,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   isAutomatic: 0
   isScoped: 0
-  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
   projectileInitalVelocity: 0

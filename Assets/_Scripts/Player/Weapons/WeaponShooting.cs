@@ -38,14 +38,13 @@ public class WeaponShooting : MonoBehaviour
     Coroutine reloadCooldownCoroutine, shellByShellReloadCoroutine;
     Camera weaponCamera;
     float weaponSpreadDeviation;
-    SkinnedMeshRenderer[] weaponSkinnedMeshRenderers;
 
 
     public static event Action<bool, WeaponShooting> onAimDownSights;
     public static event Action<int, int> onAmmoUpdated;
     public static event Action<bool> onWeaponFired;
 
-    [SerializeField] bool isInstantKillActive, isBottomlessClipActive;
+    //[SerializeField] bool isInstantKillActive, isBottomlessClipActive;
     bool stopShellByShellReload;
 
     public bool IsADSToggle;
@@ -66,8 +65,6 @@ public class WeaponShooting : MonoBehaviour
     {
         weaponCamera = GameObject.FindGameObjectWithTag("WeaponCamera").GetComponent<Camera>();
         SFXSource = GameObject.FindGameObjectWithTag("WeaponSFX").GetComponent<AudioSource>();
-        weaponSkinnedMeshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-        //laserLine = GetComponentInChildren<LineRenderer>();
     }
 
     private void OnEnable()
@@ -80,10 +77,6 @@ public class WeaponShooting : MonoBehaviour
         PlayerHealing.onSyringeUsed += CancelWeaponActions;
         PlayerHealth.onDeath += OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed += CancelWeaponActions;
-        InstantKill.onInstantKillGrabbed += EnableInstantKills;
-        BottomlessClip.onBottomlessClipGrabbed += EnableBottomlessClip;
-        PowerUpManager.onInstantKillEnded += DisableInstantKills;
-        PowerUpManager.onBottomlessClipEnded += DisableBottomlessClip;
 
         SpawnLaser();
     }
@@ -94,10 +87,6 @@ public class WeaponShooting : MonoBehaviour
         PlayerHealing.onSyringeUsed -= CancelWeaponActions;
         PlayerHealth.onDeath -= OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed -= CancelWeaponActions;
-        InstantKill.onInstantKillGrabbed -= EnableInstantKills;
-        BottomlessClip.onBottomlessClipGrabbed -= EnableBottomlessClip;
-        PowerUpManager.onInstantKillEnded -= DisableInstantKills;
-        PowerUpManager.onBottomlessClipEnded -= DisableBottomlessClip;
 
         RemoveLaser();
 
@@ -131,30 +120,30 @@ public class WeaponShooting : MonoBehaviour
 
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-        CheckInstantKillStatus();
-        CheckBottomlessClipStatus();
+        //CheckInstantKillStatus();
+        //CheckBottomlessClipStatus();
     }
 
 
-    public void CheckInstantKillStatus()
-    {
-        if (PowerUpManager.Instance.GetInstantKillStatus())
-        {
-            isInstantKillActive = true;
-        }
-        else
-            isInstantKillActive = false;
-    }
+    //public void CheckInstantKillStatus()
+    //{
+    //    if (PowerUpManager.Instance.GetInstantKillStatus())
+    //    {
+    //        isInstantKillActive = true;
+    //    }
+    //    else
+    //        isInstantKillActive = false;
+    //}
 
-    public void CheckBottomlessClipStatus()
-    {
-        if(PowerUpManager.Instance.GetBottomlessClipStatus())
-        {
-            isBottomlessClipActive = true;
-        }
-        else
-            isBottomlessClipActive = false;
-    }
+    //public void CheckBottomlessClipStatus()
+    //{
+    //    if(PowerUpManager.Instance.GetBottomlessClipStatus())
+    //    {
+    //        isBottomlessClipActive = true;
+    //    }
+    //    else
+    //        isBottomlessClipActive = false;
+    //}
 
     void OnPlayerDeath()
     {
@@ -172,21 +161,26 @@ public class WeaponShooting : MonoBehaviour
 
     void RemoveLaser()
     {
-        Destroy(spawnedLaser);
-        RemoveLaserPoint();
+        if (weaponData.hasLaserSight)
+        {
+            Destroy(spawnedLaser);
+            RemoveLaserPoint();
+        }
     }
 
     void RemoveLaserPoint()
     {
-        Destroy(spawnedLaserPoint);
+        if (weaponData.hasLaserSight)
+            Destroy(spawnedLaserPoint);
     }
 
     void Update()
     {
         if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
         {
-            if(spawnedLaser != null)
-                DrawLaser();
+            if(weaponData.hasLaserSight)
+                if(spawnedLaser != null)
+                    DrawLaser();
 
             if(isAutomatic)
             {
@@ -274,7 +268,7 @@ public class WeaponShooting : MonoBehaviour
 
     void FireWeapon()
     {
-        if (canShoot && (currentLoadedAmmo != 0 || isBottomlessClipActive) && !isReloading)
+        if (canShoot && (currentLoadedAmmo != 0 || PowerUpManager.isBottomlessClipActive) && !isReloading)
         {
             canShoot = false;
             StartCoroutine(PerShotCooldown());
@@ -287,7 +281,7 @@ public class WeaponShooting : MonoBehaviour
                 armsAnimator.Play("Fire");
             }
 
-            if(!isBottomlessClipActive)
+            if(!PowerUpManager.isBottomlessClipActive)
                 currentLoadedAmmo--;
 
             for (int i = 0; i < projectileCount; i++)
@@ -324,7 +318,7 @@ public class WeaponShooting : MonoBehaviour
                         IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
                         if (damageable != null)
                         {
-                            if (isInstantKillActive)
+                            if (PowerUpManager.isInstantKillActive)
                             {
                                 damageable.InstantlyKill();
                             }
@@ -370,7 +364,7 @@ public class WeaponShooting : MonoBehaviour
             onWeaponFired?.Invoke(isAiming);
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         }
-        else if (canShoot && (currentLoadedAmmo == 0 && !isBottomlessClipActive) && currentReserveAmmo > 0)
+        else if (canShoot && (currentLoadedAmmo == 0 && !PowerUpManager.isBottomlessClipActive) && currentReserveAmmo > 0)
         {
             ReloadWeapon();
         }
@@ -580,27 +574,27 @@ public class WeaponShooting : MonoBehaviour
         return firingSFX[rand];
     }
 
-    void EnableInstantKills()
-    {
-        isInstantKillActive = true;
-    }
+    //void EnableInstantKills()
+    //{
+    //    isInstantKillActive = true;
+    //}
 
-    void DisableInstantKills()
-    {
-        isInstantKillActive = false;
-        Debug.Log("Instant Kill Disabled");
-    }
+    //void DisableInstantKills()
+    //{
+    //    isInstantKillActive = false;
+    //    Debug.Log("Instant Kill Disabled");
+    //}
 
-    void EnableBottomlessClip()
-    {
-        isBottomlessClipActive = true;
-    }
+    //void EnableBottomlessClip()
+    //{
+    //    isBottomlessClipActive = true;
+    //}
 
-    void DisableBottomlessClip()
-    {
-        isBottomlessClipActive = false;
-        Debug.Log("Bottomless Disabled");
-    }
+    //void DisableBottomlessClip()
+    //{
+    //    isBottomlessClipActive = false;
+    //    Debug.Log("Bottomless Disabled");
+    //}
 
     IEnumerator PerShotCooldown()
     {

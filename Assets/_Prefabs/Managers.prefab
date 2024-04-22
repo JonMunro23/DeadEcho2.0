@@ -138,14 +138,14 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  walkingZombie: {fileID: 172121580578702208, guid: b5d4d5c7ed9254c448a615606e29a455, type: 3}
+  walkingZombie: {fileID: 172121580578702208, guid: e21331f162ed6d9499231edbba92e6d2, type: 3}
   runningZombie: {fileID: 172121580578702208, guid: e21331f162ed6d9499231edbba92e6d2, type: 3}
   sprintingZombie: {fileID: 172121580578702208, guid: 646f99252ee7f50459314dddf27a348d, type: 3}
   zombieParent: {fileID: 0}
   maxNumberOfAliveZombies: 60
   startingAmountToSpawn: 8
   zombieSpawnCooldown: 1
-  canSpawnZombies: 1
+  canSpawnZombies: 0
 --- !u!1 &6934477777443712108
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3036489827490675746
 Transform:
   m_ObjectHideFlags: 0
@@ -543,13 +543,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e463eb613bac0a74387beac7017896f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpPrefabs:
-  - {fileID: 4045478466513652942, guid: 166c5184ba991a94d94c367ff813d3ca, type: 3}
-  - {fileID: 4045478466513652942, guid: 836b80bd546edaf45af7c14db9bbbbe4, type: 3}
-  - {fileID: 4045478466513652942, guid: 44fc5110a9eefc0409a79165539f1732, type: 3}
+  powerUpsData: []
+  activePowerUps: []
+  powerUpBase: {fileID: 0}
   powerUpUIElement: {fileID: 2048807792859048983, guid: c237ff9bf5077cf4892541d0a4165069, type: 3}
-  activePowerUpContainer: {fileID: 0}
-  powerUpDuration: 10
+  activePowerUpUIContainer: {fileID: 0}
 --- !u!1 &8060153358141915584
 GameObject:
   m_ObjectHideFlags: 0

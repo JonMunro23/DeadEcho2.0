@@ -66,10 +66,6 @@ public class WeaponSway : MonoBehaviour
         WeaponSwapping.onWeaponSwapped -= GetWeaponData;
         PlayerHealth.onDeath -= StopSway;
     }
-    private void Awake()
-    {
-        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-    }
 
     private void Start()
     {

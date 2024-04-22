@@ -37,16 +37,6 @@ public class OldWeaponSwapping : MonoBehaviour
 
     public static event Action<GameObject> onWeaponSwapped;
 
-    private void OnEnable()
-    {
-        MaxAmmo.onMaxAmmoGrabbed += RefillWeaponAmmunition;
-    }
-
-    private void OnDisable()
-    {
-        MaxAmmo.onMaxAmmoGrabbed -= RefillWeaponAmmunition;
-    }
-
     private void Awake()
     {
         instance = this;
@@ -250,8 +240,8 @@ public class OldWeaponSwapping : MonoBehaviour
                 break;
         }
         weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
-        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
+        //currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
+        //currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
         FPSArmsAnimator.runtimeAnimatorController = currentlyEquippedWeaponData.armsController;
         onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
     }
@@ -277,18 +267,18 @@ public class OldWeaponSwapping : MonoBehaviour
         {
             case 1:
                 primaryWeapon1Holder.SetActive(true);
-                currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-                currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
+                //currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
+                //currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
                 break;
             case 2:
                 primaryWeapon2Holder.SetActive(true);
-                currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-                currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
+                //currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
+                //currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
                 break;
             case 3:
                 secondaryWeaponHolder.SetActive(true);
-                currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-                currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
+                //currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
+                //currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
                 break;
         }
     }

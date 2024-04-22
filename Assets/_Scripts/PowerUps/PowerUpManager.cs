@@ -1,53 +1,58 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+[System.Serializable]
+public struct ActivePowerUp
+{
+    public ActivePowerUp(PowerUpType _powerUpType, ActivePowerUpUIElement _activePowerUpUIElement)
+    {
+        PowerUpType = _powerUpType;
+        ActivePowerUpUIElement = _activePowerUpUIElement;
+    }
+
+    public PowerUpType PowerUpType;
+    public ActivePowerUpUIElement ActivePowerUpUIElement;
+}
 
 public class PowerUpManager : MonoBehaviour
 {
     public static PowerUpManager Instance;
 
-    [SerializeField] List<GameObject> powerUpPrefabs = new List<GameObject>();
+    [SerializeField] List<PowerUpData> powerUpsData = new List<PowerUpData>();
+    [SerializeField] List<ActivePowerUp> activePowerUps = new List<ActivePowerUp>();
 
-    List<PowerUpBase> activePowerUps = new List<PowerUpBase>();
+    public GameObject powerUpBase;
 
     [SerializeField]
     GameObject powerUpUIElement;
 
     [SerializeField]
-    Transform activePowerUpContainer;
+    Transform activePowerUpUIContainer;
 
-    activePowerUpUIElement activeInstantKillElement, activeBottomlessClipElement;
+    public static bool isInstantKillActive, isBottomlessClipActive, isDevastatorActive;
 
-    [SerializeField] int powerUpDuration;
+    Action onInstantKillEnded, onBottomlessClipEnded, onDevastatorEnded;
 
-    public static Action onInstantKillEnded, onBottomlessClipEnded;
-    bool instantKillStatus, bottomlessClipStatus;
 
     private void OnEnable()
     {
         ZombieHealth.dropPowerUp += SpawnPowerUp;
-        onInstantKillEnded += InstantKillEnded;
+        PowerUpBase.onPowerUpPickedUp += ActivatePowerUp;
         onBottomlessClipEnded += BottomlessClipEnded;
+        onInstantKillEnded += InstantKillEnded;
+        onDevastatorEnded += DevastatorEnded;
     }
 
-    void InstantKillEnded()
-    {
-        SetInstantKillStatus(false);
-    }
-
-    void BottomlessClipEnded()
-    {
-        Debug.Log("BottomlessClip disabled");
-        SetBottomlessClipStatus(false);
-    }
 
     private void OnDisable()
     {
         ZombieHealth.dropPowerUp -= SpawnPowerUp;
-        onInstantKillEnded -= InstantKillEnded;
+        PowerUpBase.onPowerUpPickedUp -= ActivatePowerUp;
         onBottomlessClipEnded -= BottomlessClipEnded;
+        onInstantKillEnded -= InstantKillEnded;
+        onDevastatorEnded -= DevastatorEnded;
     }
 
     private void Awake()
@@ -57,89 +62,132 @@ public class PowerUpManager : MonoBehaviour
 
     public void SpawnPowerUp(Vector3 spawnLocation)
     {
-        Instantiate(GetRandomPowerUp(), spawnLocation + new Vector3(0,.9f,0), new Quaternion(0, UnityEngine.Random.Range(0, 180), 0, 0));
+        Instantiate(GetRandomPowerUp(), spawnLocation + new Vector3(0,.9f,0), new Quaternion(0, Random.Range(0, 180), 0, 0));
     }
 
     GameObject GetRandomPowerUp()
     {
-        return powerUpPrefabs[UnityEngine.Random.Range(0, powerUpPrefabs.Count)];
+        int rand = Random.Range(0, powerUpsData.Count);
+
+        GameObject randomPowerUp = powerUpBase;
+        randomPowerUp.GetComponent<PowerUpBase>().powerUpData = powerUpsData[rand];
+        return randomPowerUp;
     }
 
-    public void SetPowerUpActive(PowerUpBase powerUp)
+    public void ActivatePowerUp(PowerUpBase powerUpToActivate)
     {
-        switch (powerUp.powerUpType)
+        if(powerUpToActivate.powerUpData.powerUpDuration != 0)
         {
-            case PowerUpType.InstantKill:
-                if (GetInstantKillStatus())
+            foreach(ActivePowerUp powerUp in activePowerUps)
+            {
+                if(powerUpToActivate.powerUpData.PowerUpType == powerUp.PowerUpType)
                 {
-                    activeInstantKillElement.RefreshDuration();
-                    break;
+                    powerUp.ActivePowerUpUIElement.RefreshDuration();
+                    return;
                 }
-                SpawnPowerUpUIElement(powerUp);
-                activePowerUps.Add(powerUp);
-                SetInstantKillStatus(true);
-                break;
-            case PowerUpType.BottomlessClip:
-                if(GetBottomlessClipStatus())
-                {
-                    activeBottomlessClipElement.RefreshDuration();
+            }
+            ActivePowerUpUIElement activePowerUpUIElement = null;
+            switch (powerUpToActivate.powerUpData.PowerUpType)
+            {
+                case PowerUpType.InstantKill:
+                    SetInstantKillActive(true);
+                    activePowerUpUIElement = SpawnActivePowerUpUIElement(powerUpToActivate.powerUpData, onInstantKillEnded);
                     break;
-                }
-                SpawnPowerUpUIElement(powerUp);
-                activePowerUps.Add(powerUp);
-                SetBottomlessClipStatus(true);
-                break;
+                case PowerUpType.BottomlessClip: 
+                    SetBottomlessClipActive(true);
+                    activePowerUpUIElement = SpawnActivePowerUpUIElement(powerUpToActivate.powerUpData, onBottomlessClipEnded);
+                    break;
+                case PowerUpType.Devastator:
+                    SetDevastatorActive(true);
+                    GivePowerUpWeapon(powerUpToActivate.powerUpData.powerUpWeapon);
+                    activePowerUpUIElement = SpawnActivePowerUpUIElement(powerUpToActivate.powerUpData, onDevastatorEnded);
+                    break;
+            }
+
+            activePowerUps.Add(new ActivePowerUp(powerUpToActivate.powerUpData.PowerUpType, activePowerUpUIElement));
+            return;
         }
-    }
 
-
-
-    void SpawnPowerUpUIElement(PowerUpBase _activePowerUp)
-    {
-        GameObject clone = Instantiate(powerUpUIElement, activePowerUpContainer);
-        var activePowerUpUIElement = clone.GetComponent<activePowerUpUIElement>();
-        switch (_activePowerUp.powerUpType)
+        switch (powerUpToActivate.powerUpData.PowerUpType)
         {
-            case PowerUpType.InstantKill:
-                activeInstantKillElement = activePowerUpUIElement;
+            case PowerUpType.MaxAmmo:
+                GiveMaxAmmo();
                 break;
-            case PowerUpType.BottomlessClip:
-                activeBottomlessClipElement = activePowerUpUIElement;
-                break;
+
         }
-        activePowerUpUIElement.Init(powerUpDuration, _activePowerUp.powerUpUIIcon, GetActionToInvokeOnEnd(_activePowerUp));
+
     }
 
-    Action GetActionToInvokeOnEnd(PowerUpBase _activePowerUp)
+    void GiveMaxAmmo()
     {
-        switch (_activePowerUp.powerUpType)
+        WeaponSwapping.instance.RefillWeaponAmmunition();
+    }
+
+    void GivePowerUpWeapon(WeaponData weaponToGive)
+    {
+        WeaponSwapping.instance.GivePowerUpWeapon(weaponToGive);
+    }
+
+    ActivePowerUpUIElement SpawnActivePowerUpUIElement(PowerUpData powerUpData, Action onPowerUpEndedAction)
+    {
+        GameObject clone = Instantiate(powerUpUIElement, activePowerUpUIContainer);
+        ActivePowerUpUIElement activePowerUpUIElement = clone.GetComponent<ActivePowerUpUIElement>();
+        activePowerUpUIElement.Init(powerUpData, onPowerUpEndedAction);
+        return activePowerUpUIElement;
+    }
+
+    void SetInstantKillActive(bool isActive)
+    {
+        isInstantKillActive = isActive;
+    }
+
+    void InstantKillEnded()
+    {
+        foreach (var powerUp in activePowerUps)
         {
-            case PowerUpType.InstantKill:
-                return onInstantKillEnded;
-            case PowerUpType.BottomlessClip:
-                return onBottomlessClipEnded;
-            default:
-                return null;
+            if(powerUp.PowerUpType == PowerUpType.InstantKill)
+            {
+                activePowerUps.Remove(powerUp);
+                break;
+            }
         }
+        SetInstantKillActive(false);
     }
 
-    void SetInstantKillStatus(bool status)
+    void SetBottomlessClipActive(bool isActive)
     {
-        instantKillStatus = status;
+        isBottomlessClipActive = isActive;
     }
 
-    void SetBottomlessClipStatus(bool status)
+    void BottomlessClipEnded()
     {
-        bottomlessClipStatus = status;
+        foreach (var powerUp in activePowerUps)
+        {
+            if (powerUp.PowerUpType == PowerUpType.BottomlessClip)
+            {
+                activePowerUps.Remove(powerUp);
+                break;
+            }
+        }
+        SetBottomlessClipActive(false);
     }
 
-    public bool GetInstantKillStatus()
+    void SetDevastatorActive(bool isActive)
     {
-        return instantKillStatus;
+        isDevastatorActive = isActive;
     }
 
-    public bool GetBottomlessClipStatus()
+    void DevastatorEnded()
     {
-        return bottomlessClipStatus;
+        foreach (var powerUp in activePowerUps)
+        {
+            if (powerUp.PowerUpType == PowerUpType.Devastator)
+            {
+                activePowerUps.Remove(powerUp);
+                break;
+            }
+        }
+        WeaponSwapping.instance.RemovePowerUpWeapon();
+        SetDevastatorActive(false);
     }
 }

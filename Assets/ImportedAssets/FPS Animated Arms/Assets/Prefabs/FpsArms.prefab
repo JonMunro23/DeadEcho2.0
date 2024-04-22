@@ -681,13 +681,13 @@ MonoBehaviour:
   maxRotationStep: 0.5
   smooth: 8
   speedCurve: 0
-  HipFireTravelLimit: 0.0025
-  HipFireBobLimit: 0.001
-  ADSTravelLimit: 0.0005
-  ADSBobLimit: 0.0001
+  HipFireTravelLimit: 0.00025
+  HipFireBobLimit: 0.0001
+  ADSTravelLimit: 0.00005
+  ADSBobLimit: 0.00001
   currentTravelLimit: {x: 0, y: 0, z: 0}
   currentBobLimit: {x: 0, y: 0, z: 0}
-  bobExaggeration: 2
+  bobExaggeration: 0
   multiplier: {x: 0, y: 0, z: 0}
 --- !u!114 &4256159518537717173
 MonoBehaviour:
@@ -2165,10 +2165,10 @@ Animator:
   m_GameObject: {fileID: 7643184848490326760}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 59052c6b39b1d414ca3e3111674c620c, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 466a558a50c3c4e4cab92c5bd1d94f7f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
