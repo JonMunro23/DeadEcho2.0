@@ -7,28 +7,33 @@ using UnityEngine;
 public class WeaponSwapping : MonoBehaviour
 {
     public static WeaponSwapping instance;
-
-    [SerializeField] GameObject primaryWeapon1Holder, primaryWeapon2Holder, secondaryWeaponHolder;
-
-    public WeaponData currentPrimary1Weapon, currentPrimary2Weapon, currentSecondaryWeapon;
-    public GameObject currentPrimary1WeaponObj, currentPrimary2WeaponObj, currentSecondaryWeaponObj;
-
-    public WeaponData startingSecondaryWeapon;
-
-    public List<GameObject> currentlyEquippedWeaponsList = new List<GameObject>();
-
-    //1 == primary1, 2 == primary2, 3 == secondary
-    public int currentlyEquippedWeaponSlot;
-    public WeaponData currentlyEquippedWeapon;
+    public WeaponData[] startingWeapons;
+    [Space]
+    [Header("Current Weapon Data")]
+    public WeaponShooting currentlyEquippedWeapon;
     public GameObject currentlyEquippedWeaponObj;
+    [Header("Primary 1 Data")]
+    public WeaponShooting currentPrimary1Weapon;
+    public GameObject currentPrimary1WeaponObj;
+    [Header("Primary 2 Data")]
+    public WeaponShooting currentPrimary2Weapon;
+    public GameObject currentPrimary2WeaponObj;
+    [Header("Secondary Data")]
+    public WeaponShooting currentSecondaryWeapon;
+    public GameObject currentSecondaryWeaponObj;
+    [Space]
+    public int currentActiveSlot;
 
-    [Header("Weapon Inventory")]
+    public List<WeaponShooting> currentlyEquippedWeaponsList = new List<WeaponShooting>();
+
+    public Transform GunBone, inactiveWeaponParent;
+    public Animator FPSArmsAnimator;
+
+    [Header("Weapon Inventory UI")]
     public GameObject weaponInventoryDisplayUI;
     [SerializeField] float displayLength;
     Coroutine displayCounter;
     bool isWeaponInventoryDisplayOpen = false;
-
-    [SerializeField] Vector3 weaponSpawnDefaultPosition;
 
     public static bool canSwapWeapon;
 
@@ -52,9 +57,12 @@ public class WeaponSwapping : MonoBehaviour
     private void Start()
     {
         weaponInventoryDisplayUI.SetActive(false);
-
         canSwapWeapon = true;
-        SpawnNewWeapon(startingSecondaryWeapon, 3);
+
+        foreach (WeaponData weapon in startingWeapons)
+        {
+            SpawnNewWeapon(weapon);
+        }
     }
 
     private void Update()
@@ -62,259 +70,206 @@ public class WeaponSwapping : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ShowWeaponInventory();
-            if (currentlyEquippedWeaponSlot != 1 && currentPrimary1Weapon)
+            if (currentPrimary1Weapon != null)
                 SwapToWeapon(1);
+            
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ShowWeaponInventory();
-            if (currentlyEquippedWeaponSlot != 2 && currentPrimary2Weapon)
+            if(currentPrimary2Weapon != null)
                 SwapToWeapon(2);
+
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             ShowWeaponInventory();
-            if (currentlyEquippedWeaponSlot != 3 && currentSecondaryWeapon)
+            if (currentSecondaryWeapon != null)
                 SwapToWeapon(3);
+
         }
     }
 
-    public void PickUpWeapon(WeaponData weaponToPickup)
+    void SwapToWeapon(int weaponSlot)
     {
+        if (currentlyEquippedWeapon)
+            DetachWeaponFromGunBone(currentlyEquippedWeapon);
 
-        if (weaponToPickup.weaponSlotType == WeaponData.WeaponSlotType.primary)
-        {
-            if (!currentPrimary1Weapon)
-            {
-                SpawnNewWeapon(weaponToPickup, 1);
-            }
-            else if (!currentPrimary2Weapon)
-            {
-                SpawnNewWeapon(weaponToPickup, 2);
-            }
-            else if (currentPrimary1Weapon && currentPrimary2Weapon)
-            {
-                ExchangePrimaryWeapon(weaponToPickup);
-            }
-        }
-        else if (weaponToPickup.weaponSlotType == WeaponData.WeaponSlotType.secondary)
-        {
-
-            if (!currentSecondaryWeapon)
-            {
-                SpawnNewWeapon(weaponToPickup, 3);
-            }
-            else if (currentSecondaryWeapon)
-            {
-                ExchangeSecondaryWeapon(weaponToPickup);
-            }
-        }
-
-        ShowWeaponInventory();
+        SetWeaponActive(weaponSlot);
     }
 
-
-    void ExchangePrimaryWeapon(WeaponData newWeapon)
+    public void SpawnNewWeapon(WeaponData weaponToSpawn)
     {
-        switch (currentlyEquippedWeaponSlot)
+        if (currentlyEquippedWeapon)
+            DetachWeaponFromGunBone(currentlyEquippedWeapon);
+
+        GameObject clone = Instantiate(weaponToSpawn.weaponObj);
+        currentlyEquippedWeaponObj = clone;
+        currentlyEquippedWeapon = clone.GetComponent<WeaponShooting>();
+        currentlyEquippedWeaponsList.Add(currentlyEquippedWeapon);
+        currentlyEquippedWeapon.InitialiseWeapon(weaponToSpawn, FPSArmsAnimator);
+
+        AssignWeaponToSlot(currentlyEquippedWeapon);
+        SetWeaponActive(currentlyEquippedWeapon.weaponSlot);
+    }
+
+    void SetCurrentlyEquippedWeapon(WeaponShooting weaponToEquip)
+    {
+        currentlyEquippedWeapon = weaponToEquip;
+        currentlyEquippedWeaponObj = weaponToEquip.gameObject;
+    }
+
+    void SetWeaponActive(int slot)
+    {
+        GameObject weaponToSetActive = null;
+        switch (slot)
         {
             case 1:
-                DestroyPreviousWeapon(1);
-                SpawnNewWeapon(newWeapon, 1);
+                AttachWeaponToGunBone(currentPrimary1WeaponObj.transform);
+                SetCurrentlyEquippedWeapon(currentPrimary1Weapon);
+                currentPrimary1WeaponObj.transform.localPosition = currentPrimary1Weapon.weaponData.weaponSpawnPos;
+                FPSArmsAnimator.runtimeAnimatorController = currentPrimary1Weapon.weaponData.armsController;
+                weaponToSetActive = currentPrimary1WeaponObj;
                 break;
             case 2:
-                DestroyPreviousWeapon(2);
-                SpawnNewWeapon(newWeapon, 2);
+                AttachWeaponToGunBone(currentPrimary2WeaponObj.transform);
+                SetCurrentlyEquippedWeapon(currentPrimary2Weapon);
+                currentPrimary2WeaponObj.transform.localPosition = currentPrimary2Weapon.weaponData.weaponSpawnPos;
+                FPSArmsAnimator.runtimeAnimatorController = currentPrimary2Weapon.weaponData.armsController;
+                weaponToSetActive = currentPrimary2WeaponObj;
+
                 break;
             case 3:
-                DestroyPreviousWeapon(1);
-                //Default swap first primary weapon if secondary is out
-                SpawnNewWeapon(newWeapon, 1);
+                AttachWeaponToGunBone(currentSecondaryWeaponObj.transform);
+                SetCurrentlyEquippedWeapon(currentSecondaryWeapon);
+                currentSecondaryWeaponObj.transform.localPosition = currentSecondaryWeapon.weaponData.weaponSpawnPos;
+                FPSArmsAnimator.runtimeAnimatorController = currentSecondaryWeapon.weaponData.armsController;
+                weaponToSetActive = currentSecondaryWeaponObj;
                 break;
         }
-
+        onWeaponSwapped?.Invoke(weaponToSetActive);
     }
-    void ExchangeSecondaryWeapon(WeaponData newWeapon)
+
+    void AssignWeaponToSlot(WeaponShooting weaponToAssign)
     {
-        DestroyPreviousWeapon(3);
-        SpawnNewWeapon(newWeapon, 3);
+        switch (weaponToAssign.weaponData.weaponSlotType)
+        {
+            case WeaponData.WeaponSlotType.primary:
+
+                if(currentPrimary1Weapon != null && currentPrimary2Weapon != null)
+                {
+                    if(currentlyEquippedWeapon.weaponSlot == 2)
+                    {
+                        ExchangeWeaponInSlot(2, weaponToAssign);
+                        return;
+                    }
+
+                    ExchangeWeaponInSlot(1, weaponToAssign);
+                    return;
+                }
+
+                if (currentPrimary1Weapon == null)
+                {
+                    currentPrimary1Weapon = weaponToAssign;
+                    currentPrimary1WeaponObj = weaponToAssign.gameObject;
+                    currentPrimary1Weapon.weaponSlot = 1;
+                }
+                else if(currentPrimary2Weapon == null)
+                {
+                    currentPrimary2Weapon = weaponToAssign;
+                    currentPrimary2WeaponObj = weaponToAssign.gameObject;
+                    currentPrimary2Weapon.weaponSlot = 2;
+                }
+
+                break;
+            case WeaponData.WeaponSlotType.secondary:
+
+                if (currentSecondaryWeapon == null)
+                {
+                    currentSecondaryWeapon = weaponToAssign;
+                    currentSecondaryWeaponObj = weaponToAssign.gameObject;
+                    currentSecondaryWeapon.weaponSlot = 3;
+                }
+                else
+                    ExchangeWeaponInSlot(3, weaponToAssign);
+
+                break;
+        }
     }
 
-    void DestroyPreviousWeapon(int weaponSlot)
+    void ExchangeWeaponInSlot(int weaponSlot, WeaponShooting newWeapon)
     {
         switch (weaponSlot)
         {
             case 1:
                 Destroy(currentPrimary1WeaponObj);
-                currentlyEquippedWeaponsList.Remove(currentPrimary1WeaponObj);
+                currentlyEquippedWeaponsList.Remove(currentPrimary1Weapon);
+                currentPrimary1Weapon = newWeapon;
+                currentPrimary1WeaponObj = newWeapon.gameObject;
+                currentPrimary1Weapon.weaponSlot = 1;
                 break;
             case 2:
                 Destroy(currentPrimary2WeaponObj);
-                currentlyEquippedWeaponsList.Remove(currentPrimary2WeaponObj);
+                currentlyEquippedWeaponsList.Remove(currentPrimary2Weapon);
+                currentPrimary2Weapon = newWeapon;
+                currentPrimary2WeaponObj = newWeapon.gameObject;
+                currentPrimary2Weapon.weaponSlot = 2;
                 break;
             case 3:
                 Destroy(currentSecondaryWeaponObj);
-                currentlyEquippedWeaponsList.Remove(currentSecondaryWeaponObj);
+                currentlyEquippedWeaponsList.Remove(currentSecondaryWeapon);
+                currentSecondaryWeapon = newWeapon;
+                currentSecondaryWeaponObj = newWeapon.gameObject;
+                currentSecondaryWeapon.weaponSlot = 1;
                 break;
         }
     }
 
-    void SpawnNewWeapon(WeaponData weaponToSpawn, int weaponSlot)
+    void DetachWeaponFromGunBone(WeaponShooting weaponToDetach)
     {
-        if (currentlyEquippedWeaponObj)
-        {
-            if(TryGetComponent<WeaponShooting>(out WeaponShooting weaponShooting))
-            {
-                if (weaponShooting.isReloading)
-                    weaponShooting.CancelReload();
+        if (weaponToDetach.isReloading)
+            weaponToDetach.CancelReload();
 
-                if (weaponShooting.isAiming)
-                    weaponShooting.StopADS();
-            }
+        if (weaponToDetach.isAiming)
+            weaponToDetach.StopADS();
 
-            if(currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isReloading)
-                currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
-
-            if(currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isAiming)
-                currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().StopADS();
-
-        }
-
-        DeactivateWeapons();
-        GameObject clone = Instantiate(weaponToSpawn.weaponObj);
-        //PlayerMovement.instance.animator = clone.GetComponent<Animator>();
-        switch (weaponSlot)
-        {
-            case 1:
-                primaryWeapon1Holder.SetActive(true);
-                currentPrimary1WeaponObj = clone;
-                currentPrimary1Weapon = weaponToSpawn;
-                clone.transform.SetParent(primaryWeapon1Holder.transform);
-                break;
-            case 2:
-                primaryWeapon2Holder.SetActive(true);
-                currentPrimary2WeaponObj = clone;
-                currentPrimary2Weapon = weaponToSpawn;
-                clone.transform.SetParent(primaryWeapon2Holder.transform);
-                break;
-            case 3:
-                secondaryWeaponHolder.SetActive(true);
-                currentSecondaryWeaponObj = clone;
-                currentSecondaryWeapon = weaponToSpawn;
-                clone.transform.SetParent(secondaryWeaponHolder.transform);
-                break;
-        }
-
-        if (weaponToSpawn.name == "Python")
-            clone.transform.localPosition = new Vector3(0, -1.6f, 0);
-        else
-            clone.transform.localPosition = weaponSpawnDefaultPosition;
-
-        clone.transform.localRotation = new Quaternion(0, 0, 0, 0);
-        clone.GetComponent<WeaponShooting>().InitialiseWeapon(weaponToSpawn);
-        currentlyEquippedWeaponsList.Add(clone);
-        currentlyEquippedWeaponSlot = weaponSlot;
-        currentlyEquippedWeapon = weaponToSpawn;
-        currentlyEquippedWeaponObj = clone;
+        Vector3 weaponScale = weaponToDetach.transform.localScale;
+        weaponToDetach.transform.SetParent(inactiveWeaponParent);
+        weaponToDetach.transform.localScale = weaponScale;
+        ShowWeapon(weaponToDetach.gameObject, false);
     }
 
-    void SwapToWeapon(int weaponSlotToSwapTo)
+    void AttachWeaponToGunBone(Transform weaponToAttach)
     {
-        if (currentlyEquippedWeaponObj && currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().isReloading)
-        {
-            currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CancelReload();
-        }
-        DeactivateWeapons();
-        switch (weaponSlotToSwapTo)
-        {
-            case 1:
-                if (currentPrimary1Weapon)
-                {
-                    currentlyEquippedWeaponSlot = 1;
-                    currentlyEquippedWeapon = currentPrimary1Weapon;
-                    currentlyEquippedWeaponObj = currentPrimary1WeaponObj;
-                    primaryWeapon1Holder.SetActive(true);
-                }
-                break;
-            case 2:
-                if (currentPrimary2Weapon)
-                {
-                    currentlyEquippedWeaponSlot = 2;
-                    currentlyEquippedWeapon = currentPrimary2Weapon;
-                    currentlyEquippedWeaponObj = currentPrimary2WeaponObj;
-                    primaryWeapon2Holder.SetActive(true);
-                }
-                break;
-            case 3:
-                if (currentSecondaryWeapon)
-                {
-                    currentlyEquippedWeaponSlot = 3;
-                    currentlyEquippedWeapon = currentSecondaryWeapon;
-                    currentlyEquippedWeaponObj = currentSecondaryWeaponObj;
-                    secondaryWeaponHolder.SetActive(true);
-                }
-                break;
-        }
-        weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().UpdateSelectedSlot(currentlyEquippedWeaponSlot);
-        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-        currentlyEquippedWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-        onWeaponSwapped?.Invoke(currentlyEquippedWeaponObj);
+        Vector3 weaponScale = weaponToAttach.localScale;
+        weaponToAttach.SetParent(GunBone);
+        weaponToAttach.localScale = weaponScale;
+        weaponToAttach.localRotation = new Quaternion(0, 0, 0, 0);
+
+        ShowWeapon(weaponToAttach.gameObject, true);
     }
 
-    void DeactivateWeapons()
+    void ShowWeapon(GameObject weaponToSet, bool isActive, bool affectArms = false)
     {
-        primaryWeapon1Holder.SetActive(false);
-        primaryWeapon2Holder.SetActive(false);
-        secondaryWeaponHolder.SetActive(false);
-    }
+        if(affectArms)
+            FPSArmsAnimator.gameObject.SetActive(isActive);
 
-    public void TemporarilyDeactivateWeapons(GameObject meleeObjHolder, float reactivationTime)
-    {
-        DeactivateWeapons();
-        StartCoroutine(ReactivateWeapons(meleeObjHolder, reactivationTime));
-    }
-
-    IEnumerator ReactivateWeapons(GameObject grenadeObjHolder, float reactivationTime)
-    {
-        yield return new WaitForSeconds(reactivationTime);
-        grenadeObjHolder.SetActive(false);
-        switch (currentlyEquippedWeaponSlot)
-        {
-            case 1:
-                primaryWeapon1Holder.SetActive(true);
-                currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-                currentPrimary1WeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-                break;
-            case 2:
-                primaryWeapon2Holder.SetActive(true);
-                currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-                currentPrimary2WeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-                break;
-            case 3:
-                secondaryWeaponHolder.SetActive(true);
-                currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckInstantKillStatus();
-                currentSecondaryWeaponObj.GetComponent<WeaponShooting>().CheckBottomlessClipStatus();
-                break;
-        }
+        weaponToSet.SetActive(isActive);
     }
 
     public void RefillWeaponAmmunition()
     {
-        if (currentPrimary1WeaponObj != null)
-            currentPrimary1WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
-
-        if (currentPrimary2WeaponObj != null)
-            currentPrimary2WeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
-
-        if (currentSecondaryWeaponObj != null)
-            currentSecondaryWeaponObj.GetComponent<WeaponShooting>().RefillAmmo();
+        foreach (WeaponShooting weapon in currentlyEquippedWeaponsList)
+        {
+            weapon.RefillAmmo();
+        }
     }
 
     void ShowWeaponInventory()
     {
         weaponInventoryDisplayUI.SetActive(true);
         isWeaponInventoryDisplayOpen = true;
-        weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().Init(currentlyEquippedWeaponSlot, currentSecondaryWeapon, currentPrimary1Weapon != null ? currentPrimary1Weapon : null, currentPrimary2Weapon != null ? currentPrimary2Weapon : null);
+        weaponInventoryDisplayUI.GetComponentInParent<WeaponInventoryDisplay>().Init(currentActiveSlot, currentSecondaryWeapon.weaponData, currentPrimary1Weapon != null ? currentPrimary1Weapon.weaponData : null, currentPrimary2Weapon != null ? currentPrimary2Weapon.weaponData : null);
         weaponInventoryDisplayUI.transform.DOScaleY(1, .2f).OnComplete(() =>
         {
             if(displayCounter != null)
@@ -338,12 +293,26 @@ public class WeaponSwapping : MonoBehaviour
         });
     }
 
-
     IEnumerator StartDisplayCountdown()
     {
         yield return new WaitForSeconds(displayLength);
         HideWeaponInventory();
 
+    }
+
+    public void TemporarilyDeactivateWeapons(GameObject meleeObjHolder, float reactivationTime)
+    {
+        ShowWeapon(currentlyEquippedWeaponObj, false, true);
+        StartCoroutine(ReactivateWeapons(meleeObjHolder, reactivationTime));
+    }
+
+    IEnumerator ReactivateWeapons(GameObject grenadeObjHolder, float reactivationTime)
+    {
+        yield return new WaitForSeconds(reactivationTime);
+        grenadeObjHolder.SetActive(false);
+        ShowWeapon(currentlyEquippedWeaponObj, true, true);
+        currentlyEquippedWeapon.CheckInstantKillStatus();
+        currentlyEquippedWeapon.CheckBottomlessClipStatus();
     }
 
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   weaponSlotType: 0
-  weaponType: 3
+  weaponType: 0
   reloadType: 1
   name: Shotgun
   description: 
@@ -22,8 +22,8 @@ MonoBehaviour:
   weaponWallBuyObj: {fileID: 1409424844601486, guid: f8de140166bc0c44892691442476e9ca, type: 3}
   UIObj: {fileID: 0}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  defaultYPos: -1.7
-  aimingYPos: -1.68
+  defaultPos: {x: 0, y: -1.7, z: 0}
+  aimingPos: {x: 0, y: 0, z: 0}
   UISprite: {fileID: 21300000, guid: 1e521cefafd36614ebeb1607ef395659, type: 3}
   magSize: 6
   maxReserveAmmo: 48

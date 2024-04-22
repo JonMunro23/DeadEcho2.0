@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9121504609914439805}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5773292588190454082}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Forearm.L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3478299926102026090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart1.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3369432118433688934}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky2.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3411738318778431547}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart3.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,6 +160,37 @@ Transform:
   - {fileID: 2391263528796545534}
   m_Father: {fileID: 251642095289205224}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &285480511472176253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3686950615706956403}
+  m_Layer: 7
+  m_Name: LeftHandHint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3686950615706956403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285480511472176253}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0.381, z: -0.459}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4027525735204746960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &411321641304283424
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4183097618940730217}
   - component: {fileID: 1771413991371519261}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FPSArmsMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,8 +218,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000013767877, y: 0.7071068, z: 0.70710677, w: -0.00000013767878}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6649940638940731643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -292,6 +323,37 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.007844137, y: -0.004979535, z: 0.035674904}
     m_Extent: {x: 0.013062371, y: 0.0078714825, z: 0.044528138}
   m_DirtyAABB: 0
+--- !u!1 &416687709752465630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3672002277932182350}
+  m_Layer: 7
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3672002277932182350
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416687709752465630}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2199230621100914997}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &470291548146514630
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8283463030697220996}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shoulder.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +380,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.52891314, y: 0.47291544, z: 0.47806126, w: 0.5177446}
   m_LocalPosition: {x: -0.0027390677, y: 0.016401304, z: 6.717942e-10}
-  m_LocalScale: {x: 0.99999994, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6332434498340765768}
@@ -333,7 +395,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6967820872648435873}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring3.R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +426,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8021871591627761865}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb1.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +458,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6692149237755429413}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 124132616208470048}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb2.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -461,7 +523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1768478930296781312}
   - component: {fileID: 5370576248548335391}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RigLayerRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -507,7 +569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5967859397014832804}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +601,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3802472946801423258}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Forearm.R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,6 +624,91 @@ Transform:
   - {fileID: 6834128012818246899}
   m_Father: {fileID: 2302198227603523675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1826872131531335499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2825213164050378306}
+  - component: {fileID: 6859601277440758960}
+  - component: {fileID: 4256159518537717173}
+  m_Layer: 7
+  m_Name: GunBone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2825213164050378306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826872131531335499}
+  serializedVersion: 2
+  m_LocalRotation: {x: -7e-45, y: -7e-45, z: -7e-45, w: 1}
+  m_LocalPosition: {x: 0, y: 0.01161, z: 0.02314}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6084020407328104024}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6859601277440758960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826872131531335499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53844dc84ec2be4e966c287f55f4d6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMovement: {fileID: 0}
+  canSway: 1
+  sway: 1
+  swayRotation: 1
+  bobOffset: 1
+  bobSway: 1
+  step: 0.001
+  maxStepDistance: 0.006
+  rotationStep: 0.4
+  maxRotationStep: 0.5
+  smooth: 8
+  speedCurve: 0
+  HipFireTravelLimit: 0.0025
+  HipFireBobLimit: 0.001
+  ADSTravelLimit: 0.0005
+  ADSBobLimit: 0.0001
+  currentTravelLimit: {x: 0, y: 0, z: 0}
+  currentBobLimit: {x: 0, y: 0, z: 0}
+  bobExaggeration: 2
+  multiplier: {x: 0, y: 0, z: 0}
+--- !u!114 &4256159518537717173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826872131531335499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b906148fc1e0341b7ffc5ec444f355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zRecoilAmount: -0.0025
+  aimingZRecoilAmount: -0.001
+  xRotAmount: 0.3
+  aimingXRotAmount: 0
+  yRotAmount: 0.1
+  aimingYRotAmount: 0
+  zRotAmount: 0.5
+  aimingZRotAmount: 0
 --- !u!1 &1940807933660114404
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,7 +718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5346509320674583377}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb2.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +751,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6388981406892091009}
   - component: {fileID: 4627894183017752576}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RigLayerLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -650,8 +797,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2199230621100914997}
-  m_Layer: 0
-  m_Name: Target
+  - component: {fileID: 568566133178399801}
+  m_Layer: 7
+  m_Name: RightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -669,9 +817,34 @@ Transform:
   m_LocalPosition: {x: -0.7299156, y: 0.021323442, z: -0.018461227}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3672002277932182350}
   m_Father: {fileID: 1768478930296781312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &568566133178399801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2327060849093612976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_Root: {fileID: 4842294031386494438}
+    m_Mid: {fileID: 2302198227603523675}
+    m_Tip: {fileID: 3802472946801423258}
+    m_Target: {fileID: 3672002277932182350}
+    m_Hint: {fileID: 0}
+    m_TargetPositionWeight: 1
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
+    m_MaintainTargetPositionOffset: 0
+    m_MaintainTargetRotationOffset: 0
 --- !u!1 &2351119296900104173
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,7 +854,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 251642095289205224}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart2.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,7 +886,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4589681833520807054}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart2.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -745,7 +918,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3291531655502872826}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RuntimeRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -778,7 +951,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7876063703261338311}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -810,7 +983,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3880481816866650852}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FPSArms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -825,14 +998,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3139377332287295134}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000009415696, y: 0.7071068, z: 0.7071067, w: -0.00000009415697}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0.7071068, w: 0}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 19.622635, y: 19.622635, z: 19.622635}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6084020407328104024}
   m_Father: {fileID: 6649940638940731643}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -180}
 --- !u!1 &3196581031339512923
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,7 +1015,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 167891209313076860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring1.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -874,7 +1047,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5888146474024957401}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index1.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -906,7 +1079,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8686319323181898825}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index3.L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -937,7 +1110,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1713980294061360432}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky3.L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -968,7 +1141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1109229282879173674}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart3.L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -999,7 +1172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2391263528796545534}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart3.R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1030,7 +1203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3985022409910422059}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring3.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1062,7 +1235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9007664200550848649}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index2.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1094,7 +1267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1423147930140169789}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HandIK.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1130,7 +1303,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4844872917647063775}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index2.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1162,7 +1335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 504182104391900622}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1194,7 +1367,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1416104781044619104}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky3.R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1225,7 +1398,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6193602161459458569}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring3.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1257,7 +1430,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5538771039866869157}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1289,7 +1462,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1641410550870118576}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart3.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1321,8 +1494,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4027525735204746960}
-  m_Layer: 0
-  m_Name: Target
+  - component: {fileID: 9078773588535792702}
+  m_Layer: 7
+  m_Name: LeftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1340,9 +1514,35 @@ Transform:
   m_LocalPosition: {x: 0.7299156, y: 0.02132368, z: -0.018463135}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3686950615706956403}
+  - {fileID: 6178363349357467925}
   m_Father: {fileID: 6388981406892091009}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9078773588535792702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4841735809912602392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_Root: {fileID: 8283463030697220996}
+    m_Mid: {fileID: 3216256422178677441}
+    m_Tip: {fileID: 5773292588190454082}
+    m_Target: {fileID: 6178363349357467925}
+    m_Hint: {fileID: 3686950615706956403}
+    m_TargetPositionWeight: 1
+    m_TargetRotationWeight: 1
+    m_HintWeight: 1
+    m_MaintainTargetPositionOffset: 0
+    m_MaintainTargetRotationOffset: 0
 --- !u!1 &5196873640353072179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1552,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3216256422178677441}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Forearm.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1384,7 +1584,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8529390709311206956}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pink1.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1416,7 +1616,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4178744452316597301}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb2.R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1447,7 +1647,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148221390465979835}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1470,6 +1670,37 @@ Transform:
   - {fileID: 3478299926102026090}
   m_Father: {fileID: 1423147930140169789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5441158003602581001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6178363349357467925}
+  m_Layer: 7
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6178363349357467925
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441158003602581001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4027525735204746960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5592744896739662500
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1710,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8571467827707234601}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1511,7 +1742,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6481578881294210053}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb1.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1543,7 +1774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2176124709329920125}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index1.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1575,7 +1806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3403556099234094818}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pink1.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1607,7 +1838,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4115993752310039878}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring2.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1639,7 +1870,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8227641825781860838}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index3.R_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1670,7 +1901,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3937735776208832883}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky3.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1702,7 +1933,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1634914211883627532}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Heart1.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1734,7 +1965,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6084020407328104024}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1749,15 +1980,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6776987822136736353}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: -0.013093071}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8283463030697220996}
+  - {fileID: 2825213164050378306}
   - {fileID: 4842294031386494438}
   m_Father: {fileID: 3880481816866650852}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &6985721204017052008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1767,7 +1999,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4842294031386494438}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shoulder.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1784,7 +2016,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.52891314, y: -0.47291544, z: -0.47806126, w: 0.5177446}
   m_LocalPosition: {x: 0.0027390677, y: 0.016401304, z: 6.717942e-10}
-  m_LocalScale: {x: 0.99999994, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5967859397014832804}
@@ -1799,7 +2031,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5343919394433876672}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index3.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1831,7 +2063,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6602150516765655164}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring1.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1863,7 +2095,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5978927618445896309}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Thumb2.L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1897,7 +2129,8 @@ GameObject:
   - component: {fileID: 3657861908665185665}
   - component: {fileID: 5384456969492430009}
   - component: {fileID: 6660329653442319643}
-  m_Layer: 0
+  - component: {fileID: 2145267270076716680}
+  m_Layer: 7
   m_Name: FpsArms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1914,8 +2147,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 25, y: 25, z: 25}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4183097618940730217}
   - {fileID: 3880481816866650852}
@@ -1932,7 +2165,7 @@ Animator:
   m_GameObject: {fileID: 7643184848490326760}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 59052c6b39b1d414ca3e3111674c620c, type: 3}
-  m_Controller: {fileID: 9100000, guid: 227e2c61ae0627c44bb82f5ac3e376f2, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2039,6 +2272,23 @@ MonoBehaviour:
   - {fileID: 6481578881294210053}
   - {fileID: 5346509320674583377}
   - {fileID: 4178744452316597301}
+  - {fileID: 2825213164050378306}
+--- !u!114 &2145267270076716680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7643184848490326760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e27b62e6a5365049921218c1eb1270a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHandTarget: {fileID: 6178363349357467925}
+  rightHandTarget: {fileID: 3672002277932182350}
+  leftGunTarget: {fileID: 0}
+  rightGunTarget: {fileID: 0}
 --- !u!1 &7849616566870667484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2048,7 +2298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7867702984773835413}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2080,7 +2330,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5937236705594853966}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index3.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2112,7 +2362,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3464650972045259836}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring3.L_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2143,7 +2393,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2302198227603523675}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Forearm.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2175,7 +2425,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8740894211770324760}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Index.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2207,7 +2457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3179935975195335589}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring2.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2239,7 +2489,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6332434498340765768}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2271,7 +2521,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6198258596738412035}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky2.L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2303,7 +2553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3008019338833010759}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pinky3.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2335,7 +2585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6819391544088931494}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2367,7 +2617,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6834128012818246899}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HandIK.R
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
     public PlayerMovement playerMovement;
+
+    WeaponData weapon;
+    WeaponShooting weaponShooting;
 
     [Header("Settings")]
     public bool canSway = true;
@@ -30,9 +31,15 @@ public class WeaponSway : MonoBehaviour
     public float speedCurve;
     float curveSin { get => Mathf.Sin(speedCurve); }
     float curveCos { get => Mathf.Cos(speedCurve); }
-
-    public Vector3 travelLimit = Vector3.one * 0.025f;
-    public Vector3 bobLimit = Vector3.one * 0.01f;
+    [Space]
+    public float HipFireTravelLimit;
+    public float HipFireBobLimit;
+    [Space]
+    public float ADSTravelLimit;
+    public float ADSBobLimit;
+    [Space]
+    public Vector3 currentTravelLimit;
+    public Vector3 currentBobLimit;
     Vector3 bobPosition;
 
     public float bobExaggeration;
@@ -41,23 +48,41 @@ public class WeaponSway : MonoBehaviour
     public Vector3 multiplier;
     Vector3 bobEulerRotation;
 
+    Vector3 defaultPos;
+    Vector3 aimingPos;
+
     Vector3 startPos;
 
     private void OnEnable()
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
+        WeaponSwapping.onWeaponSwapped += GetWeaponData;
         PlayerHealth.onDeath += StopSway;
     }
 
     private void OnDisable()
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
+        WeaponSwapping.onWeaponSwapped -= GetWeaponData;
         PlayerHealth.onDeath -= StopSway;
     }
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+    }
+
+    private void Start()
     {
         startPos = transform.localPosition;
+
+        RestoreBob();
+    }
+
+    void GetWeaponData(GameObject _weapon)
+    {
+        weaponShooting = _weapon.GetComponent<WeaponShooting>();
+        weapon = weaponShooting.weaponData;
+        aimingPos = weaponShooting.weaponData.gunBoneAimingPos;
     }
 
     // Update is called once per frame
@@ -71,7 +96,10 @@ public class WeaponSway : MonoBehaviour
         BobOffset();
         BobRotation();
 
-        CompositePositionRotation();
+        //if(!weaponShooting.isReloading)
+            CompositePositionRotation();
+
+
     }
 
 
@@ -112,7 +140,9 @@ public class WeaponSway : MonoBehaviour
 
     void CompositePositionRotation()
     {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + startPos, Time.deltaTime * smooth);
+        Vector3 pos = weaponShooting.isAiming ? aimingPos : startPos;
+
+        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + pos, Time.deltaTime * smooth);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
     }
 
@@ -122,9 +152,9 @@ public class WeaponSway : MonoBehaviour
         
         if (bobOffset == false) { bobPosition = Vector3.zero; return; }       
 
-        bobPosition.x = (curveCos * bobLimit.x * (playerMovement.isGrounded ? 1 : 0)) - (walkInput.x * travelLimit.x);
-        bobPosition.y = (curveSin * bobLimit.y) - (Input.GetAxis("Vertical") * travelLimit.y);
-        bobPosition.z = -(walkInput.y * travelLimit.z);
+        bobPosition.x = (curveCos * currentBobLimit.x * (playerMovement.isGrounded ? 1 : 0)) - (walkInput.x * currentTravelLimit.x);
+        bobPosition.y = (curveSin * currentBobLimit.y) - (Input.GetAxis("Vertical") * currentTravelLimit.y);
+        bobPosition.z = -(walkInput.y * currentTravelLimit.z);
     }
 
     void BobRotation()
@@ -149,11 +179,13 @@ public class WeaponSway : MonoBehaviour
     }
     public void ReduceBob()
     {
-        bobLimit = Vector3.one * 0.001f; travelLimit = Vector3.one * 0.005f;
+        currentBobLimit = new Vector3(ADSBobLimit, ADSBobLimit, ADSBobLimit); 
+        currentTravelLimit = new Vector3(ADSTravelLimit, ADSTravelLimit, ADSTravelLimit);
     }
     public void RestoreBob()
     {
-        bobLimit = Vector3.one * 0.01f; travelLimit = Vector3.one * 0.025f;
+        currentBobLimit = new Vector3(HipFireBobLimit, HipFireBobLimit, HipFireBobLimit);
+        currentTravelLimit = new Vector3(HipFireTravelLimit, HipFireTravelLimit, HipFireTravelLimit);
     }
 
     void StopSway()

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Python
   m_EditorClassIdentifier: 
   weaponSlotType: 1
+  weaponType: 0
   reloadType: 0
   name: Python
   description: 
@@ -21,8 +22,8 @@ MonoBehaviour:
   weaponWallBuyObj: {fileID: 1731598803622250, guid: c253b90d90f51fb4d9d43be78b67c403, type: 3}
   UIObj: {fileID: 0}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  defaultYPos: -1.6
-  aimingYPos: -1.545
+  defaultPos: {x: 0, y: 0, z: 0}
+  aimingPos: {x: 0, y: 0, z: 0}
   UISprite: {fileID: 21300000, guid: 2d2277bc7d3f26e4ba0d232410831a2e, type: 3}
   magSize: 6
   maxReserveAmmo: 54
@@ -31,7 +32,7 @@ MonoBehaviour:
   maxSpreadDeviationAngle: 4
   damage: 150
   headshotMultiplier: 3
-  perShotCooldown: 0.8
+  fireRate: 0
   timeToADS: 1
   aimingFOV: 50
   ADSCurve:
@@ -73,6 +74,15 @@ MonoBehaviour:
   insertShellSFX: {fileID: 0}
   reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  reloadStartAnimLength: 0
+  reloadShellAnimLength: 0
+  reloadEndAnimLength: 0
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  ADSRecoilX: 0
+  ADSRecoilY: 0
+  ADSRecoilZ: 0
   canUseSightAttachment: 1
   canUseMagAttachment: 1
   canUseMuzzleAttachment: 1

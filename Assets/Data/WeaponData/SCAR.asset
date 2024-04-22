@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SCAR
   m_EditorClassIdentifier: 
   weaponSlotType: 0
-  weaponType: 2
+  weaponType: 0
   reloadType: 0
   name: SCAR
   description: 
@@ -22,8 +22,8 @@ MonoBehaviour:
   weaponWallBuyObj: {fileID: 1701325561305732, guid: 510ec589132763647861a79fcf0441fd, type: 3}
   UIObj: {fileID: 9038608379410015798, guid: 1bfb1d334935c6b4987da104a221c207, type: 3}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  defaultYPos: -1.7
-  aimingYPos: -1.649
+  defaultPos: {x: 0, y: -1.7, z: 0}
+  aimingPos: {x: 0, y: 0, z: 0}
   UISprite: {fileID: 21300000, guid: 7bf228388cd7919489505da6dc804568, type: 3}
   magSize: 30
   maxReserveAmmo: 270

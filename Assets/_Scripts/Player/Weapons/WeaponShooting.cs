@@ -14,11 +14,12 @@ public class WeaponShooting : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] HitEffectData hitEffectData;
-
+    public WeaponData weaponData;
+    public int weaponSlot;
     public bool canShoot;
-    public Animator weaponAnimator;
-
-    public WeaponData equippedWeapon;
+    //public Animator weaponAnimator;
+    public Animator armsAnimator;
+    float laserLength = 1;
     int maxMagSize, maxReserveAmmo, loadedAmmoBeforeReload, reserveAmmoBeforeReload, weaponBaseDamage, projectileCount;
     public int currentReserveAmmo, currentLoadedAmmo;
     float maxSpreadDeviationAngle, reloadSpeed, headshotMultiplier;
@@ -28,7 +29,6 @@ public class WeaponShooting : MonoBehaviour
 
     [SerializeField]
     GameObject bulletHole;
-    Image scopeOverlay, scopeOverlayFade;
     [SerializeField]
     ParticleSystem muzzleEffect;
     //Image crosshair;
@@ -49,12 +49,25 @@ public class WeaponShooting : MonoBehaviour
     bool stopShellByShellReload;
 
     public bool IsADSToggle;
+
+    public Transform weaponLeftHandTarget, weaponRightHandTarget;
+
+    [Header("LaserSight")]
+    [SerializeField]
+    GameObject laserPoint;
+    [SerializeField]
+    Transform laserOriginPoint;
+    [SerializeField]
+    LineRenderer laserPrefab, spawnedLaser;
+
+    GameObject spawnedLaserPoint;
+
     private void Awake()
     {
         weaponCamera = GameObject.FindGameObjectWithTag("WeaponCamera").GetComponent<Camera>();
         SFXSource = GameObject.FindGameObjectWithTag("WeaponSFX").GetComponent<AudioSource>();
-        scopeOverlay = GameObject.FindGameObjectWithTag("ScopeOverlay").GetComponent<Image>();
         weaponSkinnedMeshRenderers = gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+        //laserLine = GetComponentInChildren<LineRenderer>();
     }
 
     private void OnEnable()
@@ -71,6 +84,8 @@ public class WeaponShooting : MonoBehaviour
         BottomlessClip.onBottomlessClipGrabbed += EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded += DisableInstantKills;
         PowerUpManager.onBottomlessClipEnded += DisableBottomlessClip;
+
+        SpawnLaser();
     }
 
     private void OnDisable()
@@ -83,13 +98,15 @@ public class WeaponShooting : MonoBehaviour
         BottomlessClip.onBottomlessClipGrabbed -= EnableBottomlessClip;
         PowerUpManager.onInstantKillEnded -= DisableInstantKills;
         PowerUpManager.onBottomlessClipEnded -= DisableBottomlessClip;
+
+        RemoveLaser();
+
     }
 
-    public void InitialiseWeapon(WeaponData weaponToInitialise)
+    public void InitialiseWeapon(WeaponData weaponToInitialise, Animator FPSArmsAnimator)
     {
-        weaponAnimator = GetComponent<Animator>();
-        PlayerMovement.instance.animator = weaponAnimator;
-        equippedWeapon = weaponToInitialise;
+        armsAnimator = FPSArmsAnimator;
+        weaponData = weaponToInitialise;
         maxMagSize = weaponToInitialise.magSize;
         maxReserveAmmo = weaponToInitialise.maxReserveAmmo;
         currentLoadedAmmo = maxMagSize;
@@ -111,9 +128,6 @@ public class WeaponShooting : MonoBehaviour
         }
         else
         fullReloadSFX = weaponToInitialise.fullReloadSFX;
-
-        if (weaponToInitialise.isScoped == true)
-            scopeOverlayFade = scopeOverlay.transform.GetChild(0).GetComponent<Image>();
 
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -148,18 +162,37 @@ public class WeaponShooting : MonoBehaviour
         canShoot = false;
         canADS = false;
         canReload = false;
+        RemoveLaser();
     }
 
-    // Update is called once per frame
+    void SpawnLaser()
+    {
+        spawnedLaser = Instantiate(laserPrefab, this.transform);
+    }
+
+    void RemoveLaser()
+    {
+        Destroy(spawnedLaser);
+        RemoveLaserPoint();
+    }
+
+    void RemoveLaserPoint()
+    {
+        Destroy(spawnedLaserPoint);
+    }
+
     void Update()
     {
         if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
         {
+            if(spawnedLaser != null)
+                DrawLaser();
+
             if(isAutomatic)
             {
                 if(Input.GetKey(fireKey))
                 {
-                    if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell && isReloading == true)
+                    if (weaponData.reloadType == WeaponData.ReloadType.shellByShell && isReloading == true)
                     {
                         InterruptShellByShellReload();
                         return;
@@ -172,7 +205,7 @@ public class WeaponShooting : MonoBehaviour
             {
                 if(Input.GetKeyDown(fireKey))
                 {
-                    if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell && isReloading == true)
+                    if (weaponData.reloadType == WeaponData.ReloadType.shellByShell && isReloading == true)
                     {
                         InterruptShellByShellReload();
                         return;
@@ -210,6 +243,35 @@ public class WeaponShooting : MonoBehaviour
         }
     }
 
+    void DrawLaser()
+    {
+        spawnedLaser.SetPosition(0, laserOriginPoint.transform.position);
+        spawnedLaser.SetPosition(1, muzzleEffect.transform.position + muzzleEffect.transform.forward * laserLength);
+
+        RaycastHit hit;
+        if(Physics.Raycast(muzzleEffect.transform.position, muzzleEffect.transform.forward, out hit, Mathf.Infinity))
+        {
+            Vector3 laserPointSpawnLocation = hit.point + (hit.normal * .01f);
+            Quaternion laserPointSpawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+
+            if (spawnedLaserPoint == null)
+            {
+                spawnedLaserPoint = Instantiate(laserPoint, laserPointSpawnLocation, laserPointSpawnRotation);
+            }
+            if(spawnedLaserPoint != null)
+            {
+                spawnedLaserPoint.transform.position = laserPointSpawnLocation;
+                spawnedLaserPoint.transform.rotation = laserPointSpawnRotation;
+            }
+        }
+        else
+        {
+            if(spawnedLaserPoint)
+                RemoveLaserPoint();
+        }
+
+    }
+
     void FireWeapon()
     {
         if (canShoot && (currentLoadedAmmo != 0 || isBottomlessClipActive) && !isReloading)
@@ -218,51 +280,46 @@ public class WeaponShooting : MonoBehaviour
             StartCoroutine(PerShotCooldown());
             PlayMuzzleFlash();
             SFXSource.PlayOneShot(PickAudioClip());
-            if(isAiming)
+
+            var stateID = Animator.StringToHash("Fire");
+            if(armsAnimator.HasState(0, stateID))
             {
-                weaponAnimator.Play("AimingFire");
-            }
-            else if (!isAiming)
-            {
-                weaponAnimator.Play("Fire");
+                armsAnimator.Play("Fire");
             }
 
             if(!isBottomlessClipActive)
                 currentLoadedAmmo--;
 
-            onWeaponFired?.Invoke(isAiming);
-            onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-
             for (int i = 0; i < projectileCount; i++)
             {
-                if (equippedWeapon.isProjectile)
+                if (weaponData.isProjectile)
                 {
                     //fire projectile
-                    GameObject clone = Instantiate(equippedWeapon.projectile, muzzleEffect.transform.position, transform.rotation);
-                    clone.GetComponent<Rigidbody>().AddForce(transform.forward * equippedWeapon.projectileInitalVelocity, ForceMode.Impulse);
+                    GameObject clone = Instantiate(weaponData.projectile, muzzleEffect.transform.position, transform.rotation);
+                    clone.GetComponent<Rigidbody>().AddForce(transform.forward * weaponData.projectileInitalVelocity, ForceMode.Impulse);
                 }
                 else //fire hitscan
                 {
-                    Vector3 forwardVector = Vector3.forward;
-                    if (PlayerMovement.instance.isCrouching)
-                    {
-                        weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
-                    }
-                    else if(PlayerMovement.instance.currentVelocity.magnitude > 0 && !PlayerMovement.instance.isCrouching)
-                    {
-                        weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) * 2);
-                    }
-                    else 
-                    {
-                        weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
-                    }
-                    float angle = Random.Range(-360f, 360f);
-                    forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, Vector3.up) * forwardVector;
-                    forwardVector = Quaternion.AngleAxis(angle, Vector3.forward) * forwardVector;
+                    Vector3 forwardVector = muzzleEffect.transform.forward;
+                    //if (PlayerMovement.instance.isCrouching)
+                    //{
+                    //    weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
+                    //}
+                    //else if(PlayerMovement.instance.currentVelocity.magnitude > 0 && !PlayerMovement.instance.isCrouching)
+                    //{
+                    //    weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) * 2);
+                    //}
+                    //else 
+                    //{
+                    //    weaponSpreadDeviation = Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle);
+                    //}
+                    //float angle = Random.Range(-360f, 360f);
+                    //forwardVector = Quaternion.AngleAxis(weaponSpreadDeviation, muzzleEffect.transform.up) * forwardVector;
+                    //forwardVector = Quaternion.AngleAxis(angle, muzzleEffect.transform.forward) * forwardVector;
 
-                    forwardVector = weaponCamera.transform.rotation * forwardVector;
+                    //forwardVector = weaponCamera.transform.rotation * forwardVector;
                     RaycastHit hit;
-                    if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1.7f, transform.position.z), isAiming == false ? forwardVector : transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+                    if (Physics.Raycast(muzzleEffect.transform.position, /*isAiming == false ? */forwardVector/* : muzzleEffect.transform.forward*/, out hit, Mathf.Infinity))
                     {
                         IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
                         if (damageable != null)
@@ -301,9 +358,17 @@ public class WeaponShooting : MonoBehaviour
                             spawnRotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
                             hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
                         }
+
+                        if(weaponData.bulletPenConfig && weaponData.bulletPenConfig.MaxObjectsToPenetrate > 0)
+                        {
+                            //penetrate zombies
+                        }
                     }
                 }
             }
+
+            onWeaponFired?.Invoke(isAiming);
+            onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         }
         else if (canShoot && (currentLoadedAmmo == 0 && !isBottomlessClipActive) && currentReserveAmmo > 0)
         {
@@ -334,17 +399,7 @@ public class WeaponShooting : MonoBehaviour
         {
             onAimDownSights?.Invoke(isAiming, this);
             isAiming = true;
-            weaponAnimator.SetBool("isAiming", isAiming);
-            if(equippedWeapon.isScoped)
-            {
-                scopeOverlayFade.DOColor(Color.black, .4f).SetDelay(.2f).OnComplete(() =>
-                {
-                    scopeOverlay.enabled = true;
-                    scopeOverlay.sprite = equippedWeapon.scopeOverlay;
-                    HideWeaponModel();
-                    scopeOverlayFade.DOColor(Color.clear, .2f);
-                });
-            }
+            //weaponAnimator.SetBool("isAiming", isAiming);
         }
     }
 
@@ -354,35 +409,15 @@ public class WeaponShooting : MonoBehaviour
         {
             onAimDownSights?.Invoke(isAiming, this);
             isAiming = false;
-            weaponAnimator.SetBool("isAiming", isAiming);
-            if (equippedWeapon.isScoped)
-            {
-                scopeOverlayFade.DOColor(Color.black, .2f).OnComplete(() =>
-                {
-                    scopeOverlay.enabled = false;
-                    scopeOverlay.sprite = null;
-                    ShowWeaponModel();
-                    scopeOverlayFade.DOColor(Color.clear, .1f);
-                });
-            }
+            //weaponAnimator.SetBool("isAiming", isAiming);
         }
-    }
-
-    void ShowWeaponModel()
-    {
-        foreach (SkinnedMeshRenderer meshRenderer in weaponSkinnedMeshRenderers) { meshRenderer.enabled = true; }
-    }
-
-    void HideWeaponModel()
-    {
-        foreach (SkinnedMeshRenderer meshRenderer in weaponSkinnedMeshRenderers) { meshRenderer.enabled = false; }
     }
 
     void ReloadWeapon()
     {
         if(canReload)
         {
-            weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + PlayerUpgrades.reloadSpeedModifier);
+            //weaponAnimator.SetFloat("reloadSpeedMultiplier", 1 + PlayerUpgrades.reloadSpeedModifier);
             if (isAiming)
             {
                 StopADS();
@@ -390,10 +425,10 @@ public class WeaponShooting : MonoBehaviour
             canADS = false;
             canShoot = false;
             isReloading = true;
-            if(equippedWeapon.reloadType == WeaponData.ReloadType.magazine)
+            if(weaponData.reloadType == WeaponData.ReloadType.magazine)
             {
                 SFXSource.PlayOneShot(fullReloadSFX);
-                weaponAnimator.Play("Reload");
+                armsAnimator.Play("Reload");
             
                 loadedAmmoBeforeReload = currentLoadedAmmo;
                 reserveAmmoBeforeReload = currentReserveAmmo;
@@ -427,7 +462,7 @@ public class WeaponShooting : MonoBehaviour
                     }
                 }
             }
-            else if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell)
+            else if (weaponData.reloadType == WeaponData.ReloadType.shellByShell)
             {
                 shellByShellReloadCoroutine = StartCoroutine(ShellByShellReload());
             }
@@ -436,19 +471,19 @@ public class WeaponShooting : MonoBehaviour
 
     IEnumerator ShellByShellReload()
     {
-        weaponAnimator.Play("StartReload");
+        //weaponAnimator.Play("StartReload");
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
         //SFXSource.PlayOneShot(reloadStartSFX);
-        yield return new WaitForSeconds(equippedWeapon.reloadStartAnimLength - (equippedWeapon.reloadStartAnimLength * PlayerUpgrades.reloadSpeedModifier));
+        yield return new WaitForSeconds(weaponData.reloadStartAnimLength - (weaponData.reloadStartAnimLength * PlayerUpgrades.reloadSpeedModifier));
         //maxmagsize - 1 due to EndReload anim slotting a round
         while (currentLoadedAmmo < maxMagSize - 1 && !stopShellByShellReload)
         {
-            weaponAnimator.Play("InsertShell");
+            //weaponAnimator.Play("InsertShell");
             
             loadedAmmoBeforeReload = currentLoadedAmmo;
             reserveAmmoBeforeReload = currentReserveAmmo;
-            yield return new WaitForSeconds(equippedWeapon.reloadShellAnimLength - (equippedWeapon.reloadShellAnimLength * PlayerUpgrades.reloadSpeedModifier));
+            yield return new WaitForSeconds(weaponData.reloadShellAnimLength - (weaponData.reloadShellAnimLength * PlayerUpgrades.reloadSpeedModifier));
             currentLoadedAmmo++;
             currentReserveAmmo--;
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -458,10 +493,10 @@ public class WeaponShooting : MonoBehaviour
         if (stopShellByShellReload)
             stopShellByShellReload = false;
 
-        weaponAnimator.Play("EndReload");
+        //weaponAnimator.Play("EndReload");
         loadedAmmoBeforeReload = currentLoadedAmmo;
         reserveAmmoBeforeReload = currentReserveAmmo;
-        yield return new WaitForSeconds(equippedWeapon.reloadEndAnimLength - (equippedWeapon.reloadEndAnimLength * PlayerUpgrades.reloadSpeedModifier));
+        yield return new WaitForSeconds(weaponData.reloadEndAnimLength - (weaponData.reloadEndAnimLength * PlayerUpgrades.reloadSpeedModifier));
         currentLoadedAmmo++;
         currentReserveAmmo--;
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
@@ -490,12 +525,12 @@ public class WeaponShooting : MonoBehaviour
     public void CancelReload()
     {
         //stop weapons remaining in weird positions after cancelling reload
-        weaponAnimator.Rebind();
-        weaponAnimator.Update(0f);
+        //weaponAnimator.Rebind();
+        //weaponAnimator.Update(0f);
 
         SFXSource.Stop();
 
-        if (equippedWeapon.reloadType == WeaponData.ReloadType.shellByShell)
+        if (weaponData.reloadType == WeaponData.ReloadType.shellByShell)
         {
             if (shellByShellReloadCoroutine != null)
                 StopCoroutine(shellByShellReloadCoroutine);

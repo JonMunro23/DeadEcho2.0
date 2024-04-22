@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float groundDrag;
     public LayerMask groundLayer;
     public Transform orientation;
-    public Animator animator;
+    //public Animator animator;
     [SerializeField] Transform cameraPos;
     [HideInInspector] public float walkingMovementSpeed;
     float horizontalInput;
@@ -189,10 +187,10 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f, ForceMode.Force);
             if(horizontalInput != 0 || verticalInput != 0)
             {
-                if(isSprinting)
-                    animator.SetFloat("speed", 1, .2f, Time.deltaTime);
-                else if(!isCrouching)
-                    animator.SetFloat("speed", 0.66f, .2f, Time.deltaTime);
+                //if(isSprinting)
+                //    animator.SetFloat("speed", 1, .2f, Time.deltaTime);
+                //else if(!isCrouching)
+                //    animator.SetFloat("speed", 0.66f, .2f, Time.deltaTime);
 
                 if(canPlayMovementSFX)
                 {
@@ -203,7 +201,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
+                //animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
             }
         }
 
@@ -211,7 +209,7 @@ public class PlayerMovement : MonoBehaviour
         else if(!isGrounded)
         {
             rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f * airMultiplier, ForceMode.Force);
-            animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
+            //animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
         }
     }
 
@@ -272,7 +270,7 @@ public class PlayerMovement : MonoBehaviour
             cameraPos.transform.localPosition = Vector3.MoveTowards(cameraPos.transform.localPosition, crouchingCamPos, crouchingSpeed * Time.deltaTime);
             if(horizontalInput != 0 || verticalInput != 0)
             {
-                animator.SetFloat("speed", 0.33f, .2f, Time.deltaTime);
+                //animator.SetFloat("speed", 0.33f, .2f, Time.deltaTime);
             }
         }
         else if (isCrouching == false && cameraPos.transform.localPosition.y < originalCamPos.y)
@@ -467,13 +465,13 @@ public class PlayerMovement : MonoBehaviour
 
     void SwapToNewWeaponAnimator(GameObject newWeaponObj)
     {
-        animator = newWeaponObj.GetComponent<Animator>();
+        //animator = newWeaponObj.GetComponent<Animator>();
     }
 
     void StopMovement()
     {
         canMove = false;
-        animator.SetFloat("speed", 0);
+        //animator.SetFloat("speed", 0);
         rb.velocity = Vector3.zero;
         rb.angularVelocity =  Vector3.zero;
     }

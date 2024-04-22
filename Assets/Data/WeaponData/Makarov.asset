@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: Makarov
   m_EditorClassIdentifier: 
   weaponSlotType: 1
+  weaponType: 0
+  reloadType: 0
   name: Makarov
   description: 
   cost: 0
   weaponObj: {fileID: 1170339376308916, guid: 87109e39fc1c2fe45955415c04b02e82, type: 3}
   weaponWallBuyObj: {fileID: 0}
   UIObj: {fileID: 7397937920921090876, guid: b3f239bcf48b6fe4191f8458f98befbe, type: 3}
-  muzzleEffect: {fileID: 0}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  defaultYPos: -1.7
-  aimingYPos: -1.68
+  defaultPos: {x: 0, y: -1.7, z: 0}
+  aimingPos: {x: 0, y: 0, z: 0}
   UISprite: {fileID: 21300000, guid: 314bd68ca393a9e4c86395f9bad986be, type: 3}
   magSize: 12
   maxReserveAmmo: 108
@@ -31,7 +32,7 @@ MonoBehaviour:
   maxSpreadDeviationAngle: 3
   damage: 40
   headshotMultiplier: 2
-  perShotCooldown: 0.4
+  fireRate: 0
   timeToADS: 1
   aimingFOV: 50
   ADSCurve:
@@ -59,17 +60,29 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   isAutomatic: 1
+  isScoped: 0
+  scopeOverlay: {fileID: 0}
   isProjectile: 0
   projectile: {fileID: 0}
-  blastRadius: 0
   projectileInitalVelocity: 0
-  projectileDestructionEffect: {fileID: 0}
   fireSFX:
   - {fileID: 8300000, guid: 7736ebd0e468eb843a27e996b7c014a1, type: 3}
   - {fileID: 8300000, guid: 00d6c854d736b274692325c410bbdcc7, type: 3}
   - {fileID: 8300000, guid: 57be9f76b7fd1914fbb8a53e7ad41c53, type: 3}
-  reloadSFX: {fileID: 8300000, guid: 5352c7bdf44b11141ba87d35e6e5a45a, type: 3}
+  fullReloadSFX: {fileID: 0}
+  reloadStartSFX: {fileID: 0}
+  insertShellSFX: {fileID: 0}
+  reloadEndSFX: {fileID: 0}
   equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  reloadStartAnimLength: 0
+  reloadShellAnimLength: 0
+  reloadEndAnimLength: 0
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  ADSRecoilX: 0
+  ADSRecoilY: 0
+  ADSRecoilZ: 0
   canUseSightAttachment: 0
   canUseMagAttachment: 1
   canUseMuzzleAttachment: 1

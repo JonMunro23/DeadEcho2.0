@@ -42,18 +42,18 @@ public class WeaponWorkbenchManager : MonoBehaviour
 
     void AssignWeaponsToSlots()
     {
-        if(WeaponSwapping.instance.currentPrimary1Weapon != null)
-        {
-            primarySlot1WeaponHolder.InitialiseWeaponHolder(WeaponSwapping.instance.currentPrimary1Weapon);
-        }
-        if(WeaponSwapping.instance.currentPrimary2Weapon != null)
-        {
-            primarySlot2WeaponHolder.InitialiseWeaponHolder(WeaponSwapping.instance.currentPrimary2Weapon);
-        }
-        if (WeaponSwapping.instance.currentSecondaryWeapon != null)
-        {
-            SecondarySlotWeaponHolder.InitialiseWeaponHolder(WeaponSwapping.instance.currentSecondaryWeapon);
-        }
+        //if(WeaponSwapping.instance.currentPrimary1Weapon != null)
+        //{
+        //    primarySlot1WeaponHolder.InitialiseWeaponHolder(WeaponSwapping.instance.currentPrimary1Weapon);
+        //}
+        //if(WeaponSwapping.instance.currentPrimary2Weapon != null)
+        //{
+        //    primarySlot2WeaponHolder.InitialiseWeaponHolder(WeaponSwapping.instance.currentPrimary2Weapon);
+        //}
+        //if (WeaponSwapping.instance.currentSecondaryWeapon != null)
+        //{
+        //    SecondarySlotWeaponHolder.InitialiseWeaponHolder(WeaponSwapping.instance.currentSecondaryWeapon);
+        //}
     }
 
     void UpdatePointsCounter()

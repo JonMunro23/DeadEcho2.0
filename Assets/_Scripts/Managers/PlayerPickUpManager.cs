@@ -33,8 +33,8 @@ public class PlayerPickUpManager : MonoBehaviour
                 {
                     if (PointsManager.instance.currentPoints >= weaponToPurchase.cost)
                     {
-                        if (weaponToPurchase.name != WeaponSwapping.instance.currentlyEquippedWeapon.name)
-                            WeaponSwapping.instance.PickUpWeapon(weaponToPurchase);
+                        if (weaponToPurchase.name != WeaponSwapping.instance.currentlyEquippedWeapon.weaponData.name)
+                            WeaponSwapping.instance.SpawnNewWeapon(weaponToPurchase);
                         else
                             return;
 
@@ -46,7 +46,7 @@ public class PlayerPickUpManager : MonoBehaviour
                 {
                     if (PointsManager.instance.currentPoints >= costOfAmmo)
                     {
-                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name && !WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                        if(WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.weaponData.name)
                         {
                             if (!WeaponSwapping.instance.currentPrimary1WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
@@ -56,7 +56,7 @@ public class PlayerPickUpManager : MonoBehaviour
                             else
                                 return;
                         }
-                        else if (WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name && !WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                        else if (WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.weaponData.name)
                         {
                             if (!WeaponSwapping.instance.currentPrimary2WeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
@@ -66,7 +66,7 @@ public class PlayerPickUpManager : MonoBehaviour
                             else
                                 return;
                         }
-                        else if (WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name && !WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
+                        else if (WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.weaponData.name)
                         {
                             if (!WeaponSwapping.instance.currentSecondaryWeaponObj.GetComponent<WeaponShooting>().IsAmmoFull())
                             {
@@ -131,7 +131,7 @@ public class PlayerPickUpManager : MonoBehaviour
                 //wallBuyHighlightEffect.outlineColor = Color.red;
             }                
 
-            if (WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.name || WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.name || WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.name)
+            if (WeaponSwapping.instance.currentPrimary1Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary1Weapon.weaponData.name || WeaponSwapping.instance.currentPrimary2Weapon && weaponToPurchase.name == WeaponSwapping.instance.currentPrimary2Weapon.weaponData.name || WeaponSwapping.instance.currentSecondaryWeapon && weaponToPurchase.name == WeaponSwapping.instance.currentSecondaryWeapon.weaponData.name)
             {
                 purchasePickupText.text = "Press " + purchaseWeaponKey.ToString() + " to purchase ammo for £" + costOfAmmo;
                 

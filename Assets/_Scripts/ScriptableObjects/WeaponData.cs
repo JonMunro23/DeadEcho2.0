@@ -1,3 +1,4 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "WeaponObject", menuName = "New Weapon")]
@@ -35,13 +36,17 @@ public class WeaponData : ScriptableObject
     public GameObject weaponObj;
     public GameObject weaponWallBuyObj;
     public GameObject UIObj;
+    public AnimatorController armsController;
+    [Space]
     public HitEffectData hitEffectData;
+    public BulletPenetrationConfig bulletPenConfig;
 
-    public float defaultYPos;
-    public float aimingYPos;
+    public Vector3 weaponSpawnPos;
+    public Vector3 gunBoneAimingPos;
 
     public Sprite UISprite;
 
+    public bool infiniteAmmo;
     public int magSize;
     public int maxReserveAmmo;
     public float reloadSpeed;
@@ -56,7 +61,6 @@ public class WeaponData : ScriptableObject
     public AnimationCurve ADSCurve;
     public bool isAutomatic;
     public bool isScoped;
-    public Sprite scopeOverlay;
     public bool isProjectile;
     public GameObject projectile;
     public float projectileInitalVelocity;

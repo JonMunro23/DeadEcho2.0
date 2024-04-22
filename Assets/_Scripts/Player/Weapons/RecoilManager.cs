@@ -60,7 +60,7 @@ public class RecoilManager : MonoBehaviour
 
     public void RecoilFire(bool isAiming)
     {
-        currentWeapon = weaponSwapping.currentlyEquippedWeapon;
+        currentWeapon = weaponSwapping.currentlyEquippedWeapon.weaponData;
 
         if (isAiming)
         {
