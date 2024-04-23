@@ -43,7 +43,7 @@ public class WeaponData : ScriptableObject
     public BulletPenetrationConfig bulletPenConfig;
 
     public Vector3 weaponSpawnPos;
-    public Vector3 gunBoneAimingPos;
+    public Vector3 aimingPos;
 
     public bool hasLaserSight;
 

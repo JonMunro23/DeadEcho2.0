@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f836e6ddf12a24db5922ec18ff9d2c, type: 3}
+  m_Name: AKM
+  m_EditorClassIdentifier: 
+  weaponSlotType: 0
+  weaponType: 2
+  reloadType: 0
+  name: AKM
+  description: 
+  cost: 1200
+  weaponObj: {fileID: 4627329524101206119, guid: f4ec531142b0dcd48af405f97dcb12e0, type: 3}
+  weaponWallBuyObj: {fileID: 1701325561305732, guid: 510ec589132763647861a79fcf0441fd, type: 3}
+  UIObj: {fileID: 9038608379410015798, guid: 1bfb1d334935c6b4987da104a221c207, type: 3}
+  armsController: {fileID: 9100000, guid: 85d5eb79a129f1341b7aa5311ed4841b, type: 2}
+  hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
+  bulletPenConfig: {fileID: 0}
+  weaponSpawnPos: {x: 0.00452, y: -0.00616, z: 0.0009}
+  aimingPos: {x: 0, y: -0.0042, z: -0.002}
+  hasLaserSight: 1
+  UISprite: {fileID: 21300000, guid: 7bf228388cd7919489505da6dc804568, type: 3}
+  infiniteAmmo: 0
+  magSize: 30
+  maxReserveAmmo: 270
+  reloadSpeed: 2.833
+  projectileCount: 1
+  maxSpreadDeviationAngle: 2.5
+  damage: 50
+  headshotMultiplier: 2
+  fireRate: 450
+  timeToADS: 3
+  aimingFOV: 45
+  ADSCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  isAutomatic: 1
+  isScoped: 0
+  isProjectile: 0
+  projectile: {fileID: 0}
+  projectileInitalVelocity: 0
+  fireSFX:
+  - {fileID: 8300000, guid: 8f04b3ff514c3254898fc3754113a032, type: 3}
+  fullReloadSFX: {fileID: 8300000, guid: cc988050393583047ad560d1ce931d72, type: 3}
+  reloadStartSFX: {fileID: 0}
+  insertShellSFX: {fileID: 0}
+  reloadEndSFX: {fileID: 0}
+  equipSFX: {fileID: 8300000, guid: 55fbfb2228bf67e4b9f2708b099ded81, type: 3}
+  reloadStartAnimLength: 0
+  reloadShellAnimLength: 0
+  reloadEndAnimLength: 0
+  recoilX: -2.4
+  recoilY: 1.5
+  recoilZ: 0.35
+  ADSRecoilX: -1
+  ADSRecoilY: 0.4
+  ADSRecoilZ: 0.25
+  canUseSightAttachment: 1
+  canUseMagAttachment: 1
+  canUseMuzzleAttachment: 1
+  canUseStockAttachment: 1

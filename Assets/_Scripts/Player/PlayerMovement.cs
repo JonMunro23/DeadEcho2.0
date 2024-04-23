@@ -22,6 +22,14 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 currentVelocity;
     [SerializeField] Vector3 originalCamPos;
 
+    [Header("Gun Bone States")]
+    [SerializeField] Transform gunBone;
+    [SerializeField] float statePosTransitionSpeed, stateRotTransitionSpeed;
+    [SerializeField] Transform idleState;
+    public Transform sprintState;
+    [SerializeField] Transform crouchState;
+    public Transform currentTargetState;
+
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
@@ -30,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jumping")]
     [SerializeField] bool readyToJump;
     public float playerHeight;
-    public bool isGrounded;
+    public static bool isGrounded;
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
@@ -75,7 +83,6 @@ public class PlayerMovement : MonoBehaviour
     {
         WeaponShooting.onAimDownSights += ToggleAiming;
         WeaponShooting.onWeaponFired += InterruptSprint;
-        WeaponSwapping.onWeaponSwapped += SwapToNewWeaponAnimator;
         PlayerHealth.onDeath += StopMovement;
     }
 
@@ -88,13 +95,14 @@ public class PlayerMovement : MonoBehaviour
         sprintingMovementSpeed = baseMoveSpeed * sprintSpeedMultiplier;
         crouchingMovementSpeed = baseMoveSpeed / 3;
         canPlayMovementSFX = true;
+
+        SetPlayerState(idleState);
     }
 
     private void OnDisable()
     {
         WeaponShooting.onAimDownSights -= ToggleAiming;
         WeaponShooting.onWeaponFired -= InterruptSprint;
-        WeaponSwapping.onWeaponSwapped -= SwapToNewWeaponAnimator;
         PlayerHealth.onDeath -= StopMovement;
     }
 
@@ -114,12 +122,20 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        LerpGunBoneToNewPosition(currentTargetState);
+
     }
 
     void FixedUpdate()
     {
         if(canMove)
             MovePlayer();
+    }
+
+    void SetPlayerState(Transform newStateTransform)
+    {
+        currentTargetState = newStateTransform;
     }
 
     void PlayerInput()
@@ -239,8 +255,8 @@ public class PlayerMovement : MonoBehaviour
         if(!isCrouching)
         {
             isCrouching = true;
+            SetPlayerState(crouchState);
             currentMoveSpeed = crouchingMovementSpeed;
-            //animator.SetBool("isCrouching", isCrouching);
             movementAudioSource.volume = .5f;
         }
     }
@@ -250,7 +266,7 @@ public class PlayerMovement : MonoBehaviour
         if(isCrouching)
         {
             isCrouching = false;
-            //animator.SetBool("isCrouching", isCrouching);
+            SetPlayerState(idleState);
             if (GetCurrentWeaponShootingScript().isAiming)
             {
                 currentMoveSpeed = aimingMovementSpeed;
@@ -295,6 +311,8 @@ public class PlayerMovement : MonoBehaviour
             GetCurrentWeaponShootingScript().StopADS();
         }
 
+        SetPlayerState(sprintState);
+
         if(!isSprinting)
         { 
             if(sprintingBreathingSFXCoroutine == null)
@@ -311,18 +329,23 @@ public class PlayerMovement : MonoBehaviour
 
     void StopSprinting(bool stoppedByAiming)
     {
-        isSprinting = false;
-
-        if (stoppedByAiming)
-            currentMoveSpeed = aimingMovementSpeed;
-        else
-            currentMoveSpeed = baseMoveSpeed;
-
-        StartCoroutine(_Helpers.FadeOutAudio(sprintingAudioSource, 1.5f));
-        if(sprintingBreathingSFXCoroutine != null)
+        if(isSprinting)
         {
-            StopCoroutine(sprintingBreathingSFXCoroutine);
-            sprintingBreathingSFXCoroutine = null;
+            isSprinting = false;
+
+            SetPlayerState(idleState);
+
+            if (stoppedByAiming)
+                currentMoveSpeed = aimingMovementSpeed;
+            else
+                currentMoveSpeed = baseMoveSpeed;
+
+            StartCoroutine(_Helpers.FadeOutAudio(sprintingAudioSource, 1.5f));
+            if(sprintingBreathingSFXCoroutine != null)
+            {
+                StopCoroutine(sprintingBreathingSFXCoroutine);
+                sprintingBreathingSFXCoroutine = null;
+            }
         }
     }
     #endregion
@@ -463,9 +486,10 @@ public class PlayerMovement : MonoBehaviour
         sprintingAudioSource.Play();
     }
 
-    void SwapToNewWeaponAnimator(GameObject newWeaponObj)
+    void LerpGunBoneToNewPosition(Transform newPos)
     {
-        //animator = newWeaponObj.GetComponent<Animator>();
+        gunBone.localPosition = Vector3.Lerp(gunBone.localPosition, newPos.localPosition, statePosTransitionSpeed * Time.deltaTime);
+        gunBone.localRotation = Quaternion.Lerp(gunBone.localRotation, newPos.localRotation, stateRotTransitionSpeed * Time.fixedDeltaTime);
     }
 
     void StopMovement()

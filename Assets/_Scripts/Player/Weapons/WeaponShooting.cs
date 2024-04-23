@@ -119,31 +119,10 @@ public class WeaponShooting : MonoBehaviour
         fullReloadSFX = weaponToInitialise.fullReloadSFX;
 
         headshotMultiplier = weaponToInitialise.headshotMultiplier;
-        onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-        //CheckInstantKillStatus();
-        //CheckBottomlessClipStatus();
+
+        if(!weaponData.infiniteAmmo)
+            onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
     }
-
-
-    //public void CheckInstantKillStatus()
-    //{
-    //    if (PowerUpManager.Instance.GetInstantKillStatus())
-    //    {
-    //        isInstantKillActive = true;
-    //    }
-    //    else
-    //        isInstantKillActive = false;
-    //}
-
-    //public void CheckBottomlessClipStatus()
-    //{
-    //    if(PowerUpManager.Instance.GetBottomlessClipStatus())
-    //    {
-    //        isBottomlessClipActive = true;
-    //    }
-    //    else
-    //        isBottomlessClipActive = false;
-    //}
 
     void OnPlayerDeath()
     {
@@ -156,7 +135,8 @@ public class WeaponShooting : MonoBehaviour
 
     void SpawnLaser()
     {
-        spawnedLaser = Instantiate(laserPrefab, this.transform);
+        if (weaponData.hasLaserSight && spawnedLaser == null)
+            spawnedLaser = Instantiate(laserPrefab, this.transform);
     }
 
     void RemoveLaser()
@@ -211,7 +191,7 @@ public class WeaponShooting : MonoBehaviour
 
             
 
-            if(Input.GetKeyDown(reloadKey) && currentLoadedAmmo < maxMagSize && currentReserveAmmo > 0 && !isReloading)
+            if(!weaponData.infiniteAmmo && Input.GetKeyDown(reloadKey) && currentLoadedAmmo < maxMagSize && currentReserveAmmo > 0 && !isReloading)
             {
                 ReloadWeapon();
             }
@@ -281,7 +261,7 @@ public class WeaponShooting : MonoBehaviour
                 armsAnimator.Play("Fire");
             }
 
-            if(!PowerUpManager.isBottomlessClipActive)
+            if(!PowerUpManager.isBottomlessClipActive && !weaponData.infiniteAmmo)
                 currentLoadedAmmo--;
 
             for (int i = 0; i < projectileCount; i++)
@@ -362,9 +342,10 @@ public class WeaponShooting : MonoBehaviour
             }
 
             onWeaponFired?.Invoke(isAiming);
-            onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+            if(!weaponData.infiniteAmmo)
+                onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         }
-        else if (canShoot && (currentLoadedAmmo == 0 && !PowerUpManager.isBottomlessClipActive) && currentReserveAmmo > 0)
+        else if (!weaponData.infiniteAmmo && canShoot && (currentLoadedAmmo == 0 && !PowerUpManager.isBottomlessClipActive) && currentReserveAmmo > 0)
         {
             ReloadWeapon();
         }
@@ -549,13 +530,16 @@ public class WeaponShooting : MonoBehaviour
     }
     public void RefillAmmo()
     {
-        currentLoadedAmmo = maxMagSize;
-        currentReserveAmmo = maxReserveAmmo;
-        loadedAmmoBeforeReload = currentLoadedAmmo;
-        reserveAmmoBeforeReload = currentReserveAmmo;
+        if(!weaponData.infiniteAmmo)
+        {
+            currentLoadedAmmo = maxMagSize;
+            currentReserveAmmo = maxReserveAmmo;
+            loadedAmmoBeforeReload = currentLoadedAmmo;
+            reserveAmmoBeforeReload = currentReserveAmmo;
 
-        if(WeaponSwapping.instance.currentlyEquippedWeaponObj == gameObject)
-            onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+            if(WeaponSwapping.instance.currentlyEquippedWeaponObj == gameObject)
+                onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+        }
     }
 
     public bool IsAmmoFull()
@@ -574,28 +558,6 @@ public class WeaponShooting : MonoBehaviour
         return firingSFX[rand];
     }
 
-    //void EnableInstantKills()
-    //{
-    //    isInstantKillActive = true;
-    //}
-
-    //void DisableInstantKills()
-    //{
-    //    isInstantKillActive = false;
-    //    Debug.Log("Instant Kill Disabled");
-    //}
-
-    //void EnableBottomlessClip()
-    //{
-    //    isBottomlessClipActive = true;
-    //}
-
-    //void DisableBottomlessClip()
-    //{
-    //    isBottomlessClipActive = false;
-    //    Debug.Log("Bottomless Disabled");
-    //}
-
     IEnumerator PerShotCooldown()
     {
         float modifiedFireRate = fireRate + (fireRate * PlayerUpgrades.fireRateModifier);
@@ -604,17 +566,6 @@ public class WeaponShooting : MonoBehaviour
         if (!isPlayerDead)
             canShoot = true;
     }
-
-    //IEnumerator ReloadCooldown()
-    //{
-    //    Debug.Log(reloadSpeed);
-    //    Debug.Log(reloadSpeed - (reloadSpeed * PlayerStats.reloadSpeedModifier));
-    //    yield return new WaitForSeconds(reloadSpeed - (reloadSpeed * PlayerStats.reloadSpeedModifier));
-    //    onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
-    //    isReloading = false;
-    //    canShoot = true;
-    //    canADS = true;
-    //}
 
     //Called from animation event in reload anim
     public void ReloadFinished()

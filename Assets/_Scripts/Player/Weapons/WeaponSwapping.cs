@@ -238,7 +238,7 @@ public class WeaponSwapping : MonoBehaviour
                 currentlyEquippedWeaponsList.Remove(currentSecondaryWeapon);
                 currentSecondaryWeapon = newWeapon;
                 currentSecondaryWeaponObj = newWeapon.gameObject;
-                currentSecondaryWeapon.weaponSlot = 1;
+                currentSecondaryWeapon.weaponSlot = 3;
                 break;
         }
     }

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
-    public PlayerMovement playerMovement;
-
     WeaponData weapon;
     WeaponShooting weaponShooting;
 
@@ -48,9 +46,6 @@ public class WeaponSway : MonoBehaviour
     public Vector3 multiplier;
     Vector3 bobEulerRotation;
 
-    Vector3 defaultPos;
-    Vector3 aimingPos;
-
     Vector3 startPos;
 
     private void OnEnable()
@@ -78,26 +73,21 @@ public class WeaponSway : MonoBehaviour
     {
         weaponShooting = _weapon.GetComponent<WeaponShooting>();
         weapon = weaponShooting.weaponData;
-        aimingPos = weaponShooting.weaponData.gunBoneAimingPos;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canSway)
-            GetInput();
+        
+            if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canSway)
+                GetInput();
+                Sway();
+                SwayRotation();
+                BobOffset();
+                BobRotation();
 
-        Sway();
-        SwayRotation();
-        BobOffset();
-        BobRotation();
-
-        //if(!weaponShooting.isReloading)
-            CompositePositionRotation();
-
-
+                CompositePositionRotation();
     }
-
 
     Vector2 walkInput;
     Vector2 lookInput;
@@ -136,7 +126,7 @@ public class WeaponSway : MonoBehaviour
 
     void CompositePositionRotation()
     {
-        Vector3 pos = weaponShooting.isAiming ? aimingPos : startPos;
+        Vector3 pos = weaponShooting.isAiming ? weapon.aimingPos : PlayerMovement.instance.currentTargetState.localPosition;
 
         transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + pos, Time.deltaTime * smooth);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
@@ -144,11 +134,11 @@ public class WeaponSway : MonoBehaviour
 
     void BobOffset()
     {
-        speedCurve += Time.deltaTime * (playerMovement.isGrounded ? (Input.GetAxis("Horizontal") + Input.GetAxis("Vertical")) * bobExaggeration : 1f) + 0.01f;
+        speedCurve += Time.deltaTime * (PlayerMovement.isGrounded ? (Input.GetAxis("Horizontal") + Input.GetAxis("Vertical")) * bobExaggeration : 1f) + 0.01f;
         
         if (bobOffset == false) { bobPosition = Vector3.zero; return; }       
 
-        bobPosition.x = (curveCos * currentBobLimit.x * (playerMovement.isGrounded ? 1 : 0)) - (walkInput.x * currentTravelLimit.x);
+        bobPosition.x = (curveCos * currentBobLimit.x * (PlayerMovement.isGrounded ? 1 : 0)) - (walkInput.x * currentTravelLimit.x);
         bobPosition.y = (curveSin * currentBobLimit.y) - (Input.GetAxis("Vertical") * currentTravelLimit.y);
         bobPosition.z = -(walkInput.y * currentTravelLimit.z);
     }

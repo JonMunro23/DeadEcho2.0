@@ -310,12 +310,17 @@ MonoBehaviour:
   walkingMovementSpeed: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   originalCamPos: {x: 0, y: 0.5, z: 0}
+  gunBone: {fileID: 0}
+  statePosTransitionSpeed: 4
+  stateRotTransitionSpeed: 4
+  idleState: {fileID: 0}
+  sprintState: {fileID: 0}
+  crouchState: {fileID: 0}
   jumpKey: 32
   sprintKey: 304
   crouchKey: 306
   readyToJump: 0
   playerHeight: 2
-  isGrounded: 0
   jumpForce: 6
   jumpCooldown: 0.25
   airMultiplier: 0.4
@@ -367,7 +372,7 @@ MonoBehaviour:
   baseMaxHealth: 100
   lowHealthOverlay: {fileID: 0}
   healthbarImage: {fileID: 0}
-  invincibilityLength: 0.5
+  invincibilityLength: 1
   syringeHealAmount: 50
   gettingHitSource: {fileID: 7654926387314604357}
   lowHealthSource: {fileID: 6140878727713330247}
@@ -418,7 +423,7 @@ GameObject:
   - component: {fileID: 4384344095974905247}
   m_Layer: 2
   m_Name: PlayerObj
-  m_TagString: Untagged
+  m_TagString: PlayerBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -650,7 +655,7 @@ GameObject:
   - component: {fileID: 6459542631952352944}
   m_Layer: 2
   m_Name: CrouchingCameraTarget
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

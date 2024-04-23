@@ -27,8 +27,14 @@ public class AmmoManager : MonoBehaviour
 
     void GetAmmoOfSwappedWeapon(GameObject _weaponSwappedTo)
     {
-       WeaponShooting swappedWeaponShootingScript = _weaponSwappedTo.GetComponent<WeaponShooting>();
-       UpdateAmmoHUD(swappedWeaponShootingScript.currentLoadedAmmo, swappedWeaponShootingScript.currentReserveAmmo);
+        if(_weaponSwappedTo.GetComponent<WeaponShooting>().weaponData.infiniteAmmo)
+        {
+            currentlyEquippedWeaponLoadedAmmoText.text = "";
+            currentlyEquippedWeaponReserveAmmoText.text = "";
+            return;
+        }
+        WeaponShooting swappedWeaponShootingScript = _weaponSwappedTo.GetComponent<WeaponShooting>();
+        UpdateAmmoHUD(swappedWeaponShootingScript.currentLoadedAmmo, swappedWeaponShootingScript.currentReserveAmmo);
     }
 
     public void UpdateAmmoHUD(int _currentLoadedAmmo, int _currentReserveAmmo)
