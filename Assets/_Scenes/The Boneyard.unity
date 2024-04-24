@@ -14688,7 +14688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 463932100}
   m_Layer: 0
-  m_Name: SprintState
+  m_Name: RifleSprintState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15723,6 +15723,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000013149834228, guid: 6857ff1d3761e21479727f3b27cc8f68, type: 3}
   m_PrefabInstance: {fileID: 498678337}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &500255238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 500255239}
+  m_Layer: 0
+  m_Name: PistolSprintState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &500255239
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500255238}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.6427876, y: 0, z: 0, w: 0.7660445}
+  m_LocalPosition: {x: 0, y: 0.01089, z: 0.01865}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2029169175}
+  m_LocalEulerAnglesHint: {x: -80, y: 0, z: 0}
 --- !u!1001 &501632853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44104,6 +44135,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7178288422808934489, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
+      propertyPath: movementBobXAmplitude
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178288422808934489, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
+      propertyPath: movementBobXFrequency
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178288422808934489, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
+      propertyPath: movementBobYFrequency
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 7643184848490326760, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
       propertyPath: m_Name
       value: FpsArms
@@ -53480,6 +53523,14 @@ PrefabInstance:
       propertyPath: jumpCooldown
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 2888709841626420681, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: rifleSprintState
+      value: 
+      objectReference: {fileID: 463932100}
+    - target: {fileID: 2888709841626420681, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: pistolSprintState
+      value: 
+      objectReference: {fileID: 500255239}
     - target: {fileID: 3069719484839355263, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
       propertyPath: m_Name
       value: Player
@@ -56074,6 +56125,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 463932100}
+  - {fileID: 500255239}
   - {fileID: 1265053655}
   - {fileID: 1636150789}
   m_Father: {fileID: 423115861}
@@ -62261,7 +62313,7 @@ MonoBehaviour:
   startingWeapons:
   - {fileID: 11400000, guid: fd4aa4866a57d89419f79ef32a1766e6, type: 2}
   - {fileID: 11400000, guid: 141c175528f3390429aa97c89c24ac2c, type: 2}
-  - {fileID: 11400000, guid: 73ac6ba1012b80148931f81cf6ab921d, type: 2}
+  - {fileID: 11400000, guid: 16c2b0430fcd60842b456f4169c24bc0, type: 2}
   currentlyEquippedWeapon: {fileID: 0}
   currentlyEquippedWeaponObj: {fileID: 0}
   currentPrimary1Weapon: {fileID: 0}

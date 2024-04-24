@@ -145,19 +145,23 @@ public class WeaponShooting : MonoBehaviour
                 Destroy(spawnedLaser.gameObject);
             }
             spawnedLasers.Clear();
-            RemoveLaserPoints();
+
+            if(spawnedLaserPoints.Count > 0)
+            {
+                foreach (GameObject spawnedLaserPoint in spawnedLaserPoints)
+                {
+                    RemoveLaserPoint(spawnedLaserPoint);
+                }
+            }
         }
     }
 
-    void RemoveLaserPoints()
+    void RemoveLaserPoint(GameObject pointToRemove)
     {
         if (weaponData.hasLaserSight)
         {
-            foreach (GameObject spawnedLaserPoint in spawnedLaserPoints)
-            {
-                Destroy(spawnedLaserPoint);
-            }
-            spawnedLaserPoints.Clear();
+            Destroy(pointToRemove);
+            spawnedLaserPoints.Remove(pointToRemove);
         }
     }
 
@@ -246,17 +250,19 @@ public class WeaponShooting : MonoBehaviour
                     spawnedLaserPoints.Add(Instantiate(laserPoint, laserPointSpawnLocation, laserPointSpawnRotation));
                 }
 
-                spawnedLaserPoints[i].transform.position = laserPointSpawnLocation;
-                spawnedLaserPoints[i].transform.rotation = laserPointSpawnRotation;
+                if (spawnedLaserPoints.Count >= i)
+                {
+                    spawnedLaserPoints[i].transform.position = laserPointSpawnLocation;
+                    spawnedLaserPoints[i].transform.rotation = laserPointSpawnRotation;
+                }
 
             }
             else
             {
-                if(spawnedLaserPoints.Count > 0)
-                    RemoveLaserPoints();
+                if(spawnedLaserPoints.Count != 0)
+                    RemoveLaserPoint(spawnedLaserPoints[i]);
             }
         }
-
     }
 
     void FireWeapon()

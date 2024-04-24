@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform gunBone;
     [SerializeField] float statePosTransitionSpeed, stateRotTransitionSpeed;
     public Transform idleState;
-    public Transform sprintState;
+    public Transform rifleSprintState, pistolSprintState;
     [SerializeField] Transform crouchState;
     public static Transform currentTargetState;
 
@@ -202,7 +202,13 @@ public class PlayerMovement : MonoBehaviour
             if(horizontalInput != 0 || verticalInput != 0)
             {
                 if (isSprinting)
-                    SetPlayerState(sprintState);
+                {
+                    WeaponData.WeaponType weaponType = GetCurrentWeaponShootingScript().weaponData.weaponType;
+                    if (weaponType == WeaponData.WeaponType.Pistol)
+                        SetPlayerState(pistolSprintState);
+                    else
+                        SetPlayerState(rifleSprintState);
+                }
 
                 if (canPlayMovementSFX)
                 {

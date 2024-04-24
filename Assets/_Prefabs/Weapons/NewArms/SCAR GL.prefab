@@ -288,14 +288,17 @@ MonoBehaviour:
   canReload: 0
   fireRate: 0
   bulletHole: {fileID: 1952876972476476232, guid: dc8a9061ec4dcd8408b9f74eec030c6f, type: 3}
-  muzzleEffect: {fileID: 6026008925679259566}
+  muzzleEffects:
+  - {fileID: 6026008925679259566}
   IsADSToggle: 0
   weaponLeftHandTarget: {fileID: 448805774146602319}
   weaponRightHandTarget: {fileID: 5740080629959669036}
   laserPoint: {fileID: 1952876972476476232, guid: 7a4718dfbbcf1f142ad82abd756b50c8, type: 3}
-  laserOriginPoint: {fileID: 271970523350208620}
+  laserOriginPoints:
+  - {fileID: 271970523350208620}
   laserPrefab: {fileID: 479479831371359063, guid: 0cbc97c1c9fb9a440b2722c9474e80f1, type: 3}
-  spawnedLaser: {fileID: 0}
+  spawnedLasers: []
+  spawnedLaserPoints: []
 --- !u!82 &7972254494812844352
 AudioSource:
   m_ObjectHideFlags: 0
