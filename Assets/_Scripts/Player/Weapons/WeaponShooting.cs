@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class WeaponShooting : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class WeaponShooting : MonoBehaviour
     [SerializeField]
     GameObject bulletHole;
     [SerializeField]
-    ParticleSystem muzzleEffect;
+    ParticleSystem[] muzzleEffects;
     //Image crosshair;
     AudioSource SFXSource;
     AudioClip[] firingSFX;
@@ -55,11 +56,13 @@ public class WeaponShooting : MonoBehaviour
     [SerializeField]
     GameObject laserPoint;
     [SerializeField]
-    Transform laserOriginPoint;
+    Transform[] laserOriginPoints;
     [SerializeField]
-    LineRenderer laserPrefab, spawnedLaser;
-
-    GameObject spawnedLaserPoint;
+    LineRenderer laserPrefab;
+    [SerializeField]
+    List<LineRenderer> spawnedLasers = new List<LineRenderer>();
+    [SerializeField]
+    List<GameObject> spawnedLaserPoints = new List<GameObject>();
 
     private void Awake()
     {
@@ -77,8 +80,6 @@ public class WeaponShooting : MonoBehaviour
         PlayerHealing.onSyringeUsed += CancelWeaponActions;
         PlayerHealth.onDeath += OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed += CancelWeaponActions;
-
-        SpawnLaser();
     }
 
     private void OnDisable()
@@ -88,7 +89,7 @@ public class WeaponShooting : MonoBehaviour
         PlayerHealth.onDeath -= OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed -= CancelWeaponActions;
 
-        RemoveLaser();
+        RemoveLasers();
 
     }
 
@@ -130,28 +131,34 @@ public class WeaponShooting : MonoBehaviour
         canShoot = false;
         canADS = false;
         canReload = false;
-        RemoveLaser();
+        RemoveLasers();
     }
 
-    void SpawnLaser()
-    {
-        if (weaponData.hasLaserSight && spawnedLaser == null)
-            spawnedLaser = Instantiate(laserPrefab, this.transform);
-    }
 
-    void RemoveLaser()
+
+    void RemoveLasers()
     {
         if (weaponData.hasLaserSight)
         {
-            Destroy(spawnedLaser);
-            RemoveLaserPoint();
+            foreach (LineRenderer spawnedLaser in spawnedLasers)
+            {
+                Destroy(spawnedLaser.gameObject);
+            }
+            spawnedLasers.Clear();
+            RemoveLaserPoints();
         }
     }
 
-    void RemoveLaserPoint()
+    void RemoveLaserPoints()
     {
         if (weaponData.hasLaserSight)
-            Destroy(spawnedLaserPoint);
+        {
+            foreach (GameObject spawnedLaserPoint in spawnedLaserPoints)
+            {
+                Destroy(spawnedLaserPoint);
+            }
+            spawnedLaserPoints.Clear();
+        }
     }
 
     void Update()
@@ -159,8 +166,7 @@ public class WeaponShooting : MonoBehaviour
         if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
         {
             if(weaponData.hasLaserSight)
-                if(spawnedLaser != null)
-                    DrawLaser();
+                DrawLaser();
 
             if(isAutomatic)
             {
@@ -219,29 +225,36 @@ public class WeaponShooting : MonoBehaviour
 
     void DrawLaser()
     {
-        spawnedLaser.SetPosition(0, laserOriginPoint.transform.position);
-        spawnedLaser.SetPosition(1, muzzleEffect.transform.position + muzzleEffect.transform.forward * laserLength);
-
-        RaycastHit hit;
-        if(Physics.Raycast(muzzleEffect.transform.position, muzzleEffect.transform.forward, out hit, Mathf.Infinity))
+        if (spawnedLasers.Count < laserOriginPoints.Length)
         {
-            Vector3 laserPointSpawnLocation = hit.point + (hit.normal * .01f);
-            Quaternion laserPointSpawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-
-            if (spawnedLaserPoint == null)
-            {
-                spawnedLaserPoint = Instantiate(laserPoint, laserPointSpawnLocation, laserPointSpawnRotation);
-            }
-            if(spawnedLaserPoint != null)
-            {
-                spawnedLaserPoint.transform.position = laserPointSpawnLocation;
-                spawnedLaserPoint.transform.rotation = laserPointSpawnRotation;
-            }
+            spawnedLasers.Add(Instantiate(laserPrefab, transform));
         }
-        else
+
+        for (int i = 0; i < spawnedLasers.Count; i++)
         {
-            if(spawnedLaserPoint)
-                RemoveLaserPoint();
+            spawnedLasers[i].SetPosition(0, laserOriginPoints[i].transform.position);
+            spawnedLasers[i].SetPosition(1, muzzleEffects[i].transform.position + muzzleEffects[i].transform.forward * laserLength);
+
+            RaycastHit hit;
+            if(Physics.Raycast(muzzleEffects[i].transform.position, muzzleEffects[i].transform.forward, out hit, Mathf.Infinity))
+            {
+                Vector3 laserPointSpawnLocation = hit.point + (hit.normal * .01f);
+                Quaternion laserPointSpawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+
+                if (spawnedLaserPoints.Count < laserOriginPoints.Length)
+                {
+                    spawnedLaserPoints.Add(Instantiate(laserPoint, laserPointSpawnLocation, laserPointSpawnRotation));
+                }
+
+                spawnedLaserPoints[i].transform.position = laserPointSpawnLocation;
+                spawnedLaserPoints[i].transform.rotation = laserPointSpawnRotation;
+
+            }
+            else
+            {
+                if(spawnedLaserPoints.Count > 0)
+                    RemoveLaserPoints();
+            }
         }
 
     }
@@ -269,12 +282,12 @@ public class WeaponShooting : MonoBehaviour
                 if (weaponData.isProjectile)
                 {
                     //fire projectile
-                    GameObject clone = Instantiate(weaponData.projectile, muzzleEffect.transform.position, transform.rotation);
+                    GameObject clone = Instantiate(weaponData.projectile, muzzleEffects[0].transform.position, transform.rotation);
                     clone.GetComponent<Rigidbody>().AddForce(transform.forward * weaponData.projectileInitalVelocity, ForceMode.Impulse);
                 }
                 else //fire hitscan
                 {
-                    Vector3 forwardVector = muzzleEffect.transform.forward;
+                    Vector3 forwardVector = muzzleEffects[0].transform.forward;
                     //if (PlayerMovement.instance.isCrouching)
                     //{
                     //    weaponSpreadDeviation = (Random.Range(-maxSpreadDeviationAngle, maxSpreadDeviationAngle) / 2);
@@ -293,7 +306,7 @@ public class WeaponShooting : MonoBehaviour
 
                     //forwardVector = weaponCamera.transform.rotation * forwardVector;
                     RaycastHit hit;
-                    if (Physics.Raycast(muzzleEffect.transform.position, /*isAiming == false ? */forwardVector/* : muzzleEffect.transform.forward*/, out hit, Mathf.Infinity))
+                    if (Physics.Raycast(muzzleEffects[0].transform.position, /*isAiming == false ? */forwardVector/* : muzzleEffect.transform.forward*/, out hit, Mathf.Infinity))
                     {
                         IDamageable damageable = hit.transform.GetComponentInParent<IDamageable>();
                         if (damageable != null)
@@ -353,7 +366,7 @@ public class WeaponShooting : MonoBehaviour
 
     void PlayMuzzleFlash()
     {
-        muzzleEffect.Play();
+        muzzleEffects[0].Play();
     }
 
     void ToggleWeaponAiming()

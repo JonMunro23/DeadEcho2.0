@@ -337,8 +337,6 @@ GameObject:
   - component: {fileID: 4538264183039358}
   - component: {fileID: -2615855454236821456}
   - component: {fileID: -5596045616528018379}
-  - component: {fileID: 8671915095411500892}
-  - component: {fileID: 3248941003325300109}
   m_Layer: 7
   m_Name: HiPower
   m_TagString: Untagged
@@ -494,58 +492,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8671915095411500892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425756895877542}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c53844dc84ec2be4e966c287f55f4d6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerMovement: {fileID: 0}
-  canSway: 1
-  sway: 1
-  swayRotation: 1
-  bobOffset: 1
-  bobSway: 1
-  step: 0.001
-  maxStepDistance: 0.006
-  rotationStep: 0.4
-  maxRotationStep: 0.5
-  smooth: 8
-  speedCurve: 0
-  HipFireTravelLimit: 0.00025
-  HipFireBobLimit: 0.0001
-  ADSTravelLimit: 0.00005
-  ADSBobLimit: 0.00001
-  currentTravelLimit: {x: 0.00025, y: 0.00025, z: 0.00025}
-  currentBobLimit: {x: 0.0001, y: 0.0001, z: 0.0001}
-  bobExaggeration: 0
-  multiplier: {x: 0, y: 0, z: 0}
---- !u!114 &3248941003325300109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1425756895877542}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67b906148fc1e0341b7ffc5ec444f355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zRecoilAmount: -0.0025
-  aimingZRecoilAmount: -0.001
-  xRotAmount: 0.3
-  aimingXRotAmount: 0
-  yRotAmount: 0.1
-  aimingYRotAmount: 0
-  zRotAmount: 0.5
-  aimingZRotAmount: 0
 --- !u!1 &1493792951574834
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,4 @@
-using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
@@ -11,10 +9,7 @@ public class PlayerCam : MonoBehaviour
 
     float xRotation;
     float yRotation;
-
     float defaultFOV;
-    float timeToLeaveADS = 0.75f;
-
     public bool canLook = true;
 
     Camera weaponCamera;
@@ -48,7 +43,6 @@ public class PlayerCam : MonoBehaviour
         OptionsMenu.updateSettings += UpdateMouseSensitivity;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -65,7 +59,6 @@ public class PlayerCam : MonoBehaviour
         OptionsMenu.updateSettings -= UpdateMouseSensitivity;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
@@ -110,39 +103,21 @@ public class PlayerCam : MonoBehaviour
         {
             if (_isAiming)
             {
-                MoveCameraToDefaultPosition(weaponToToggle);
+                ChangeCameraFOV(weaponToToggle, defaultFOV);
             }
             else if (!_isAiming)
             {
-                MoveCameraToAimingPosition(weaponToToggle);
+                ChangeCameraFOV(weaponToToggle, weaponToToggle.weaponData.aimingFOV);
             }
         }
     }
 
-    void MoveCameraToAimingPosition(WeaponShooting weaponToToggle)
+    void ChangeCameraFOV(WeaponShooting weaponToToggle, float fov)
     {
         if (cameraFOVLerpCoroutine != null)
             StopCoroutine(cameraFOVLerpCoroutine);
 
-        cameraFOVLerpCoroutine = StartCoroutine(LerpCameraFOV(weaponToToggle.weaponData.aimingFOV, weaponToToggle.weaponData.timeToADS));
-
-        //if (weaponLocalPositionLerpCoroutine != null)
-        //    StopCoroutine(weaponLocalPositionLerpCoroutine);
-
-        //weaponLocalPositionLerpCoroutine = StartCoroutine(LerpWeaponLocalPosition(weaponToToggle, weaponToToggle.gameObject.transform.localPosition, weaponToToggle.weaponData.gunBoneAimingPos, .25f));
-    }
-
-    void MoveCameraToDefaultPosition(WeaponShooting weaponToToggle)
-    {
-        if (cameraFOVLerpCoroutine != null)
-            StopCoroutine(cameraFOVLerpCoroutine);
-
-        cameraFOVLerpCoroutine = StartCoroutine(LerpCameraFOV(defaultFOV, timeToLeaveADS));
-
-    //    if (weaponLocalPositionLerpCoroutine != null)
-    //        StopCoroutine(weaponLocalPositionLerpCoroutine);
- 
-    //    weaponLocalPositionLerpCoroutine = StartCoroutine(LerpWeaponLocalPosition(weaponToToggle, weaponToToggle.gameObject.transform.localPosition, weaponToToggle.weaponData.weaponSpawnPos, .2f));
+        cameraFOVLerpCoroutine = StartCoroutine(LerpCameraFOV(fov, weaponToToggle.weaponData.timeToADS));
     }
 
     void DisableCameraLook()
@@ -160,22 +135,6 @@ public class PlayerCam : MonoBehaviour
     {
         sensitivity = playerSettings.mouseSensitivity.currentValue;
     }
-
-    //IEnumerator LerpWeaponLocalPosition(WeaponShooting weaponToLerp, Vector3 startingPosition, Vector3 finalPosition, float duration)
-    //{
-    //    float _timeElapsed = 0;
-
-    //    while (_timeElapsed < duration)
-    //    {
-    //        float t = _timeElapsed / duration;
-
-    //        weaponToLerp.gameObject.transform.localPosition = Vector3.Lerp(startingPosition, finalPosition, t);
-    //        _timeElapsed += Time.deltaTime;
-
-    //        yield return null;
-    //    }
-    //    weaponToLerp.gameObject.transform.localPosition = finalPosition;
-    //}
 
     IEnumerator LerpCameraFOV(float newFOV, float duration)
     {

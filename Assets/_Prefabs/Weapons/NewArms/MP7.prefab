@@ -2562,9 +2562,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8916549146485933457}
   - component: {fileID: 2366733154810407589}
-  - component: {fileID: 6907620183925308125}
   - component: {fileID: 948129476078970302}
-  - component: {fileID: -2251777200665774181}
   m_Layer: 7
   m_Name: MP7
   m_TagString: Untagged
@@ -2673,38 +2671,6 @@ MonoBehaviour:
   laserOriginPoint: {fileID: 3791414866071291692}
   laserPrefab: {fileID: 479479831371359063, guid: 0cbc97c1c9fb9a440b2722c9474e80f1, type: 3}
   spawnedLaser: {fileID: 0}
---- !u!114 &6907620183925308125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5613363016151971714}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c53844dc84ec2be4e966c287f55f4d6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerMovement: {fileID: 0}
-  canSway: 1
-  sway: 1
-  swayRotation: 1
-  bobOffset: 1
-  bobSway: 1
-  step: 0.001
-  maxStepDistance: 0.006
-  rotationStep: 0.4
-  maxRotationStep: 0.5
-  smooth: 8
-  speedCurve: 0
-  HipFireTravelLimit: 0.00025
-  HipFireBobLimit: 0.0001
-  ADSTravelLimit: 0.00005
-  ADSBobLimit: 0.00001
-  currentTravelLimit: {x: 0.00025, y: 0.00025, z: 0.00025}
-  currentBobLimit: {x: 0.0001, y: 0.0001, z: 0.0001}
-  bobExaggeration: 0
-  multiplier: {x: 0, y: 0, z: 0}
 --- !u!82 &948129476078970302
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2801,26 +2767,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-2251777200665774181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5613363016151971714}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67b906148fc1e0341b7ffc5ec444f355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zRecoilAmount: -0.0025
-  aimingZRecoilAmount: -0.001
-  xRotAmount: 0.3
-  aimingXRotAmount: 0
-  yRotAmount: 0.1
-  aimingYRotAmount: 0
-  zRotAmount: 0.5
-  aimingZRotAmount: 0
 --- !u!1 &6090122223651337034
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class WeaponSway : MonoBehaviour
+public class WeaponAnimation : MonoBehaviour
 {
     WeaponData weapon;
     WeaponShooting weaponShooting;
@@ -46,10 +48,24 @@ public class WeaponSway : MonoBehaviour
     public Vector3 multiplier;
     Vector3 bobEulerRotation;
 
-    Vector3 startPos;
+    [Header("MovementBob")]
+    Vector3 movementBob;
+    [SerializeField] float movementBobYFrequency;
+    [SerializeField] float movementBobXFrequency;
+    [SerializeField] float movementBobXAmplitude;
+
+    [Space]
+    [Space]
+
+    [SerializeField]
+    float zRecoilAmount, aimingZRecoilAmount, xRotAmount, aimingXRotAmount, yRotAmount, aimingYRotAmount, zRotAmount, aimingZRotAmount;
+
+    Vector3 recoilPos;
+    Quaternion recoilRot;
 
     private void OnEnable()
     {
+        WeaponShooting.onWeaponFired += AddRecoil;
         WeaponShooting.onAimDownSights += ToggleAiming;
         WeaponSwapping.onWeaponSwapped += GetWeaponData;
         PlayerHealth.onDeath += StopSway;
@@ -57,6 +73,7 @@ public class WeaponSway : MonoBehaviour
 
     private void OnDisable()
     {
+        WeaponShooting.onWeaponFired -= AddRecoil;
         WeaponShooting.onAimDownSights -= ToggleAiming;
         WeaponSwapping.onWeaponSwapped -= GetWeaponData;
         PlayerHealth.onDeath -= StopSway;
@@ -64,8 +81,6 @@ public class WeaponSway : MonoBehaviour
 
     private void Start()
     {
-        startPos = transform.localPosition;
-
         RestoreBob();
     }
 
@@ -78,15 +93,27 @@ public class WeaponSway : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-            if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canSway)
-                GetInput();
-                Sway();
-                SwayRotation();
-                BobOffset();
-                BobRotation();
+        if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canSway)
+            GetInput();
 
-                CompositePositionRotation();
+        Sway();
+        SwayRotation();
+        BobOffset();
+        BobRotation();
+
+        if (PlayerMovement.instance.isSprinting)
+            MovementBob();
+        else
+            movementBob = Vector3.Lerp(movementBob, Vector3.zero, 4);
+
+
+        CompositePositionRotation();
+    }
+
+    private void MovementBob()
+    {
+        movementBob.y = (Mathf.Sin(Time.time * movementBobYFrequency) / 1000);
+        movementBob.x = ((Mathf.Sin(Time.time * movementBobXFrequency) * movementBobXAmplitude) / 1000);
     }
 
     Vector2 walkInput;
@@ -126,10 +153,22 @@ public class WeaponSway : MonoBehaviour
 
     void CompositePositionRotation()
     {
-        Vector3 pos = weaponShooting.isAiming ? weapon.aimingPos : PlayerMovement.instance.currentTargetState.localPosition;
+        Vector3 pos;
+        if (weaponShooting.isAiming)
+        {
+            pos = weapon.gunBoneAimingPos;
+        }
+        else
+            pos = PlayerMovement.currentTargetState.localPosition;
 
-        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + pos, Time.deltaTime * smooth);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
+        Quaternion rot = PlayerMovement.currentTargetState.localRotation;
+
+        if (PlayerMovement.instance.isCrouching)
+            if (weaponShooting.isAiming)
+                rot = PlayerMovement.instance.idleState.localRotation;
+
+        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + pos + movementBob, Time.deltaTime * smooth);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, rot * Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
     }
 
     void BobOffset()
@@ -150,6 +189,12 @@ public class WeaponSway : MonoBehaviour
         bobEulerRotation.x = (walkInput != Vector2.zero ? multiplier.x * (Mathf.Sin(2 * speedCurve)) : multiplier.x * (Mathf.Sin(2 * speedCurve) / 2));
         bobEulerRotation.y = (walkInput != Vector2.zero ? multiplier.y * curveCos : 0);
         bobEulerRotation.z = (walkInput != Vector2.zero ? multiplier.z * curveCos * walkInput.x : 0);
+    }
+
+    void AddRecoil(bool isAiming)
+    {
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + (!isAiming ? zRecoilAmount : aimingZRecoilAmount));
+        //transform.localRotation = Quaternion.Euler(transform.localRotation.x + (!isAiming ? xRotAmount : aimingXRotAmount), transform.localRotation.y + Random.Range(-(!isAiming ? yRotAmount : aimingYRotAmount), (!isAiming ? yRotAmount : aimingYRotAmount)), transform.localRotation.z + Random.Range(-(!isAiming ? zRotAmount : aimingZRotAmount), (!isAiming ? zRotAmount : aimingZRecoilAmount)));
     }
 
     public void ToggleAiming(bool _isAiming, WeaponShooting weaponToToggle)

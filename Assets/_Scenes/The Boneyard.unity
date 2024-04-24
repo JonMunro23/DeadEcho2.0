@@ -27672,6 +27672,34 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000010482363180, guid: 32c4edf4f02ad254092a6e1ba94f5b4e, type: 3}
   m_PrefabInstance: {fileID: 935911914}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &936329626 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3681153510122642189, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+  m_PrefabInstance: {fileID: 1936588515}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &936329631
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936329626}
+  m_Material: {fileID: 13400000, guid: 22dcabb96d7771d439f65919c823e4bb, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.9
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &939910096
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44032,10 +44060,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5382273508797680648}
     m_Modifications:
-    - target: {fileID: 3657861908665185665, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6649940638940731643, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -44075,6 +44099,10 @@ PrefabInstance:
     - target: {fileID: 6649940638940731643, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178288422808934489, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7643184848490326760, guid: 55b4ebb48417b9f4aba7dea1d549b0d6, type: 3}
       propertyPath: m_Name
@@ -53448,6 +53476,10 @@ PrefabInstance:
       propertyPath: sprintState
       value: 
       objectReference: {fileID: 463932100}
+    - target: {fileID: 2888709841626420681, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: jumpCooldown
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 3069719484839355263, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
       propertyPath: m_Name
       value: Player
@@ -53456,6 +53488,18 @@ PrefabInstance:
       propertyPath: lowHealthOverlay
       value: 
       objectReference: {fileID: 661995377}
+    - target: {fileID: 4384344095974905247, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: m_Height
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344095974905247, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: m_Radius
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4384344095974905247, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5882179577331821263, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -53499,7 +53543,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3681153510122642189, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 936329631}
   m_SourcePrefab: {fileID: 100100000, guid: bcb8cae335b5f5345b21edcfc52f36ee, type: 3}
 --- !u!1001 &1937691535
 PrefabInstance:
@@ -62177,7 +62224,7 @@ MonoBehaviour:
   startingGrenadeCount: 4
   grenadesPerRound: 2
   currentMaxHeldGrenades: 0
-  baseMaxHeldGrenades: 0
+  baseMaxHeldGrenades: 4
   grenadeReactivationTime: 1.5
   currentGrenadeCount: 0
 --- !u!114 &5897527541307557917
@@ -62212,7 +62259,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingWeapons:
+  - {fileID: 11400000, guid: fd4aa4866a57d89419f79ef32a1766e6, type: 2}
   - {fileID: 11400000, guid: 141c175528f3390429aa97c89c24ac2c, type: 2}
+  - {fileID: 11400000, guid: 73ac6ba1012b80148931f81cf6ab921d, type: 2}
   currentlyEquippedWeapon: {fileID: 0}
   currentlyEquippedWeaponObj: {fileID: 0}
   currentPrimary1Weapon: {fileID: 0}

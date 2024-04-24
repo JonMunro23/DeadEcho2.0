@@ -18,14 +18,14 @@ MonoBehaviour:
   name: MP5K
   description: 
   cost: 800
-  weaponObj: {fileID: 1060585169976870, guid: 3d0ee8c7f71372b4fbd720bea3abbbfe, type: 3}
+  weaponObj: {fileID: 1060585169976870, guid: 4811234f938cb59478f66ac26b7d5fc5, type: 3}
   weaponWallBuyObj: {fileID: 1060585169976870, guid: d3c0169cb1a6e3049a9e930874158a9a, type: 3}
   UIObj: {fileID: 0}
-  armsController: {fileID: 0}
+  armsController: {fileID: 9100000, guid: 79b03a36c6b3c3c4ea8a0637713ae27b, type: 2}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0, y: 0, z: 0}
-  gunBoneAimingPos: {x: 0, y: 0, z: 0}
+  weaponSpawnPos: {x: 0, y: -0.0478, z: -0.0168}
+  gunBoneAimingPos: {x: -0.00343, y: 0.0121, z: 0.02}
   hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 099714b640d608c419323511a8712aac, type: 3}
   infiniteAmmo: 0

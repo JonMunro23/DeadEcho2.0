@@ -43,12 +43,13 @@ public class WeaponData : ScriptableObject
     public BulletPenetrationConfig bulletPenConfig;
 
     public Vector3 weaponSpawnPos;
-    public Vector3 aimingPos;
+    public Vector3 gunBoneAimingPos;
 
     public bool hasLaserSight;
 
     public Sprite UISprite;
 
+    public bool canDualWield;
     public bool infiniteAmmo;
     public int magSize;
     public int maxReserveAmmo;

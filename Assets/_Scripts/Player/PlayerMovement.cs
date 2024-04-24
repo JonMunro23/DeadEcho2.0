@@ -25,10 +25,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Gun Bone States")]
     [SerializeField] Transform gunBone;
     [SerializeField] float statePosTransitionSpeed, stateRotTransitionSpeed;
-    [SerializeField] Transform idleState;
+    public Transform idleState;
     public Transform sprintState;
     [SerializeField] Transform crouchState;
-    public Transform currentTargetState;
+    public static Transform currentTargetState;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -122,9 +122,6 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
-
-        LerpGunBoneToNewPosition(currentTargetState);
-
     }
 
     void FixedUpdate()
@@ -176,13 +173,13 @@ public class PlayerMovement : MonoBehaviour
         //}
 
         //Jumping
-        if (Input.GetKey(jumpKey) && readyToJump && isGrounded && !isCrouching)
+        if (Input.GetKeyDown(jumpKey) && readyToJump && isGrounded)
         {
             readyToJump = false;
 
             Jump();
 
-            Invoke(nameof(ResetJump), jumpCooldown);
+            //Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
 
@@ -194,21 +191,20 @@ public class PlayerMovement : MonoBehaviour
         // on ground
         if(isGrounded)
         {
-            if(hasJumped)
+            if (hasJumped)
             {
                 hasJumped = false;
                 jumpingAudioSource.PlayOneShot(PickSFXClip(landingSFX));
+                Invoke(nameof(ResetJump), jumpCooldown);
             }
 
             rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f, ForceMode.Force);
             if(horizontalInput != 0 || verticalInput != 0)
             {
-                //if(isSprinting)
-                //    animator.SetFloat("speed", 1, .2f, Time.deltaTime);
-                //else if(!isCrouching)
-                //    animator.SetFloat("speed", 0.66f, .2f, Time.deltaTime);
+                if (isSprinting)
+                    SetPlayerState(sprintState);
 
-                if(canPlayMovementSFX)
+                if (canPlayMovementSFX)
                 {
                     canPlayMovementSFX = false;
                     movementAudioSource.PlayOneShot(PickSFXClip(walkingSFX));
@@ -217,7 +213,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                //animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
+                if(isSprinting)
+                    SetPlayerState(idleState);
             }
         }
 
@@ -225,6 +222,7 @@ public class PlayerMovement : MonoBehaviour
         else if(!isGrounded)
         {
             rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f * airMultiplier, ForceMode.Force);
+            hasJumped = true;
             //animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
         }
     }
@@ -300,6 +298,9 @@ public class PlayerMovement : MonoBehaviour
     #region Sprinting
     void BeginSprinting()
     {
+        if(isCrouching)
+            StopCrouching();
+
         if(verticalInput == -1)
         {
             InterruptSprint(false);
@@ -310,8 +311,6 @@ public class PlayerMovement : MonoBehaviour
         {
             GetCurrentWeaponShootingScript().StopADS();
         }
-
-        SetPlayerState(sprintState);
 
         if(!isSprinting)
         { 
@@ -398,6 +397,9 @@ public class PlayerMovement : MonoBehaviour
     #region Jumping
     void Jump()
     {
+        if(isCrouching)
+            StopCrouching();
+
         if (GetCurrentWeaponShootingScript().isAiming)
             GetCurrentWeaponShootingScript().StopADS();
 
@@ -412,7 +414,6 @@ public class PlayerMovement : MonoBehaviour
     void ResetJump()
     {
         readyToJump = true;
-        hasJumped = true;
     }
     #endregion
 
@@ -486,11 +487,12 @@ public class PlayerMovement : MonoBehaviour
         sprintingAudioSource.Play();
     }
 
-    void LerpGunBoneToNewPosition(Transform newPos)
-    {
-        gunBone.localPosition = Vector3.Lerp(gunBone.localPosition, newPos.localPosition, statePosTransitionSpeed * Time.deltaTime);
-        gunBone.localRotation = Quaternion.Lerp(gunBone.localRotation, newPos.localRotation, stateRotTransitionSpeed * Time.fixedDeltaTime);
-    }
+    //POSSIBLY CAN BE MOVED INTO WEAPON SWAY
+    //void LerpGunBoneToNewPosition(Transform newPos)
+    //{
+    //    gunBone.localPosition = Vector3.Lerp(gunBone.localPosition, newPos.localPosition, statePosTransitionSpeed * Time.deltaTime);
+    //    gunBone.localRotation = Quaternion.Lerp(gunBone.localRotation, newPos.localRotation, stateRotTransitionSpeed * Time.fixedDeltaTime);
+    //}
 
     void StopMovement()
     {

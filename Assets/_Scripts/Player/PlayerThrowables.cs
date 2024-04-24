@@ -45,6 +45,7 @@ public class PlayerThrowables : MonoBehaviour
     {
         currentMaxHeldGrenades = baseMaxHeldGrenades;
         canThrowGrenade = true;
+        AddGrenades(startingGrenadeCount);
     }
 
     void DisableEquipment()

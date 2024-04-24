@@ -25,7 +25,7 @@ MonoBehaviour:
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   bulletPenConfig: {fileID: 0}
   weaponSpawnPos: {x: 0.0039, y: -0.0035, z: 0.0038}
-  aimingPos: {x: 0, y: 0, z: 0}
+  gunBoneAimingPos: {x: -0.0039, y: 0.0136, z: 0.02}
   hasLaserSight: 1
   UISprite: {fileID: 0}
   infiniteAmmo: 0
