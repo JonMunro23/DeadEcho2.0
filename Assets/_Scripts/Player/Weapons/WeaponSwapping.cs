@@ -70,21 +70,21 @@ public class WeaponSwapping : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && currentActiveSlot != 1)
         {
             ShowWeaponInventory();
             if (currentPrimary1Weapon != null)
                 SwapToWeapon(1);
             
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && currentActiveSlot != 2)
         {
             ShowWeaponInventory();
             if(currentPrimary2Weapon != null)
                 SwapToWeapon(2);
 
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && currentActiveSlot != 3)
         {
             ShowWeaponInventory();
             if (currentSecondaryWeapon != null)
@@ -120,6 +120,7 @@ public class WeaponSwapping : MonoBehaviour
     {
         currentlyEquippedWeapon = weaponToEquip;
         currentlyEquippedWeaponObj = weaponToEquip.gameObject;
+        currentlyEquippedWeapon.OnWeaponEquipped();
     }
 
     void SetWeaponActive(int slot)
@@ -133,6 +134,7 @@ public class WeaponSwapping : MonoBehaviour
                 currentPrimary1WeaponObj.transform.localPosition = currentPrimary1Weapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentPrimary1Weapon.weaponData.armsController;
                 weaponToSetActive = currentPrimary1WeaponObj;
+                currentActiveSlot = 1;
                 break;
             case 2:
                 AttachWeaponToGunBone(currentPrimary2WeaponObj.transform);
@@ -140,7 +142,7 @@ public class WeaponSwapping : MonoBehaviour
                 currentPrimary2WeaponObj.transform.localPosition = currentPrimary2Weapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentPrimary2Weapon.weaponData.armsController;
                 weaponToSetActive = currentPrimary2WeaponObj;
-
+                currentActiveSlot = 2;
                 break;
             case 3:
                 AttachWeaponToGunBone(currentSecondaryWeaponObj.transform);
@@ -148,6 +150,7 @@ public class WeaponSwapping : MonoBehaviour
                 currentSecondaryWeaponObj.transform.localPosition = currentSecondaryWeapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentSecondaryWeapon.weaponData.armsController;
                 weaponToSetActive = currentSecondaryWeaponObj;
+                currentActiveSlot = 3;
                 break;
             case 4:
                 AttachWeaponToGunBone(currentPowerUpWeaponObj.transform);
@@ -155,6 +158,7 @@ public class WeaponSwapping : MonoBehaviour
                 currentPowerUpWeaponObj.transform.localPosition = currentPowerUpWeapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentPowerUpWeapon.weaponData.armsController;
                 weaponToSetActive = currentPowerUpWeaponObj;
+                currentActiveSlot = 4;
                 break;
         }
         onWeaponSwapped?.Invoke(weaponToSetActive);

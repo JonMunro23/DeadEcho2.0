@@ -1,9 +1,7 @@
 using System.Collections;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
-using DG.Tweening;
 using System.Collections.Generic;
 
 public class WeaponShooting : MonoBehaviour
@@ -44,6 +42,7 @@ public class WeaponShooting : MonoBehaviour
     public static event Action<bool, WeaponShooting> onAimDownSights;
     public static event Action<int, int> onAmmoUpdated;
     public static event Action<bool> onWeaponFired;
+    public static event Action onWeaponEquipped;
 
     //[SerializeField] bool isInstantKillActive, isBottomlessClipActive;
     bool stopShellByShellReload;
@@ -54,15 +53,13 @@ public class WeaponShooting : MonoBehaviour
 
     [Header("LaserSight")]
     [SerializeField]
-    GameObject laserPoint;
-    [SerializeField]
-    Transform[] laserOriginPoints;
-    [SerializeField]
-    LineRenderer laserPrefab;
-    [SerializeField]
-    List<LineRenderer> spawnedLasers = new List<LineRenderer>();
-    [SerializeField]
-    List<GameObject> spawnedLaserPoints = new List<GameObject>();
+    LaserPointer[] laserPointers;
+    //[SerializeField]
+    //LineRenderer laserPrefab;
+    //[SerializeField]
+    //List<LineRenderer> spawnedLasers = new List<LineRenderer>();
+    //[SerializeField]
+    //List<GameObject> spawnedLaserPoints = new List<GameObject>();
 
     private void Awake()
     {
@@ -80,7 +77,10 @@ public class WeaponShooting : MonoBehaviour
         PlayerHealing.onSyringeUsed += CancelWeaponActions;
         PlayerHealth.onDeath += OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed += CancelWeaponActions;
+
     }
+
+
 
     private void OnDisable()
     {
@@ -89,8 +89,7 @@ public class WeaponShooting : MonoBehaviour
         PlayerHealth.onDeath -= OnPlayerDeath;
         PlayerThrowables.onEquipmentUsed -= CancelWeaponActions;
 
-        RemoveLasers();
-
+        DeinitLaserPointers();
     }
 
     public void InitialiseWeapon(WeaponData weaponToInitialise, Animator FPSArmsAnimator)
@@ -123,6 +122,13 @@ public class WeaponShooting : MonoBehaviour
 
         if(!weaponData.infiniteAmmo)
             onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
+
+        //OnWeaponEquipped();
+    }
+
+    public void OnWeaponEquipped()
+    {
+        InitLaserPointers();
     }
 
     void OnPlayerDeath()
@@ -131,37 +137,28 @@ public class WeaponShooting : MonoBehaviour
         canShoot = false;
         canADS = false;
         canReload = false;
-        RemoveLasers();
+        DeinitLaserPointers();
     }
 
-
-
-    void RemoveLasers()
+    private void InitLaserPointers()
     {
         if (weaponData.hasLaserSight)
         {
-            foreach (LineRenderer spawnedLaser in spawnedLasers)
+            for (int i = 0; i < laserPointers.Length; i++)
             {
-                Destroy(spawnedLaser.gameObject);
-            }
-            spawnedLasers.Clear();
-
-            if(spawnedLaserPoints.Count > 0)
-            {
-                foreach (GameObject spawnedLaserPoint in spawnedLaserPoints)
-                {
-                    RemoveLaserPoint(spawnedLaserPoint);
-                }
+                laserPointers[i].SpawnLaser(muzzleEffects[i].transform);
             }
         }
     }
 
-    void RemoveLaserPoint(GameObject pointToRemove)
+    private void DeinitLaserPointers()
     {
         if (weaponData.hasLaserSight)
         {
-            Destroy(pointToRemove);
-            spawnedLaserPoints.Remove(pointToRemove);
+            for (int i = 0; i < laserPointers.Length; i++)
+            {
+                laserPointers[i].RemoveLaser();
+            }
         }
     }
 
@@ -169,10 +166,7 @@ public class WeaponShooting : MonoBehaviour
     {
         if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen)
         {
-            if(weaponData.hasLaserSight)
-                DrawLaser();
-
-            if(isAutomatic)
+            if (isAutomatic)
             {
                 if(Input.GetKey(fireKey))
                 {
@@ -223,44 +217,6 @@ public class WeaponShooting : MonoBehaviour
                 {
                     StopADS();
                 }
-            }
-        }
-    }
-
-    void DrawLaser()
-    {
-        if (spawnedLasers.Count < laserOriginPoints.Length)
-        {
-            spawnedLasers.Add(Instantiate(laserPrefab, transform));
-        }
-
-        for (int i = 0; i < spawnedLasers.Count; i++)
-        {
-            spawnedLasers[i].SetPosition(0, laserOriginPoints[i].transform.position);
-            spawnedLasers[i].SetPosition(1, muzzleEffects[i].transform.position + muzzleEffects[i].transform.forward * laserLength);
-
-            RaycastHit hit;
-            if(Physics.Raycast(muzzleEffects[i].transform.position, muzzleEffects[i].transform.forward, out hit, Mathf.Infinity))
-            {
-                Vector3 laserPointSpawnLocation = hit.point + (hit.normal * .01f);
-                Quaternion laserPointSpawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-
-                if (spawnedLaserPoints.Count < laserOriginPoints.Length)
-                {
-                    spawnedLaserPoints.Add(Instantiate(laserPoint, laserPointSpawnLocation, laserPointSpawnRotation));
-                }
-
-                if (spawnedLaserPoints.Count >= i)
-                {
-                    spawnedLaserPoints[i].transform.position = laserPointSpawnLocation;
-                    spawnedLaserPoints[i].transform.rotation = laserPointSpawnRotation;
-                }
-
-            }
-            else
-            {
-                if(spawnedLaserPoints.Count != 0)
-                    RemoveLaserPoint(spawnedLaserPoints[i]);
             }
         }
     }
