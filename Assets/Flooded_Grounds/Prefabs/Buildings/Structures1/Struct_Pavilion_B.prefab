@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3311952}
   - component: {fileID: 2328146}
   - component: {fileID: 6461564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Struct_Pavilion_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}

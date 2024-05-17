@@ -543,9 +543,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e463eb613bac0a74387beac7017896f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpsData: []
+  powerUpsData:
+  - {fileID: 11400000, guid: 8f5d907f09b3ed74fb0cdb50257893f0, type: 2}
+  - {fileID: 11400000, guid: 300321d0e14e19640aa5c1215147cb65, type: 2}
+  - {fileID: 11400000, guid: 3ca4dbe450918144db9c6d2886cb5c29, type: 2}
+  - {fileID: 11400000, guid: 622f6ff2c2aed4544afaaebcdf7a3e2d, type: 2}
   activePowerUps: []
-  powerUpBase: {fileID: 0}
+  powerUpBase: {fileID: 4045478466513652942, guid: 89c16ed08f4a5f44487a80e80964a158, type: 3}
   powerUpUIElement: {fileID: 2048807792859048983, guid: c237ff9bf5077cf4892541d0a4165069, type: 3}
   activePowerUpUIContainer: {fileID: 0}
 --- !u!1 &8060153358141915584

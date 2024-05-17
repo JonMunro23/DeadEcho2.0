@@ -63,7 +63,6 @@ public class Grenade : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
         if(!other.CompareTag("Player") && !other.CompareTag("PlayerBody") && !other.CompareTag("PlayerSpawnRadius") && !other.CompareTag("ZombieSpawnPoint"))
         {
             if (explodesOnContact)

@@ -19,19 +19,23 @@ MonoBehaviour:
   description: 
   cost: 1200
   weaponObj: {fileID: 4627329524101206119, guid: f4ec531142b0dcd48af405f97dcb12e0, type: 3}
-  weaponWallBuyObj: {fileID: 1701325561305732, guid: 510ec589132763647861a79fcf0441fd, type: 3}
+  weaponWallBuyObj: {fileID: 1701325561305732, guid: 2dcdc7f3362d2d04b9fb0a82793971e8, type: 3}
   UIObj: {fileID: 9038608379410015798, guid: 1bfb1d334935c6b4987da104a221c207, type: 3}
   armsController: {fileID: 9100000, guid: 85d5eb79a129f1341b7aa5311ed4841b, type: 2}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0.00452, y: -0.00616, z: 0.0009}
-  gunBoneAimingPos: {x: -0.004505, y: 0.0136, z: 0.02}
+  bulletPenData: {fileID: 0}
+  weaponSpawnLocation: {x: 0.0045, y: -0.0062, z: -0.0008}
+  gunBoneAimingPos: {x: -0.0045, y: 0.0136, z: 0.02}
+  gunBoneAimingRot: {x: 0, y: 0, z: 0}
+  gunBoneHipPos: {x: 0, y: 0.01161, z: 0.02314}
+  gunBoneHipRot: {x: 0, y: 0, z: 0}
   hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 7bf228388cd7919489505da6dc804568, type: 3}
+  canDualWield: 0
   infiniteAmmo: 0
   magSize: 30
   maxReserveAmmo: 270
-  reloadSpeed: 2.833
+  reloadSpeed: 3.067
   projectileCount: 1
   maxSpreadDeviationAngle: 2.5
   damage: 50
@@ -78,6 +82,7 @@ MonoBehaviour:
   reloadStartAnimLength: 0
   reloadShellAnimLength: 0
   reloadEndAnimLength: 0
+  recoilData: {fileID: 11400000, guid: 3ce0ad3f1ed5dd0488f3c0a0b9c01006, type: 2}
   recoilX: -2.4
   recoilY: 1.5
   recoilZ: 0.35

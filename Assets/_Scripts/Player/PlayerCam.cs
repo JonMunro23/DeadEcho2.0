@@ -12,7 +12,7 @@ public class PlayerCam : MonoBehaviour
     float defaultFOV;
     public bool canLook = true;
 
-    Camera weaponCamera;
+    [SerializeField] Camera weaponCamera;
     [SerializeField]
     AnimationCurve ADSCurve;
 
@@ -29,7 +29,7 @@ public class PlayerCam : MonoBehaviour
 
     private void Awake()
     {
-        weaponCamera = GetComponent<Camera>();
+        //weaponCamera = GetComponentInChildren<Camera>();
         weaponSwapping = GetComponentInChildren<WeaponSwapping>();
         orientation = GameObject.FindGameObjectWithTag("PlayerOrientation").transform;
     }
@@ -65,18 +65,18 @@ public class PlayerCam : MonoBehaviour
         {
             if (canLook)
             {
-                float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * (sensitivity * 10);
-                float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * (sensitivity * 10);
+                float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+                float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
                 yRotation += mouseX;
                 xRotation -= mouseY;
 
                 xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-                targetRecoilRotation = Vector3.Lerp(targetRecoilRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
-                currentRecoilRot = Vector3.Slerp(currentRecoilRot, targetRecoilRotation, recoilSnappiness * Time.fixedDeltaTime);
+                //targetRecoilRotation = Vector3.Lerp(targetRecoilRotation, Vector3.zero, recoilReturnSpeed * Time.deltaTime);
+                //currentRecoilRot = Vector3.Slerp(currentRecoilRot, targetRecoilRotation, recoilSnappiness * Time.fixedDeltaTime);
             
-                transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0) * Quaternion.Euler(currentRecoilRot);
+                transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0) /** Quaternion.Euler(currentRecoilRot)*/;
                 orientation.rotation = Quaternion.Euler(0, yRotation, 0);          
 
             }
@@ -85,15 +85,15 @@ public class PlayerCam : MonoBehaviour
 
     public void RecoilFire(bool isAiming)
     {
-        currentWeapon = weaponSwapping.currentlyEquippedWeapon.weaponData;
+        //currentWeapon = weaponSwapping.currentlyEquippedWeapon.weaponData;
 
-        if (isAiming)
-        {
-            targetRecoilRotation += new Vector3(currentWeapon.ADSRecoilX, Random.Range(-currentWeapon.ADSRecoilY, currentWeapon.ADSRecoilY), Random.Range(-currentWeapon.ADSRecoilZ, currentWeapon.ADSRecoilZ));
-            return;
-        }
+        //if (isAiming)
+        //{
+        //    targetRecoilRotation += new Vector3(currentWeapon.recoilData.cameraADSRotRecoil.x, Random.Range(-currentWeapon.recoilData.cameraADSRotRecoil.y, currentWeapon.recoilData.cameraADSRotRecoil.y), Random.Range(-currentWeapon.recoilData.cameraADSRotRecoil.z, currentWeapon.recoilData.cameraADSRotRecoil.z));
+        //    return;
+        //}
 
-        targetRecoilRotation += new Vector3(currentWeapon.recoilX, Random.Range(-currentWeapon.recoilY, currentWeapon.recoilY), Random.Range(-currentWeapon.recoilZ, currentWeapon.recoilZ));
+        //targetRecoilRotation += new Vector3(currentWeapon.recoilData.cameraRotRecoil.x, Random.Range(-currentWeapon.recoilData.cameraRotRecoil.y, currentWeapon.recoilData.cameraRotRecoil.y), Random.Range(-currentWeapon.recoilData.cameraRotRecoil.z, currentWeapon.recoilData.cameraRotRecoil.z));
 
     }
 

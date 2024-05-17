@@ -9,7 +9,7 @@ public class AttachToPlayer : MonoBehaviour
         cameraPosition = GameObject.FindGameObjectWithTag("PlayerCameraPos").transform;
     }
 
-    void Update()
+    private void Update()
     {
         transform.position = cameraPosition.position;
     }

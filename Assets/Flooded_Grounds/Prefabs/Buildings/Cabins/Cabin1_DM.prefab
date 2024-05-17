@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3357884}
   - component: {fileID: 2306234}
   - component: {fileID: 6425064}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cabin1_DM
   m_TagString: Untagged
   m_Icon: {fileID: 0}

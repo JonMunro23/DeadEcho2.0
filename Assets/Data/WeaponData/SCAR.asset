@@ -24,10 +24,11 @@ MonoBehaviour:
   armsController: {fileID: 0}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0, y: 0, z: 0}
   gunBoneAimingPos: {x: 0, y: 0, z: 0}
+  gunBoneHipPos: {x: 0, y: 0.01161, z: 0.02314}
   hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 7bf228388cd7919489505da6dc804568, type: 3}
+  canDualWield: 0
   infiniteAmmo: 0
   magSize: 30
   maxReserveAmmo: 270

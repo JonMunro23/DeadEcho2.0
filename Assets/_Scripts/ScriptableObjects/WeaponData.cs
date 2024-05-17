@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "WeaponObject", menuName = "New Weapon")]
@@ -37,13 +36,16 @@ public class WeaponData : ScriptableObject
     public GameObject weaponObj;
     public GameObject weaponWallBuyObj;
     public GameObject UIObj;
-    public AnimatorController armsController;
+    public RuntimeAnimatorController armsController;
     [Space]
     public HitEffectData hitEffectData;
-    public BulletPenetrationConfig bulletPenConfig;
+    public BulletPenetrationData bulletPenData;
 
-    public Vector3 weaponSpawnPos;
+    public Vector3 weaponSpawnLocation;
     public Vector3 gunBoneAimingPos;
+    public Vector3 gunBoneAimingRot;
+    public Vector3 gunBoneHipPos;
+    public Vector3 gunBoneHipRot;
 
     public bool hasLaserSight;
 
@@ -75,6 +77,7 @@ public class WeaponData : ScriptableObject
     public float reloadStartAnimLength, reloadShellAnimLength, reloadEndAnimLength;
 
     [Header("Recoil")]
+    public RecoilData recoilData;
     public float recoilX;
     public float recoilY;
     public float recoilZ;

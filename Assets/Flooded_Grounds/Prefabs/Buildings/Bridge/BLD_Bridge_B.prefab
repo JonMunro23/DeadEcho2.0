@@ -222,7 +222,7 @@ GameObject:
   m_Component:
   - component: {fileID: 495248}
   - component: {fileID: 20585150}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BLD_Bridge_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}

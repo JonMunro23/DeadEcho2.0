@@ -115,6 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 481948}
   - component: {fileID: 20565268}
+  - component: {fileID: 2075886886059836369}
   m_Layer: 8
   m_Name: Prop_Clock_A
   m_TagString: Untagged
@@ -162,6 +163,19 @@ LODGroup:
     renderers:
     - renderer: {fileID: 2345684}
   m_Enabled: 1
+--- !u!114 &2075886886059836369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d905fc75baea7a240b905072400b1b94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surfaceType: 2
 --- !u!1 &197594
 GameObject:
   m_ObjectHideFlags: 0

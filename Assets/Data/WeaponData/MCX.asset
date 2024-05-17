@@ -15,17 +15,20 @@ MonoBehaviour:
   weaponSlotType: 0
   weaponType: 2
   reloadType: 0
-  name: AKM
+  name: MCX
   description: 
   cost: 1200
   weaponObj: {fileID: 422078975399765304, guid: af02a7761f1367e40bec2e3ec66f750b, type: 3}
-  weaponWallBuyObj: {fileID: 1701325561305732, guid: 510ec589132763647861a79fcf0441fd, type: 3}
+  weaponWallBuyObj: {fileID: 1701325561305732, guid: 5395d7b2ef854f74c97870db8ced60fe, type: 3}
   UIObj: {fileID: 9038608379410015798, guid: 1bfb1d334935c6b4987da104a221c207, type: 3}
   armsController: {fileID: 9100000, guid: f923b7b39f6b5c2439209f89edaab9c2, type: 2}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
-  bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0.00408, y: -0.00549, z: 0.0003}
+  bulletPenData: {fileID: 0}
+  weaponSpawnLocation: {x: 0.00408, y: -0.00549, z: 0.0003}
   gunBoneAimingPos: {x: -0.00408, y: 0.01268, z: 0.02}
+  gunBoneAimingRot: {x: 0, y: 0, z: 0}
+  gunBoneHipPos: {x: 0, y: 0.01161, z: 0.02314}
+  gunBoneHipRot: {x: 0, y: 0, z: 0}
   hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 7bf228388cd7919489505da6dc804568, type: 3}
   canDualWield: 0
@@ -79,6 +82,7 @@ MonoBehaviour:
   reloadStartAnimLength: 0
   reloadShellAnimLength: 0
   reloadEndAnimLength: 0
+  recoilData: {fileID: 0}
   recoilX: -2.4
   recoilY: 1.5
   recoilZ: 0.35

@@ -1,5 +1,5 @@
-using System;
-using Unity.VisualScripting;
+using System.Collections;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class WeaponAnimation : MonoBehaviour
@@ -13,6 +13,7 @@ public class WeaponAnimation : MonoBehaviour
     public bool swayRotation = true;
     public bool bobOffset = true;
     public bool bobSway = true;
+    [SerializeField] bool isAiming;
 
     [Header("Sway")]
     public float step = 0.01f;
@@ -32,11 +33,11 @@ public class WeaponAnimation : MonoBehaviour
     float curveSin { get => Mathf.Sin(speedCurve); }
     float curveCos { get => Mathf.Cos(speedCurve); }
     [Space]
-    public float HipFireTravelLimit;
-    public float HipFireBobLimit;
+    public Vector3 HipFireTravelLimit;
+    public Vector3 HipFireBobLimit;
     [Space]
-    public float ADSTravelLimit;
-    public float ADSBobLimit;
+    public Vector3 ADSTravelLimit;
+    public Vector3 ADSBobLimit;
     [Space]
     public Vector3 currentTravelLimit;
     public Vector3 currentBobLimit;
@@ -54,14 +55,34 @@ public class WeaponAnimation : MonoBehaviour
     [SerializeField] float movementBobXFrequency;
     [SerializeField] float movementBobXAmplitude;
 
-    [Space]
-    [Space]
+    [Header("Gun Bone")]
+    //public Vector3 currentGunBonePos;
+    //public Quaternion currentGunBoneRot;
+    //[SerializeField] Vector3 newGunBonePos;
+    //[SerializeField] Quaternion newGunBoneRot;
+    [SerializeField] float gunBoneAimTransitionSmooth;
+    [SerializeField] float gunBoneAimTransitionLength;
+    [SerializeField] float movementStateSmooth;
+    [SerializeField] float movementStateTransitionLength;
+    [SerializeField] Vector3 currentMovementStatePos;
+    [SerializeField] Quaternion currentMovementStateRot;
+    [SerializeField] Vector3 newMovementStatePos;
+    [SerializeField] Vector3 newMovementStateRot;
+    [SerializeField]
+    Transform sprintingState, crouchState;
+    PlayerMovement.MovementState currentMovementState;
+    Coroutine movementCoroutine, rotationCoroutine;
+    bool isLerpingPos, isLerpingRot;
 
+    Vector2 walkInput;
+    Vector2 lookInput;
+
+    [Header("Recoil")]
+    public Vector3 recoilPosOffset;
+    public Vector3 recoilRotOffset;
+    [SerializeField] float recoilSmooth;
     [SerializeField]
     float zRecoilAmount, aimingZRecoilAmount, xRotAmount, aimingXRotAmount, yRotAmount, aimingYRotAmount, zRotAmount, aimingZRotAmount;
-
-    Vector3 recoilPos;
-    Quaternion recoilRot;
 
     private void OnEnable()
     {
@@ -69,6 +90,7 @@ public class WeaponAnimation : MonoBehaviour
         WeaponShooting.onAimDownSights += ToggleAiming;
         WeaponSwapping.onWeaponSwapped += GetWeaponData;
         PlayerHealth.onDeath += StopSway;
+        PlayerMovement.onMovementStateChanged += CheckMovementState;
     }
 
     private void OnDisable()
@@ -77,47 +99,102 @@ public class WeaponAnimation : MonoBehaviour
         WeaponShooting.onAimDownSights -= ToggleAiming;
         WeaponSwapping.onWeaponSwapped -= GetWeaponData;
         PlayerHealth.onDeath -= StopSway;
+        PlayerMovement.onMovementStateChanged -= CheckMovementState;
     }
 
     private void Start()
     {
-        RestoreBob();
+        //RestoreBob();
+    }
+    void Update()
+    {
+        //if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canSway)
+        //    GetInput();
+        //    Sway();
+        //    SwayRotation();
+        //    BobOffset();
+        //    BobRotation();
+
+        //    if (PlayerMovement.instance.isSprinting)
+        //        MovementBob();
+        //    else
+        //        movementBob = Vector3.Lerp(movementBob, Vector3.zero, 4);
+
+        //if (!isAiming)
+        //{
+        //        LerpToNewMovementState();
+        //}
+
+        //LerpRecoil();
+    }
+
+    private void FixedUpdate()
+    {
+        //if(!isAiming)
+        //    CompositePositionRotation();
+
+        if(isAiming && !isLerpingPos && !isLerpingRot)
+        {
+            Debug.Log("Setting");
+            transform.localPosition = weapon.gunBoneAimingPos;
+            transform.localRotation =  Quaternion .Euler(weapon.gunBoneAimingRot);
+        }
+    }
+    void CheckMovementState(PlayerMovement.MovementState stateToCheck)
+    {
+        currentMovementState = stateToCheck;
+        
+        if (isAiming)
+            return;
+
+        switch (stateToCheck)
+        {
+            case PlayerMovement.MovementState.Idle:
+                MoveTo(weapon.gunBoneHipPos, weapon.gunBoneHipRot, movementStateTransitionLength);
+                //SetNewMovementStatePos(weapon.gunBoneHipPos);
+                //SetNewMovementStateRot(weapon.gunBoneHipRot);
+                break;
+            case PlayerMovement.MovementState.Sprinting:
+                MoveTo(sprintingState.localPosition, sprintingState.localRotation.eulerAngles, movementStateTransitionLength);
+                //SetNewMovementStatePos(sprintingState.localPosition);
+                //SetNewMovementStateRot(sprintingState.localRotation.eulerAngles);
+                break;
+            case PlayerMovement.MovementState.Crouching:
+               MoveTo(crouchState.localPosition, crouchState.localRotation.eulerAngles, movementStateTransitionLength);
+                //SetNewMovementStatePos(crouchState.localPosition);
+                //SetNewMovementStateRot(crouchState.localRotation.eulerAngles);
+                break;
+        }
+
+    }
+
+    void SetNewMovementStatePos(Vector3 newPos)
+    {
+        newMovementStatePos = newPos;
+    }
+
+    void SetNewMovementStateRot(Vector3 newRot)
+    {
+        newMovementStateRot = newRot;
+    }
+
+    void LerpToNewMovementState()
+    {
+        currentMovementStatePos = Vector3.Lerp(currentMovementStatePos, newMovementStatePos + swayPos + bobPosition, movementStateSmooth * Time.deltaTime);
+        currentMovementStateRot = Quaternion.Slerp(currentMovementStateRot, Quaternion.Euler(newMovementStateRot), movementStateSmooth * Time.deltaTime);
     }
 
     void GetWeaponData(GameObject _weapon)
     {
         weaponShooting = _weapon.GetComponent<WeaponShooting>();
         weapon = weaponShooting.weaponData;
+        CheckMovementState(currentMovementState);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(!PauseMenu.isPaused && !UpgradeSelectionMenu.isUpgradeSelectionMenuOpen && canSway)
-            GetInput();
-
-        Sway();
-        SwayRotation();
-        BobOffset();
-        BobRotation();
-
-        if (PlayerMovement.instance.isSprinting)
-            MovementBob();
-        else
-            movementBob = Vector3.Lerp(movementBob, Vector3.zero, 4);
-
-
-        CompositePositionRotation();
-    }
-
     private void MovementBob()
     {
         movementBob.y = (Mathf.Sin(Time.time * movementBobYFrequency) / 1000);
         movementBob.x = ((Mathf.Sin(Time.time * movementBobXFrequency) * movementBobXAmplitude) / 1000);
     }
-
-    Vector2 walkInput;
-    Vector2 lookInput;
 
     void GetInput()
     {
@@ -151,24 +228,25 @@ public class WeaponAnimation : MonoBehaviour
         swayEulerRot = new Vector3(invertLook.y, invertLook.x, invertLook.x);
     }
 
+    //void SetNewGunBonePos(Vector3 newPos)
+    //{
+    //    newGunBonePos = newPos;
+    //}
+    //void LerpGunBonePos()
+    //{
+    //    currentGunBonePos = Vector3.Lerp(currentGunBonePos, newGunBonePos, gunBoneAimTransitionSmooth * Time.deltaTime);
+    //}
+
+    void LerpRecoil()
+    {
+        recoilPosOffset = Vector3.Lerp(recoilPosOffset, Vector3.zero, recoilSmooth * Time.deltaTime);
+        recoilRotOffset = Vector3.Slerp(recoilRotOffset, Vector3.zero, recoilSmooth * Time.deltaTime);
+    }
+
     void CompositePositionRotation()
     {
-        Vector3 pos;
-        if (weaponShooting.isAiming)
-        {
-            pos = weapon.gunBoneAimingPos;
-        }
-        else
-            pos = PlayerMovement.currentTargetState.localPosition;
-
-        Quaternion rot = PlayerMovement.currentTargetState.localRotation;
-
-        if (PlayerMovement.instance.isCrouching)
-            if (weaponShooting.isAiming)
-                rot = PlayerMovement.instance.idleState.localRotation;
-
-        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPos + bobPosition + pos + movementBob, Time.deltaTime * smooth);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, rot * Quaternion.Euler(swayEulerRot) * Quaternion.Euler(bobEulerRotation), Time.deltaTime * smoothRot);
+        transform.localPosition = currentMovementStatePos + recoilPosOffset + movementBob;
+        transform.localRotation = Quaternion.Euler(currentMovementStateRot.eulerAngles + recoilRotOffset);
     }
 
     void BobOffset()
@@ -193,34 +271,101 @@ public class WeaponAnimation : MonoBehaviour
 
     void AddRecoil(bool isAiming)
     {
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + (!isAiming ? zRecoilAmount : aimingZRecoilAmount));
-        //transform.localRotation = Quaternion.Euler(transform.localRotation.x + (!isAiming ? xRotAmount : aimingXRotAmount), transform.localRotation.y + Random.Range(-(!isAiming ? yRotAmount : aimingYRotAmount), (!isAiming ? yRotAmount : aimingYRotAmount)), transform.localRotation.z + Random.Range(-(!isAiming ? zRotAmount : aimingZRotAmount), (!isAiming ? zRotAmount : aimingZRecoilAmount)));
+        //if(isAiming)
+        //{
+        //    recoilPosOffset += new Vector3(weapon.recoilData.aimingPosRecoil.x, weapon.recoilData.aimingPosRecoil.y, weapon.recoilData.aimingPosRecoil.z);
+        //    recoilRotOffset += new Vector3(weapon.recoilData.aimingRotRecoil.x, weapon.recoilData.aimingPosRecoil.y, weapon.recoilData.aimingPosRecoil.z);
+
+        //    MoveTo(weapon.gunBoneAimingPos, weapon.gunBoneAimingRot, gunBoneAimTransitionLength);
+        //    return;
+        //}
+
+        //recoilPosOffset += new Vector3(weapon.recoilData.posRecoil.x, weapon.recoilData.posRecoil.y, weapon.recoilData.posRecoil.z);
+        //recoilRotOffset += new Vector3(weapon.recoilData.rotRecoil.x, weapon.recoilData.posRecoil.y, weapon.recoilData.posRecoil.z);
+
+        //MoveTo(weapon.gunBoneHipPos, weapon.gunBoneHipRot, gunBoneAimTransitionLength);
     }
 
     public void ToggleAiming(bool _isAiming, WeaponShooting weaponToToggle)
     {
+        isAiming = !_isAiming;
         if (_isAiming)
         {
-            RestoreBob();
+            //RestoreBob();
+            CheckMovementState(currentMovementState);
         }
         else if (!_isAiming)
         {
-            ReduceBob();
+            //ReduceBob();
+            MoveTo(weapon.gunBoneAimingPos, weapon.gunBoneAimingRot, gunBoneAimTransitionLength);
+            //SetNewMovementStatePos(weapon.gunBoneAimingPos);
+            //SetNewMovementStateRot(weapon.gunBoneAimingRot);
         }
     }
     public void ReduceBob()
     {
-        currentBobLimit = new Vector3(ADSBobLimit, ADSBobLimit, ADSBobLimit); 
-        currentTravelLimit = new Vector3(ADSTravelLimit, ADSTravelLimit, ADSTravelLimit);
+        currentBobLimit = ADSBobLimit;
+        currentTravelLimit = ADSTravelLimit;
     }
     public void RestoreBob()
     {
-        currentBobLimit = new Vector3(HipFireBobLimit, HipFireBobLimit, HipFireBobLimit);
-        currentTravelLimit = new Vector3(HipFireTravelLimit, HipFireTravelLimit, HipFireTravelLimit);
+        currentBobLimit = HipFireBobLimit;
+        currentTravelLimit = HipFireTravelLimit;
     }
 
     void StopSway()
     {
         canSway = false;
+    }
+
+    void MoveTo(Vector3 targetPos, Vector3 targetRot, float duration)
+    {
+        if(movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+
+        if(rotationCoroutine != null)
+        {
+            StopCoroutine(rotationCoroutine);
+        }
+
+        movementCoroutine = StartCoroutine(LerpPosition(targetPos, duration));
+        rotationCoroutine = StartCoroutine(LerpRotation(targetRot, duration));
+    }
+
+    IEnumerator LerpPosition(Vector3 targetPosition, float duration)
+    {
+        isLerpingPos = true;
+        float time = 0;
+        Vector3 startPosition = transform.localPosition;
+
+        while (time < duration)
+        {
+            transform.localPosition = Vector3.Lerp(startPosition, targetPosition, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.localPosition = targetPosition;
+        currentMovementStatePos = transform.localPosition;
+        isLerpingPos = false;
+    }
+
+    IEnumerator LerpRotation(Vector3 targetRotation, float duration)
+    {
+        isLerpingRot = true;
+        float time = 0;
+        Quaternion startRotation = transform.localRotation;
+
+        while (time < duration)
+        {
+            transform.localRotation = Quaternion.Slerp(startRotation, Quaternion.Euler(targetRotation), time / duration);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+        transform.localRotation = Quaternion.Euler(targetRotation);
+        currentMovementStateRot = transform.localRotation;
+        isLerpingRot = false;
     }
 }

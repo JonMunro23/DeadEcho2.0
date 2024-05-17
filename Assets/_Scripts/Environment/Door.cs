@@ -3,26 +3,23 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public int doorCost;
-    [SerializeField] GameObject doorObject;
 
     AudioSource doorOpeningSFXSource;
-    Animation animationComponent;
+    Animator animator;
     [SerializeField]
     ZombieSpawnPoint[] spawnPointsToMakeAccessible;
 
-
-
     public bool isOpen;
-
-    [Header("Animation")]
-    [Tooltip("if false will destory doorObject and its children")]
-    [SerializeField] bool playsAnimation;
 
     private void Awake()
     {
         doorOpeningSFXSource = GetComponent<AudioSource>();
-        animationComponent = GetComponent<Animation>();
-        doorObject = gameObject;
+        animator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        tag = "Door";
     }
 
     public void OpenDoor()
@@ -34,16 +31,7 @@ public class Door : MonoBehaviour
         if(doorOpeningSFXSource != null)
             doorOpeningSFXSource.Play();
 
-        if(playsAnimation)
-        {
-            animationComponent.Play();
-        }
-        else
-        {
-            Destroy(doorObject);
-            Destroy(this.gameObject, 5);
-        }
-
+        animator.enabled = true;
     }
 
     void SetSpawnPointsAccessible()

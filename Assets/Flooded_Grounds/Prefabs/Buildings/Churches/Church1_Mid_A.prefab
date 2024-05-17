@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3321740}
   - component: {fileID: 2304356}
   - component: {fileID: 6455704}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Church1_Mid_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

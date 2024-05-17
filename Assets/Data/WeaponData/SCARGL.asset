@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SCARGL
   m_EditorClassIdentifier: 
   weaponSlotType: 0
-  weaponType: 2
+  weaponType: 0
   reloadType: 0
   name: SCAR GL
   description: 
@@ -24,10 +24,11 @@ MonoBehaviour:
   armsController: {fileID: 9100000, guid: 3b412f4a7c3f43c4e85b930600893f16, type: 2}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0, y: -0.04801, z: -0.01743}
   gunBoneAimingPos: {x: -0.0036, y: 0.0117, z: 0.023}
+  gunBoneHipPos: {x: 0, y: 0.01161, z: 0.02314}
   hasLaserSight: 1
   UISprite: {fileID: 21300000, guid: 7bf228388cd7919489505da6dc804568, type: 3}
+  canDualWield: 0
   infiniteAmmo: 0
   magSize: 30
   maxReserveAmmo: 270

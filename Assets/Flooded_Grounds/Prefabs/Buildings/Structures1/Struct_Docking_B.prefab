@@ -222,7 +222,7 @@ GameObject:
   m_Component:
   - component: {fileID: 442760}
   - component: {fileID: 20532068}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Struct_Docking_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}

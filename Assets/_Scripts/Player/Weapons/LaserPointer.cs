@@ -3,7 +3,7 @@ using UnityEngine;
 public class LaserPointer : MonoBehaviour
 {
     LineRenderer laserLine;
-    [SerializeField] Transform bulletSpawnTransform;
+    Transform bulletSpawnTransform;
     [SerializeField] GameObject laserPointPrefab;
     GameObject spawnedLaserPoint;
 

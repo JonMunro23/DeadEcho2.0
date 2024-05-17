@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: L96A1
   m_EditorClassIdentifier: 
   weaponSlotType: 0
-  weaponType: 2
+  weaponType: 0
   reloadType: 0
   name: L96A1
   description: 
@@ -24,10 +24,12 @@ MonoBehaviour:
   armsController: {fileID: 9100000, guid: 848763c50e9a984479175a245f4482f1, type: 2}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0, y: -0.0482, z: -0.0179}
+  weaponSpawnLocation: {x: 0, y: -0.0482, z: -0.0179}
   gunBoneAimingPos: {x: -0.0033, y: 0.0123, z: 0.018}
+  gunBoneHipPos: {x: 0, y: 0.01161, z: 0.02314}
   hasLaserSight: 0
   UISprite: {fileID: 21300000, guid: 92a6affaf5d451a49a99f6e38eb8af72, type: 3}
+  canDualWield: 0
   infiniteAmmo: 0
   magSize: 5
   maxReserveAmmo: 45

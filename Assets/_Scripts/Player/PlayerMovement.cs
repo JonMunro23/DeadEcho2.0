@@ -1,12 +1,23 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement instance;
 
+    public enum MovementState
+    {
+        Idle,
+        Sprinting,
+        Crouching,
+        Jumping
+    }
+
     [Header("Movement")]
     public bool canMove;
+    public bool isMoving;
     public float baseMoveSpeed;
     float currentMoveSpeed;
     public float groundDrag;
@@ -22,13 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 currentVelocity;
     [SerializeField] Vector3 originalCamPos;
 
-    [Header("Gun Bone States")]
-    [SerializeField] Transform gunBone;
-    [SerializeField] float statePosTransitionSpeed, stateRotTransitionSpeed;
-    public Transform idleState;
-    public Transform rifleSprintState, pistolSprintState;
-    [SerializeField] Transform crouchState;
-    public static Transform currentTargetState;
+
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -73,6 +78,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] AudioClip[] walkingSFX, landingSFX;
     [SerializeField] AudioClip jumpingGruntingSFX;
 
+    [Header("State Handling")]
+    public MovementState currentMovementState;
+    public static event Action<MovementState> onMovementStateChanged;
+
     void Awake()
     {
         instance = this;
@@ -96,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
         crouchingMovementSpeed = baseMoveSpeed / 3;
         canPlayMovementSFX = true;
 
-        SetPlayerState(idleState);
+        UpdateMovementState(MovementState.Idle);
     }
 
     private void OnDisable()
@@ -130,15 +139,22 @@ public class PlayerMovement : MonoBehaviour
             MovePlayer();
     }
 
-    void SetPlayerState(Transform newStateTransform)
+    void UpdateMovementState(MovementState newState)
     {
-        currentTargetState = newStateTransform;
+        currentMovementState = newState;
+        onMovementStateChanged?.Invoke(currentMovementState);
     }
 
     void PlayerInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
+
+        if (horizontalInput == 0 || verticalInput == 0)
+            isMoving = false;
+        else
+            if (isMoving == false)
+                isMoving = true;
 
         if (verticalInput == -1 && isSprinting)
         {
@@ -203,11 +219,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (isSprinting)
                 {
-                    WeaponData.WeaponType weaponType = GetCurrentWeaponShootingScript().weaponData.weaponType;
-                    if (weaponType == WeaponData.WeaponType.Pistol)
-                        SetPlayerState(pistolSprintState);
-                    else
-                        SetPlayerState(rifleSprintState);
+                    UpdateMovementState(MovementState.Sprinting);
                 }
 
                 if (canPlayMovementSFX)
@@ -219,8 +231,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                if(isSprinting)
-                    SetPlayerState(idleState);
+                if (isSprinting)
+                    UpdateMovementState(MovementState.Idle);
             }
         }
 
@@ -229,7 +241,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10f * airMultiplier, ForceMode.Force);
             hasJumped = true;
-            //animator.SetFloat("speed", 0.0f, .2f, Time.deltaTime);
         }
     }
 
@@ -237,7 +248,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        //CrosshairManager.instance.UpdateCrosshairSize(flatVel.magnitude);
         currentVelocity = flatVel;
 
         // limit velocity if needed
@@ -259,7 +269,7 @@ public class PlayerMovement : MonoBehaviour
         if(!isCrouching)
         {
             isCrouching = true;
-            SetPlayerState(crouchState);
+            UpdateMovementState(MovementState.Crouching);
             currentMoveSpeed = crouchingMovementSpeed;
             movementAudioSource.volume = .5f;
         }
@@ -270,7 +280,7 @@ public class PlayerMovement : MonoBehaviour
         if(isCrouching)
         {
             isCrouching = false;
-            SetPlayerState(idleState);
+            UpdateMovementState(MovementState.Idle);
             if (GetCurrentWeaponShootingScript().isAiming)
             {
                 currentMoveSpeed = aimingMovementSpeed;
@@ -288,15 +298,10 @@ public class PlayerMovement : MonoBehaviour
         if (isCrouching == true)
         {
             cameraPos.transform.localPosition = Vector3.MoveTowards(cameraPos.transform.localPosition, crouchingCamPos, crouchingSpeed * Time.deltaTime);
-            if(horizontalInput != 0 || verticalInput != 0)
-            {
-                //animator.SetFloat("speed", 0.33f, .2f, Time.deltaTime);
-            }
         }
         else if (isCrouching == false && cameraPos.transform.localPosition.y < originalCamPos.y)
         {
             cameraPos.transform.localPosition = Vector3.MoveTowards(cameraPos.transform.localPosition, originalCamPos, crouchingSpeed * Time.deltaTime);
-            //animator.SetFloat("speed", 0, .2f, Time.deltaTime);
         }
     }
     #endregion
@@ -324,6 +329,7 @@ public class PlayerMovement : MonoBehaviour
                 sprintingBreathingSFXCoroutine = StartCoroutine(StartSprintingBreathingSFX());
         }
         isSprinting = true;
+        //UpdateMovementState(MovementState.Sprinting);
         currentMoveSpeed = sprintingMovementSpeed;
     }
 
@@ -338,7 +344,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isSprinting = false;
 
-            SetPlayerState(idleState);
+            UpdateMovementState(MovementState.Idle);
 
             if (stoppedByAiming)
                 currentMoveSpeed = aimingMovementSpeed;

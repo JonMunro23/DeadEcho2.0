@@ -2,7 +2,6 @@ using System.Collections;
 using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Collections.Generic;
 
 public class WeaponShooting : MonoBehaviour
 {
@@ -18,7 +17,6 @@ public class WeaponShooting : MonoBehaviour
     public bool canShoot;
     //public Animator weaponAnimator;
     public Animator armsAnimator;
-    float laserLength = 1;
     int maxMagSize, maxReserveAmmo, loadedAmmoBeforeReload, reserveAmmoBeforeReload, weaponBaseDamage, projectileCount;
     public int currentReserveAmmo, currentLoadedAmmo;
     float maxSpreadDeviationAngle, reloadSpeed, headshotMultiplier;
@@ -35,35 +33,25 @@ public class WeaponShooting : MonoBehaviour
     AudioClip[] firingSFX;
     AudioClip fullReloadSFX, insertShellSFX, reloadStartSFX, reloadEndSFX; 
     Coroutine reloadCooldownCoroutine, shellByShellReloadCoroutine;
-    Camera weaponCamera;
-    float weaponSpreadDeviation;
+    //float weaponSpreadDeviation;
 
 
     public static event Action<bool, WeaponShooting> onAimDownSights;
     public static event Action<int, int> onAmmoUpdated;
     public static event Action<bool> onWeaponFired;
-    public static event Action onWeaponEquipped;
 
-    //[SerializeField] bool isInstantKillActive, isBottomlessClipActive;
     bool stopShellByShellReload;
 
     public bool IsADSToggle;
 
     public Transform weaponLeftHandTarget, weaponRightHandTarget;
 
-    [Header("LaserSight")]
+    [Header("Laser Pointers")]
     [SerializeField]
     LaserPointer[] laserPointers;
-    //[SerializeField]
-    //LineRenderer laserPrefab;
-    //[SerializeField]
-    //List<LineRenderer> spawnedLasers = new List<LineRenderer>();
-    //[SerializeField]
-    //List<GameObject> spawnedLaserPoints = new List<GameObject>();
 
     private void Awake()
     {
-        weaponCamera = GameObject.FindGameObjectWithTag("WeaponCamera").GetComponent<Camera>();
         SFXSource = GameObject.FindGameObjectWithTag("WeaponSFX").GetComponent<AudioSource>();
     }
 
@@ -294,6 +282,12 @@ public class WeaponShooting : MonoBehaviour
 
                         if (hit.transform.TryGetComponent<SurfaceIdentifier>(out SurfaceIdentifier _surface))
                         {
+                            if(_surface.surfaceType == SurfaceTypes.glass)
+                            {
+                                Destroy(hit.transform.gameObject);
+                                return;
+                            }
+
                             Vector3 spawnLocation = hit.point + (hit.normal * .01f);
                             Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 
@@ -308,7 +302,7 @@ public class WeaponShooting : MonoBehaviour
                             hitEffectData.SpawnHitEffect(_surface.surfaceType, spawnLocation, spawnRotation);
                         }
 
-                        if(weaponData.bulletPenConfig && weaponData.bulletPenConfig.MaxObjectsToPenetrate > 0)
+                        if(weaponData.bulletPenData && weaponData.bulletPenData.MaxObjectsToPenetrate > 0)
                         {
                             //penetrate zombies
                         }
@@ -545,6 +539,8 @@ public class WeaponShooting : MonoBehaviour
     //Called from animation event in reload anim
     public void ReloadFinished()
     {
+        //transform.rotation = Quaternion.Euler(Vector3.zero);
+        
         onAmmoUpdated?.Invoke(currentLoadedAmmo, currentReserveAmmo);
         isReloading = false;
         canShoot = true;

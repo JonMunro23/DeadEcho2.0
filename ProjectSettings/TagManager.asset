@@ -35,6 +35,7 @@ TagManager:
   - ZombieRightArm
   - ZombieLeftArm
   - PlayerBody
+  - Glass
   layers:
   - Default
   - TransparentFX

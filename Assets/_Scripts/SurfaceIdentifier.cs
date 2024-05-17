@@ -6,7 +6,8 @@ public enum SurfaceTypes
     stone,
     wood,
     flesh,
-    sand
+    sand,
+    glass
 }
 
 public class SurfaceIdentifier : MonoBehaviour

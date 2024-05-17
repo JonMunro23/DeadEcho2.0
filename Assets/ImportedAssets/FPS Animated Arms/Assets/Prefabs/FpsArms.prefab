@@ -673,23 +673,37 @@ MonoBehaviour:
   swayRotation: 1
   bobOffset: 1
   bobSway: 1
+  isAiming: 0
   step: 0.001
   maxStepDistance: 0.006
-  rotationStep: 0.4
-  maxRotationStep: 0.5
-  smooth: 8
+  rotationStep: 2
+  maxRotationStep: 6
+  smooth: 4
   speedCurve: 0
-  HipFireTravelLimit: 0.00025
-  HipFireBobLimit: 0.0001
-  ADSTravelLimit: 0.00005
-  ADSBobLimit: 0.00001
-  currentTravelLimit: {x: 0.00025, y: 0.00025, z: 0.00025}
-  currentBobLimit: {x: 0.0001, y: 0.0001, z: 0.0001}
+  HipFireTravelLimit: {x: 0.00025, y: 0.00025, z: 0.00025}
+  HipFireBobLimit: {x: 0.0001, y: 0.0001, z: 0.0001}
+  ADSTravelLimit: {x: 0, y: 0, z: 0}
+  ADSBobLimit: {x: 0, y: 0, z: 0}
+  currentTravelLimit: {x: 0, y: 0, z: 0}
+  currentBobLimit: {x: 0, y: 0, z: 0}
   bobExaggeration: 0
   multiplier: {x: 0, y: 0, z: 0}
-  movementBobYFrequency: 14
-  movementBobXFrequency: 7
-  movementBobXAmplitude: 3
+  movementBobYFrequency: 0
+  movementBobXFrequency: 0
+  movementBobXAmplitude: 0
+  gunBoneAimTransitionSmooth: 12
+  gunBoneAimTransitionLength: 0.1
+  movementStateSmooth: 10
+  movementStateTransitionLength: 0
+  currentMovementStatePos: {x: 0, y: 0, z: 0}
+  currentMovementStateRot: {x: 0, y: 0, z: 0, w: 0}
+  newMovementStatePos: {x: 0, y: 0, z: 0}
+  newMovementStateRot: {x: 0, y: 0, z: 0}
+  sprintingState: {fileID: 0}
+  crouchState: {fileID: 0}
+  recoilPosOffset: {x: 0, y: 0, z: 0}
+  recoilRotOffset: {x: 0, y: 0, z: 0}
+  recoilSmooth: 15
   zRecoilAmount: -0.0025
   aimingZRecoilAmount: -0.001
   xRotAmount: 0.3

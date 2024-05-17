@@ -383,7 +383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5284103448238382632, guid: 79700d90c52470743a44094444f0eb9c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: The Boneyard
+      value: Scene_A
       objectReference: {fileID: 0}
     - target: {fileID: 5284103448238382632, guid: 79700d90c52470743a44094444f0eb9c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 402812}
   - component: {fileID: 20503620}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Struct_WoodPath_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

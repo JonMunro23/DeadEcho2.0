@@ -129,33 +129,33 @@ public class WeaponSwapping : MonoBehaviour
         switch (slot)
         {
             case 1:
-                AttachWeaponToGunBone(currentPrimary1WeaponObj.transform);
+                AttachWeaponToGunBone(currentPrimary1Weapon);
                 SetCurrentlyEquippedWeapon(currentPrimary1Weapon);
-                currentPrimary1WeaponObj.transform.localPosition = currentPrimary1Weapon.weaponData.weaponSpawnPos;
+                //currentPrimary1WeaponObj.transform.localPosition = currentPrimary1Weapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentPrimary1Weapon.weaponData.armsController;
                 weaponToSetActive = currentPrimary1WeaponObj;
                 currentActiveSlot = 1;
                 break;
             case 2:
-                AttachWeaponToGunBone(currentPrimary2WeaponObj.transform);
+                AttachWeaponToGunBone(currentPrimary2Weapon);
                 SetCurrentlyEquippedWeapon(currentPrimary2Weapon);
-                currentPrimary2WeaponObj.transform.localPosition = currentPrimary2Weapon.weaponData.weaponSpawnPos;
+                //currentPrimary2WeaponObj.transform.localPosition = currentPrimary2Weapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentPrimary2Weapon.weaponData.armsController;
                 weaponToSetActive = currentPrimary2WeaponObj;
                 currentActiveSlot = 2;
                 break;
             case 3:
-                AttachWeaponToGunBone(currentSecondaryWeaponObj.transform);
+                AttachWeaponToGunBone(currentSecondaryWeapon);
                 SetCurrentlyEquippedWeapon(currentSecondaryWeapon);
-                currentSecondaryWeaponObj.transform.localPosition = currentSecondaryWeapon.weaponData.weaponSpawnPos;
+                //currentSecondaryWeaponObj.transform.localPosition = currentSecondaryWeapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentSecondaryWeapon.weaponData.armsController;
                 weaponToSetActive = currentSecondaryWeaponObj;
                 currentActiveSlot = 3;
                 break;
             case 4:
-                AttachWeaponToGunBone(currentPowerUpWeaponObj.transform);
+                AttachWeaponToGunBone(currentPowerUpWeapon);
                 SetCurrentlyEquippedWeapon(currentPowerUpWeapon);
-                currentPowerUpWeaponObj.transform.localPosition = currentPowerUpWeapon.weaponData.weaponSpawnPos;
+                //currentPowerUpWeaponObj.transform.localPosition = currentPowerUpWeapon.weaponData.weaponSpawnPos;
                 FPSArmsAnimator.runtimeAnimatorController = currentPowerUpWeapon.weaponData.armsController;
                 weaponToSetActive = currentPowerUpWeaponObj;
                 currentActiveSlot = 4;
@@ -256,17 +256,19 @@ public class WeaponSwapping : MonoBehaviour
             weaponToDetach.StopADS();
 
         Vector3 weaponScale = weaponToDetach.transform.localScale;
-        weaponToDetach.transform.SetParent(inactiveWeaponParent);
+        weaponToDetach.transform.SetParent(inactiveWeaponParent, true);
         weaponToDetach.transform.localScale = weaponScale;
         ShowWeapon(weaponToDetach.gameObject, false);
     }
 
-    void AttachWeaponToGunBone(Transform weaponToAttach)
+    void AttachWeaponToGunBone(WeaponShooting weaponToAttach)
     {
-        Vector3 weaponScale = weaponToAttach.localScale;
-        weaponToAttach.SetParent(GunBone);
-        weaponToAttach.localScale = weaponScale;
-        weaponToAttach.localRotation = new Quaternion(0, 0, 0, 0);
+        GunBone.localPosition = weaponToAttach.weaponData.gunBoneHipPos;
+        Vector3 weaponScale = weaponToAttach.transform.localScale;
+        weaponToAttach.transform.SetParent(GunBone);
+        weaponToAttach.transform.localPosition = weaponToAttach.weaponData.weaponSpawnLocation;
+        weaponToAttach.transform.localScale = weaponScale;
+        weaponToAttach.transform.localRotation = new Quaternion(0, 0, 0, 0);
 
         ShowWeapon(weaponToAttach.gameObject, true);
     }

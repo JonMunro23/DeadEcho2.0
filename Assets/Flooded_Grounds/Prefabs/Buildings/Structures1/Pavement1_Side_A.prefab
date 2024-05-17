@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3362352}
   - component: {fileID: 2380886}
   - component: {fileID: 6575972}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pavement1_Side_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

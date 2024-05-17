@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3351344}
   - component: {fileID: 2325136}
   - component: {fileID: 6583398}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pavement2_Mid_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

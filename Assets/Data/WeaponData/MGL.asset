@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MGL
   m_EditorClassIdentifier: 
   weaponSlotType: 2
-  weaponType: 4
+  weaponType: 0
   reloadType: 1
   name: MGL
   description: 
@@ -24,10 +24,12 @@ MonoBehaviour:
   armsController: {fileID: 9100000, guid: 893bad978ed19b64290fe667ae3d308b, type: 2}
   hitEffectData: {fileID: 11400000, guid: 713ae77050df6d246839fd3955ae88d5, type: 2}
   bulletPenConfig: {fileID: 0}
-  weaponSpawnPos: {x: 0, y: -0.04798, z: -0.01844}
+  weaponSpawnLocation: {x: 0, y: -0.04798, z: -0.01844}
   gunBoneAimingPos: {x: -0.00141, y: 0.0124, z: 0.02127}
+  gunBoneHipPos: {x: 0, y: 0.01161, z: 0.02314}
   hasLaserSight: 0
   UISprite: {fileID: 21300000, guid: 49f6413b7187d9748a1c26b89ac57bd1, type: 3}
+  canDualWield: 0
   infiniteAmmo: 1
   magSize: 6
   maxReserveAmmo: 30
